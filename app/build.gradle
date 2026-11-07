@@ -477,10 +477,10 @@ androidComponents {
             if (abi != null) {
                 def abiName = abi.replace("arm64-v8a", "arm64").replace("armeabi-v7a", "arm")
                 output.versionCode.set(abiCodes.get(abi, 0) + codeNumber)
-                output.outputFileName.set("Librera ${flavor}-${versionNumber}${suffix}-${abiName}.apk")
+                output.outputFileName.set("OmniShelf ${flavor}-${versionNumber}${suffix}-${abiName}.apk")
             } else {
                 output.versionCode.set(codeNumber)
-                output.outputFileName.set("Librera ${flavor}-${versionNumber}${suffix}-uni.apk")
+                output.outputFileName.set("OmniShelf ${flavor}-${versionNumber}${suffix}-uni.apk")
             }
         }
     }
