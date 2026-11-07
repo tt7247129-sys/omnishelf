@@ -124,6 +124,21 @@ jobs:
           echo "签名校验通过"
 
 
+      - name: 发布到 Release(固定下载链接)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG=latest
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" \
+              --title "OmniShelf 最新构建" \
+              --notes "自动构建产物。AAB 用于 Google Play,APK 用于手机安装测试。" \
+              --prerelease
+          fi
+          gh release upload "$TAG" out/* --clobber
+          echo "下载页:https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+
       - uses: actions/upload-artifact@v4
         with:
           name: omnishelf-build

@@ -39,26 +39,36 @@ public class Android6 {
         return true;
     }
 
+    private static void openAllFilesAccessSettings(final Activity a) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+        intent.setData(Uri.fromParts("package", a.getPackageName(), null));
+        try {
+            a.startActivityForResult(intent, MY_PERMISSIONS_REQUEST_WES);
+        } catch (Exception e) {
+            Toast.makeText(a, R.string.msg_unexpected_error, Toast.LENGTH_LONG).show();
+            try {
+                Intent fallback = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                a.startActivityForResult(fallback, MY_PERMISSIONS_REQUEST_WES);
+            } catch (Exception e2) {
+                Toast.makeText(a, R.string.msg_unexpected_error, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     public static void checkPermissions(final Activity a, boolean checkWhatIsNew) {
         if (Build.VERSION.SDK_INT >= 30) {
             LOG.d("Environment.isExternalStorageManager()", Environment.isExternalStorageManager(), Build.VERSION.SDK_INT);
 
             if (!Environment.isExternalStorageManager()) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", a.getPackageName(), null);
-                intent.setData(uri);
-                try {
-                    a.startActivityForResult(intent, MY_PERMISSIONS_REQUEST_WES);
-                } catch (Exception e) {
-                    Toast.makeText(a, R.string.msg_unexpected_error, Toast.LENGTH_LONG).show();
-                    try {
-                        Intent intent2 = new Intent();
-                        intent2.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                        a.startActivityForResult(intent2,MY_PERMISSIONS_REQUEST_WES);
-                    } catch (Exception e2) {
-                        Toast.makeText(a, R.string.msg_unexpected_error, Toast.LENGTH_LONG).show();
-                    }
-                }
+                // OmniShelf: Play's "All files access" policy expects the request to be explained
+                // before the system settings screen is opened. Without this the app demands the
+                // permission cold on first launch, which reads as abusive to a reviewer.
+                new AlertDialog.Builder(a)
+                        .setTitle(R.string.storage)
+                        .setMessage(R.string.you_need_grant_permission5)
+                        .setPositiveButton(R.string.allow, (d, which) -> openAllFilesAccessSettings(a))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             } else {
                 AppProfile.init(a);
                 //FontExtractor.extractFonts(a);
