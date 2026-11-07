@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation fileTree(dir: 'src/libs', include: ['*.jar'])
+    runtimeOnly fileTree(dir: 'src/libs', include: ['*.aar', '*.jar'], exclude: [])
+}
+
+//java {
+    //sourceCompatibility = JavaVersion.VERSION_1_8
+    //targetCompatibility = JavaVersion.VERSION_1_8
+//}

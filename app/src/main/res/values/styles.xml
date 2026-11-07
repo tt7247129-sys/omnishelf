@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <style name="StyledIndicatorsWhite" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
+        <item name="android:actionOverflowMenuStyle">@style/PopupMenuRoundOverflow</item>
+        <item name="android:listPopupWindowStyle">@style/ListPopupWindowRound</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerPopupRound</item>
+        <item name="android:alertDialogTheme">@style/DialogRoundLight</item>
+    </style>
+
+    <style name="StyledIndicatorsBlack" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
+        <item name="android:actionOverflowMenuStyle">@style/PopupMenuRoundOverflow</item>
+        <item name="android:listPopupWindowStyle">@style/ListPopupWindowRound</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerPopupRound</item>
+        <item name="android:alertDialogTheme">@style/DialogRoundDark</item>
+    </style>
+
+
+    <style name="PagerTabStripText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#a4c639</item>
+    </style>
+
+
+    <style name="navBG">
+        <item name="android:background">#60000000</item>
+    </style>
+
+    <style name="listBG">
+        <item name="android:background">#90000000</item>
+    </style>
+
+    <style name="navBGButton">
+        <item name="android:tint">@color/tint_white</item>
+        <item name="android:background">@drawable/wp_button</item>
+    </style>
+
+    <style name="wpButton">
+        <item name="android:tint">@color/tint_white</item>
+        <item name="android:padding">5dip</item>
+        <item name="android:layout_margin">2dip</item>
+        <item name="android:background">@drawable/wp_button</item>
+    </style>
+
+    <style name="wpButtonM0">
+        <item name="android:padding">5dip</item>
+        <item name="android:background">@drawable/wp_button</item>
+    </style>
+
+
+    <style name="buttonWhiteInverted">
+        <item name="android:background">@drawable/bg_border_white</item>
+        <item name="android:padding">4dip</item>
+        <item name="android:layout_marginLeft">1.5dip</item>
+        <item name="android:layout_marginRight">1.5dip</item>
+        <item name="android:tint">?android:attr/textColorLink</item>
+    </style>
+
+
+    <style name="buttonWhite">
+        <item name="android:background">@drawable/bg_round_press</item>
+        <item name="android:padding">3dip</item>
+        <item name="android:layout_marginLeft">1.5dip</item>
+        <item name="android:layout_marginRight">1.5dip</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <!-- An icon in a screen's top bar: a little more room either side than buttonWhite. -->
+    <style name="buttonTop" parent="buttonWhite">
+        <item name="android:layout_marginLeft">@dimen/top_button_margin</item>
+        <item name="android:layout_marginRight">@dimen/top_button_margin</item>
+    </style>
+
+    <style name="buttonWhiteClose" parent="buttonWhite">
+        <item name="android:padding">4dip</item>
+    </style>
+
+    <style name="textLink">
+        <item name="android:padding">5dip</item>
+        <item name="android:minEms">4</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:tag">textLink</item>
+        <item name="android:textColor">?android:attr/textColorLink</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- A link that opens a list to choose from: it ends in a chevron, which the ringed-button
+         pass sizes and tints to the word; the tint here is for a link drawn without that pass. -->
+    <style name="textLinkDropdown" parent="textLink">
+        <item name="android:drawableEnd">@drawable/ic_chevron_down</item>
+        <item name="android:drawableTint">?android:attr/textColorLink</item>
+    </style>
+
+    <style name="textLinkWhite" parent="textLink">
+        <item name="android:tag">textLinkWhite</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <!-- A settings section head: the same white link the rest of the panel is set in, but
+         in caps, so a head is told apart from the settings under it at a glance. -->
+    <style name="textSectionTitle" parent="textLinkWhite">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="textLinkStyle">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">?android:attr/textColorLink</item>
+    </style>
+
+    <style name="buttonClear">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">4dip</item>
+        <item name="android:tint">@color/tint_gray</item>
+    </style>
+
+    <style name="textSection">
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">4dip</item>
+        <item name="android:background">#60e1e1e1</item>
+    </style>
+
+    <!-- A fact in the book sheet, set as a pair: the name of the fact held to one column so
+         every name lines up, and the fact itself taking the rest of the row and wrapping
+         inside it. -->
+    <style name="infoRow">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingTop">7dip</item>
+        <item name="android:paddingBottom">7dip</item>
+    </style>
+
+    <!-- The name of a fact: quieter than the fact, so the eye runs down the values. -->
+    <style name="infoLabel">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!-- The fact itself. -->
+    <style name="infoValue">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <!-- A fact that answers a tap - an author to search by, a year, a tongue - set in the
+         colour links are set in and left unmarked otherwise. -->
+    <style name="infoValueLink" parent="infoValue">
+        <item name="android:textColor">?android:attr/textColorLink</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- The head of a block that stands on its own under the facts - the annotation, the
+         bookmarks - set in the quiet of a fact's name with air above it. -->
+    <style name="infoBlockLabel">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:paddingBottom">6dip</item>
+    </style>
+
+    <style name="textCircle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/bg_circular</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:text">A</item>
+        <item name="android:layout_marginRight">8dip</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Every menu the app drops open is drawn on the same rounded sheet. The framework
+         widgets read the android: attributes and the AppCompat ones read the plain names, so
+         each theme below points both at these. -->
+    <style name="PopupMenuRound" parent="@android:style/Widget.Material.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="PopupMenuRoundOverflow" parent="@android:style/Widget.Material.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="ListPopupWindowRound" parent="@android:style/Widget.Material.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="SpinnerPopupRound" parent="@android:style/Widget.Material.Spinner">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="PopupMenuRoundCompat" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="PopupMenuRoundCompatOverflow" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <style name="ListPopupWindowRoundCompat" parent="Widget.AppCompat.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/bg_popup_round</item>
+    </style>
+
+    <!-- Dialogs are cut to the same round the cards are and held a little short of opaque, and
+         their titles are set in caps like the section heads, so a dialog reads as part of the
+         app rather than as the platform's own box. -->
+    <!-- The platform's own dialog-title style is private, so the title is described here
+         rather than inherited: the large text appearance the platform uses for it, set in
+         caps and bold like the section heads. -->
+    <style name="DialogRoundTitle">
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="DialogRoundLight" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_dialog_round_light</item>
+        <item name="android:windowTitleStyle">@style/DialogRoundTitle</item>
+    </style>
+
+    <style name="DialogRoundDark" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_dialog_round_dark</item>
+        <item name="android:windowTitleStyle">@style/DialogRoundTitle</item>
+    </style>
+
+    <!-- OmniShelfActivity: no screen of its own, only the popup when OmniShelf is missing. -->
+    <style name="OmniShelfWhite" parent="StyledIndicatorsWhite">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+    <style name="OmniShelfBlack" parent="StyledIndicatorsBlack">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+
+</resources>

@@ -1,0 +1,458 @@
+package com.foobnix.tts;
+
+import android.annotation.TargetApi;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
+
+import com.foobnix.android.utils.Apps;
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.TxtUtils;
+import com.foobnix.pdf.info.R;
+import com.foobnix.pdf.info.TintUtil;
+import com.foobnix.pdf.info.Urls;
+import com.foobnix.pdf.info.model.BookCSS;
+import com.foobnix.pdf.info.view.MyPopupMenu;
+import com.foobnix.pdf.info.wrapper.DocumentController;
+import com.foobnix.pdf.info.wrapper.MagicHelper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+
+public class TTSControlsView extends FrameLayout {
+
+    Handler handler;
+    private ImageView ttsPlayPause;
+    private DocumentController controller;
+    private ImageView ttsDialog;
+    private View layoutMp3;
+    private SeekBar seekMp3;
+    private TextView seekCurrent;
+    private TextView seekMax;
+    private TextView trackName;
+    private ImageView ttsPrevTrack;
+    private ImageView ttsNextTrack;
+    private int colorTint;
+    Runnable update = new Runnable() {
+
+        @Override
+        public void run() {
+            try {
+                if (TTSEngine.get().isMp3()) {
+                    initMp3();
+                    if (TTSEngine.get().mp != null) {
+                        seekCurrent.setText(TxtUtils.getMp3TimeString(TTSEngine.get().mp.getCurrentPosition()));
+                        seekMax.setText(TxtUtils.getMp3TimeString(TTSEngine.get().mp.getDuration()));
+
+                        seekMp3.setMax(TTSEngine.get().mp.getDuration());
+                        seekMp3.setProgress(TTSEngine.get().mp.getCurrentPosition());
+
+                        udateButtons();
+                    }
+
+                } else {
+                    layoutMp3.setVisibility(View.GONE);
+                    trackName.setVisibility(View.GONE);
+                }
+
+                LOG.d("TtsStatus-isPlaying", TTSEngine.get().isPlaying());
+                ttsPlayPause.setImageResource(TTSEngine.get().isPlaying() ? R.drawable.glyphicons_174_pause : R.drawable.glyphicons_175_play);
+            } catch (Exception e) {
+                LOG.e(e);
+            }
+        }
+    };
+
+    /**
+     * The row does not wrap and a dialog can be narrower than its buttons, the more so with the
+     * track buttons of an MP3 showing: they give up size there rather than being cut off.
+     */
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        final ViewGroup row = (ViewGroup) view.findViewById(R.id.ttsStop).getParent();
+        final int available = MeasureSpec.getSize(widthMeasureSpec);
+        if (available > 0) {
+            int visible = 0;
+            int margins = 0;
+            for (int i = 0; i < row.getChildCount(); i++) {
+                final View child = row.getChildAt(i);
+                if (child.getVisibility() != View.GONE) {
+                    visible++;
+                    margins += ((MarginLayoutParams) child.getLayoutParams()).leftMargin;
+                }
+            }
+            final int full = getResources().getDimensionPixelSize(R.dimen.wh_tts_button);
+            final int size = visible == 0 ? full : Math.min(full, (available - margins) / visible);
+            for (int i = 0; i < row.getChildCount(); i++) {
+                final ViewGroup.LayoutParams params = row.getChildAt(i).getLayoutParams();
+                params.width = size;
+                params.height = size;
+            }
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    public void setBackgroundColor(int color) {
+        if(view!=null) {
+            //view.setBackgroundColor(color);
+        }
+    }
+    View view;
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public TTSControlsView(final Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+         view = LayoutInflater.from(getContext()).inflate(R.layout.tts_mp3_line, this, false);
+        addView(view);
+
+        final ImageView ttsStop = (ImageView) view.findViewById(R.id.ttsStop);
+        ttsPlayPause = (ImageView) view.findViewById(R.id.ttsPlay);
+
+
+        final ImageView ttsNext = (ImageView) view.findViewById(R.id.ttsNext);
+        final ImageView ttsPrev = (ImageView) view.findViewById(R.id.ttsPrev);
+
+        ttsPrevTrack = (ImageView) view.findViewById(R.id.ttsPrevTrack);
+        ttsNextTrack = (ImageView) view.findViewById(R.id.ttsNextTrack);
+        trackName = (TextView) view.findViewById(R.id.trackName);
+
+        ttsDialog = (ImageView) view.findViewById(R.id.ttsDialog);
+        ttsDialog.setVisibility(View.GONE);
+        trackName.setVisibility(View.GONE);
+
+        // The colour the marks on the reading bars are drawn in. The theme colour the bars are
+        // filled with is nearly invisible against the panel these controls stand on.
+        colorTint = MagicHelper.getTextOrIconColor();
+
+
+        int alpha = 240;
+        TintUtil.setTintImageWithAlpha(ttsStop, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsPlayPause, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsNext, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsPrev, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsDialog, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsPrevTrack, colorTint, alpha);
+        TintUtil.setTintImageWithAlpha(ttsNextTrack, colorTint, alpha);
+        TintUtil.setTintText(trackName, colorTint);
+
+        // TxtUtils.updateAllLinks(view);
+
+        ttsNext.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!TTSService.isTTSGranted(context)) {
+                    return;
+                }
+                PendingIntent next = PendingIntent.getService(context, 0, new Intent(TTSNotification.TTS_NEXT, null, context, TTSService.class), PendingIntent.FLAG_IMMUTABLE);
+                try {
+                    next.send();
+                } catch (CanceledException e) {
+                    LOG.d(e);
+                }
+
+            }
+        });
+        ttsPrev.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!TTSService.isTTSGranted(context)) {
+                    return;
+                }
+                PendingIntent next = PendingIntent.getService(context, 0, new Intent(TTSNotification.TTS_PREV, null, context, TTSService.class), PendingIntent.FLAG_IMMUTABLE);
+                try {
+                    next.send();
+                } catch (CanceledException e) {
+                    LOG.d(e);
+                }
+
+            }
+        });
+
+        ttsStop.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!TTSService.isTTSGranted(context)) {
+                    return;
+                }
+                PendingIntent next = PendingIntent.getService(context, 0, new Intent(TTSNotification.TTS_STOP_DESTROY, null, context, TTSService.class), PendingIntent.FLAG_IMMUTABLE);
+                try {
+                    next.send();
+                } catch (CanceledException e) {
+                    LOG.d(e);
+                }
+            }
+        });
+
+        ttsPlayPause.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!TTSService.isTTSGranted(context)) {
+                    return;
+                }
+
+                if (TTSEngine.get().getEngineCount() == 0) {
+                    Urls.openTTS(getContext());
+                } else {
+                    TTSService.playPause(context, controller);
+                }
+            }
+        });
+
+        ttsPlayPause.setOnLongClickListener(new OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                TTSEngine.get().pauseMp3();
+                TTSEngine.get().seekTo(0);
+                return true;
+            }
+        });
+
+        handler = new Handler(Looper.getMainLooper());
+        seekMp3 = (SeekBar) view.findViewById(R.id.seekMp3);
+        seekCurrent = (TextView) view.findViewById(R.id.seekCurrent);
+        seekMax = (TextView) view.findViewById(R.id.seekMax);
+        layoutMp3 = view.findViewById(R.id.layoutMp3);
+
+
+        TintUtil.setDrawableTint(seekMp3.getProgressDrawable(), colorTint, alpha);
+
+        if (Build.VERSION.SDK_INT >= 16) {
+            TintUtil.setDrawableTint(seekMp3.getThumb(), colorTint, alpha);
+        }
+        TintUtil.setTintText(seekCurrent, colorTint);
+        TintUtil.setTintText(seekMax, colorTint);
+
+        layoutMp3.setVisibility(View.GONE);
+        initMp3();
+
+        ttsPrevTrack.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String track = TTSTracks.getPrevTrack();
+                if (track != null) {
+                    BookCSS.get().mp3BookPath(track);
+                    TTSEngine.get().loadMP3(track, true);
+                    udateButtons();
+                }
+            }
+        });
+
+        ttsNextTrack.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String track = TTSTracks.getNextTrack();
+                if (track != null) {
+                    BookCSS.get().mp3BookPath(track);
+                    TTSEngine.get().loadMP3(track, true);
+                    udateButtons();
+                }
+            }
+        });
+
+        if (TTSTracks.isMultyTracks()) {
+            ttsPrevTrack.setVisibility(View.VISIBLE);
+            ttsNextTrack.setVisibility(View.VISIBLE);
+        } else {
+            ttsPrevTrack.setVisibility(View.GONE);
+            ttsNextTrack.setVisibility(View.GONE);
+
+        }
+
+
+        trackName.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MyPopupMenu menu = new MyPopupMenu(v);
+                for (final File file : TTSTracks.getAllMp3InFolder()) {
+                    menu.getMenu().add(file.getName()).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            TTSEngine.get().stop();
+                            BookCSS.get().mp3BookPath(file.getPath());
+                            TTSEngine.get().loadMP3(file.getPath(), true);
+                            udateButtons();
+                            return false;
+                        }
+
+
+                    });
+                }
+                menu.show();
+
+            }
+        });
+        Apps.accessibilityButtonSize(ttsPlayPause);
+        Apps.accessibilityButtonSize(ttsNext);
+        Apps.accessibilityButtonSize(ttsPrev);
+        Apps.accessibilityButtonSize(ttsNextTrack);
+        Apps.accessibilityButtonSize(ttsPrevTrack);
+        Apps.accessibilityButtonSize(ttsDialog);
+        Apps.accessibilityButtonSize(ttsStop);
+
+    }
+
+    /**
+     * The controls wear the colour of the marks on the reading bars, which suits them where they
+     * stand on a bar. Put on a sheet of their own - the TTS dialog - they are handed the colour
+     * marks take there by whoever put them on it.
+     */
+    public void setTintColor(int color) {
+        colorTint = color;
+        int alpha = 240;
+        for (int id : new int[]{R.id.ttsStop, R.id.ttsPlay, R.id.ttsNext, R.id.ttsPrev, R.id.ttsDialog,
+                R.id.ttsPrevTrack, R.id.ttsNextTrack}) {
+            View mark = view.findViewById(id);
+            if (mark instanceof ImageView) {
+                TintUtil.setTintImageWithAlpha((ImageView) mark, color, alpha);
+            }
+        }
+        TintUtil.setTintText(trackName, color);
+        TintUtil.setDrawableTint(seekMp3.getProgressDrawable(), color, alpha);
+        TintUtil.setDrawableTint(seekMp3.getThumb(), color, alpha);
+        TintUtil.setTintText(seekCurrent, color);
+        TintUtil.setTintText(seekMax, color);
+    }
+
+    public void setDC(DocumentController dc) {
+        controller = dc;
+    }
+
+    /**
+     * Drops the mark that stops the reading. The panel keeps the book open behind it and has
+     * its own way out, so the line standing in it carries only what plays the book; the
+     * dialog, which is read on its own, keeps the mark.
+     */
+    public void hideStop() {
+        View stop = view.findViewById(R.id.ttsStop);
+        if (stop != null) {
+            stop.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * The line that stands on the page itself while the panels are closed: only the marks, with
+     * no sheet behind them, in the colour of the status line below the words, and see-through
+     * so the words under them still show.
+     */
+    public void onPage() {
+        hideStop();
+        setTintColor(TintUtil.getStatusBarTextColor());
+        setAlpha(0.6f);
+    }
+
+    public void addOnDialogRunnable(final Runnable run) {
+        // The mark that opens the settings stays hidden: the line carries the four controls
+        // that play the book and nothing else, and the settings are reached from the bar.
+        ttsDialog.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                run.run();
+            }
+        });
+    }
+
+    public void initMp3() {
+        if (TTSEngine.get().isMp3() && layoutMp3.getVisibility() == View.GONE) {
+            layoutMp3.setVisibility(View.VISIBLE);
+            trackName.setVisibility(View.VISIBLE);
+            view.setBackgroundColor(Color.parseColor("#ddffffff"));
+
+            udateButtons();
+
+            seekMp3.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser && TTSEngine.get().mp != null) {
+                        LOG.d("Seek-onProgressChanged", progress);
+                        TTSEngine.get().mp.seekTo(progress);
+                    }
+                }
+            });
+
+        }
+    }
+
+    public void udateButtons() {
+        trackName.setText("☰ "+TTSTracks.getCurrentTrackName());
+
+        boolean isMulty = TTSTracks.isMultyTracks();
+        ttsPrevTrack.setVisibility(TxtUtils.visibleIf(isMulty));
+        ttsNextTrack.setVisibility(TxtUtils.visibleIf(isMulty));
+
+        //TintUtil.setTintImageWithAlpha(ttsPrevTrack, TTSTracks.getPrevTrack() != null ? colorTint : Color.GRAY);
+        //TintUtil.setTintImageWithAlpha(ttsNextTrack, TTSTracks.getNextTrack() != null ? colorTint : Color.GRAY);
+
+        //TintUtil.setTintImageWithAlpha(ttsPrevTrack, colorTint, 240);
+        //TintUtil.setTintImageWithAlpha(ttsNextTrack, colorTint, 240);
+
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        EventBus.getDefault().unregister(this);
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTTSStatus(TtsStatus status) {
+        if (ttsPlayPause != null) {
+            handler.removeCallbacksAndMessages(null);
+            handler.postDelayed(update, 200);
+        }
+    }
+
+    public void reset() {
+        TTSEngine.get().loadMP3(BookCSS.get().mp3BookPathGet());
+        update.run();
+
+    }
+
+}

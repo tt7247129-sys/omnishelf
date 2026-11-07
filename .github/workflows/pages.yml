@@ -1,0 +1,36 @@
+# 把 site/ 目录发布到 GitHub Pages,得到 https://omnishelf.cc/privacy/
+#
+# 你需要在仓库 Settings → Pages 里把 Source 选成 "GitHub Actions"(点一次)。
+# 域名解析在域名商那边设置(见 docs/SETUP.md 第 4 步)。
+
+name: pages
+
+on:
+  push:
+    branches: [master, main]
+    paths: ["site/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

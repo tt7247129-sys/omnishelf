@@ -1,0 +1,331 @@
+package com.foobnix.pdf.info;
+
+import android.os.Handler;
+import android.os.Looper;
+import org.greenrobot.eventbus.EventBus;
+import com.foobnix.pdf.search.activity.msg.UpdateAllFragments;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.EncodeStrategy;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.ObjectKey;
+import com.foobnix.LibreraApp;
+import com.foobnix.android.utils.Dips;
+import com.foobnix.android.utils.LOG;
+import com.foobnix.model.AppState;
+import com.foobnix.pdf.info.wrapper.MagicHelper;
+import com.foobnix.pdf.search.activity.HorizontalViewActivity;
+import com.foobnix.sys.ImageExtractor;
+import com.foobnix.sys.LibreraAppGlideModule;
+import com.foobnix.ui2.MainTabs2;
+
+import org.ebookdroid.BookType;
+import org.ebookdroid.ui.viewer.VerticalViewActivity;
+
+import java.io.File;
+
+public class IMG {
+
+    public static final float WIDTH_DK = 1.5f;
+    public static final int TWO_LINE_COVER_SIZE = 74;
+    public static Drawable bookBGWithMark;
+    public static Drawable bookBGNoMark;
+    public static Context context;
+
+    public static void init(Context context) {
+
+        IMG.context = context;
+
+        bookBGWithMark = ContextCompat.getDrawable(context, R.drawable.bookeffect2);
+        bookBGNoMark = ContextCompat.getDrawable(context, R.drawable.bookeffect1);
+
+    }
+
+    public static int getImageSize() {
+        return Dips.dpToPx(Math.max(AppState.get().coverSmallSize, AppState.get().coverBigSize));
+    }
+
+    public static LayoutParams updateImageSizeSmall(View imageView) {
+        if (imageView == null || imageView.getLayoutParams() == null) {
+            return null;
+        }
+        LayoutParams lp = imageView.getLayoutParams();
+        lp.width = Dips.dpToPx(AppState.get().coverSmallSize);
+        lp.height = (int) (lp.width * WIDTH_DK);
+        return lp;
+    }
+
+    public static LayoutParams updateImageSizeSmallDir(View imageView) {
+        if (imageView == null || imageView.getLayoutParams() == null) {
+            return null;
+        }
+        LayoutParams lp = imageView.getLayoutParams();
+        lp.width = (int) (Dips.dpToPx(AppState.get().coverSmallSize) / 1.5);
+        lp.height = (int) (lp.width * WIDTH_DK);
+        return lp;
+    }
+
+    public static void updateImageSizeBig(View imageView) {
+        if (imageView == null || imageView.getLayoutParams() == null) {
+            return;
+        }
+
+        LayoutParams lp = imageView.getLayoutParams();
+        lp.width = Dips.dpToPx(AppState.get().coverBigSize);
+        lp.height = (int) (lp.width * WIDTH_DK);
+    }
+
+    public static void updateImageSizeBig(View imageView, int sizeDP) {
+        if (imageView == null || imageView.getLayoutParams() == null) {
+            return;
+        }
+
+        LayoutParams lp = imageView.getLayoutParams();
+        lp.width = Dips.dpToPx(sizeDP);
+        lp.height = (int) (lp.width * WIDTH_DK);
+    }
+
+    public static int alphaColor(int persent, String color) {
+        try {
+            int parseColor = Color.parseColor(color);
+            int alpha = 255 * persent / 100;
+            return Color.argb(alpha, Color.red(parseColor), Color.green(parseColor), Color.blue(parseColor));
+        } catch (Exception e) {
+            return Color.WHITE;
+        }
+    }
+
+    public static void clearMemoryCache() {
+        if (LibreraApp.context != null) {
+            LOG.d("clearMemoryCache", "Bitmap-test-2 clearMemoryCache");
+            LibreraAppGlideModule.clearCache();
+            Glide.get(LibreraApp.context)
+                 .clearMemory();
+        }
+    }
+
+    /**
+     * {@link #clearMemoryCache()} until nothing is left: what Glide's memory cache lets go of
+     * reaches its bitmap pool on the next turn of the main thread, and would stay there, counted
+     * by Google Play while the app is in the background.
+     */
+    public static void releaseMemory() {
+        clearMemoryCache();
+        final Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(() -> {
+            clearMemoryCache();
+            handler.post(IMG::clearMemoryCache);
+        });
+    }
+
+    public static RequestManager with(Context a) {
+        if (a instanceof HorizontalViewActivity) {
+            return Glide.with((HorizontalViewActivity) a);
+        } else if (a instanceof VerticalViewActivity) {
+            return Glide.with((VerticalViewActivity) a);
+        } else if (a instanceof MainTabs2) {
+            return Glide.with((MainTabs2) a);
+        } else {
+            return Glide.with(LibreraApp.context);
+        }
+    }
+
+    public static void pauseRequests(Context a) {
+        LOG.d("Glide-pause", a);
+        //with(a).pauseRequests();
+    }
+
+    public static void resumeRequests(Context a) {
+        LOG.d("Glide-resume", a);
+        //with(a).resumeRequests();
+    }
+
+    public static void clear(ImageView image) {
+        try {
+            LOG.d("Glide-clear", image.getContext());
+            Activity activity = ((Activity) image.getContext());
+            if (Build.VERSION.SDK_INT < 17 || !activity.isDestroyed()) {
+                with(image.getContext()).clear(image);
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+    }
+
+    public static void clear(Context c, Target t) {
+        LOG.d("Glide-clear", c);
+        try {
+            with(c).clear(t);
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+
+    }
+
+    public static void clearDiscCache() {
+        LOG.d("clearDiscCache", "Bitmap-test-2 clearDiscCache");
+        AppsConfig.executorService.execute(new Runnable() {
+            @Override public void run() {
+                try {
+                    if (LibreraApp.context != null) {
+                        Glide.get(LibreraApp.context)
+                             .clearDiskCache();
+                    }
+                } catch (Exception e) {
+                    LOG.e(e);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * The app can read files it could not before - a folder handed over again, or the permission
+     * to read the storage given. A book it could not open meanwhile was given a cover drawn from
+     * its name, and that cover is kept under the book's own key, so it would stay: every cover is
+     * dropped, and the lists drawn again once the cache is empty, so each is made from the book.
+     */
+    public static void onAccessRegained() {
+        clearMemoryCache();
+        AppsConfig.executorService.execute(() -> {
+            try {
+                if (LibreraApp.context != null) {
+                    Glide.get(LibreraApp.context).clearDiskCache();
+                }
+            } catch (Exception e) {
+                LOG.e(e);
+            }
+            new Handler(Looper.getMainLooper()).post(() -> {
+                clearMemoryCache();
+                EventBus.getDefault().post(new UpdateAllFragments());
+            });
+        });
+    }
+
+    public static void clearCache(String path) {
+        try {
+
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+    }
+
+
+    public static interface ResourceReady {
+        void onResourceReady(Bitmap bitmap);
+    }
+
+
+
+    public static String getCoverUrl(String path){
+        return toUrl(path, ImageExtractor.COVER_PAGE, IMG.getImageSize(), false);
+    }
+    public static final DiskCacheStrategy AUTOMATIC1 =
+            new DiskCacheStrategy() {
+                @Override
+                public boolean isDataCacheable(DataSource dataSource) {
+                    return dataSource == DataSource.LOCAL;
+                }
+
+                @Override
+                public boolean isResourceCacheable(
+                        boolean isFromAlternateCacheKey, DataSource dataSource, EncodeStrategy encodeStrategy) {
+                    return dataSource == DataSource.LOCAL;
+                }
+
+                @Override
+                public boolean decodeCachedResource() {
+                    return true;
+                }
+
+                @Override
+                public boolean decodeCachedData() {
+                    return true;
+                }
+            };
+
+
+    public static RequestBuilder<Bitmap> getCoverPageWithEffect(Context context, String path, ResourceReady run) {
+        int imageSize = IMG.getImageSize();
+        String url = toUrl(path, ImageExtractor.COVER_PAGE, imageSize,false);
+        return IMG.with(context)
+           .asBitmap()
+           .load(url)
+           .override(imageSize)
+                .onlyRetrieveFromCache(false)
+           .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+           //.override(imageSize)
+              .signature(new ObjectKey(url.hashCode()))
+           .listener(new RequestListener<>() {
+               @Override public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target,
+                                                     boolean isFirstResource) {
+                   return false;
+               }
+
+               @Override
+               public boolean onResourceReady(Bitmap bitmap, Object model, Target<Bitmap> target, DataSource dataSource,
+                                              boolean isFirstResource) {
+                   target.onResourceReady(bitmap, null);
+                   LOG.d("Bitmap-test-2", bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig(),
+                           dataSource,isFirstResource,model);
+
+                   if (run != null) {
+                       run.onResourceReady(null);
+                   }
+                   return true;
+               }
+           });
+
+    }
+
+
+    public static String toUrl(final String path, final int page, final int width, boolean withHash) {
+        PageUrl pdfUrl = new PageUrl(path, page, width, 0, false, false, 0,false);
+        // A book on added storage is drawn either as its name or as its own cover, and the two
+        // are told apart here so that turning the setting switches what is shown at once and
+        // neither picture has to be made twice.
+        pdfUrl.setUnic(AppState.get().isSafBookCovers && ExtUtils.isExteralSD(path) ? 1 : 0);
+        // A book from the history the app can only reach through a folder handed over in the
+        // picker has its cover read that way (see ImageExtractor); it is told apart from the name
+        // drawn for it while there was no such folder.
+        if (AppState.get().isSafBookCovers && path != null && path.startsWith("/")
+                && !Android6.canWrite(LibreraApp.context) && !new File(path).canRead()
+                && ExtUtils.getSafUriForPath(LibreraApp.context, path) != null) {
+            pdfUrl.setUnic(2);
+        } else if (path != null && path.startsWith("/") && !new File(path).exists()) {
+            // A synced book is listed before its file comes down. The name drawn for it meanwhile
+            // must not stay in the cache as this book's cover once the file is here.
+            pdfUrl.setUnic(3);
+        }
+        if(withHash) {
+            pdfUrl.hash =
+                    ("" + AppState.get().isBookCoverEffect + TintUtil.getColorInDayNighth() + AppState.get().sortByBrowse).hashCode() + MagicHelper.hash();
+        }else{
+            // A PDF's cover is drawn by the engine that reads it, so a change of engine draws it
+            // again. PDF_ENGINE_MUPDF is 0, which keeps the covers already in the cache.
+            pdfUrl.hash = BookType.PDF.is(path) ? AppState.get().getPdfEngine() : 0;
+        }
+        return pdfUrl.toString();
+    }
+
+
+}

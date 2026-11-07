@@ -1,0 +1,1017 @@
+package com.foobnix.pdf.search.activity;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Matrix;
+import android.graphics.PointF;
+import android.util.Pair;
+
+import com.foobnix.ext.PageEstimate;
+import com.foobnix.android.utils.Apps;
+import com.foobnix.android.utils.Dips;
+import com.foobnix.android.utils.Intents;
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.Safe;
+import com.foobnix.android.utils.TxtUtils;
+import com.foobnix.dao2.FileMeta;
+import com.foobnix.ext.CacheZipUtils;
+import com.foobnix.model.AppBook;
+import android.graphics.RectF;
+import com.foobnix.model.AppSP;
+import com.foobnix.pdf.info.AnnotationsPainter;
+import com.foobnix.pdf.info.AnnotationsFinder;
+import com.foobnix.model.AppAnnotation;
+import com.foobnix.model.AppState;
+import com.foobnix.pdf.CopyAsyncTask;
+import com.foobnix.pdf.info.AppsConfig;
+import com.foobnix.pdf.info.ExtUtils;
+import com.foobnix.pdf.info.PageUrl;
+import com.foobnix.pdf.info.model.AnnotationType;
+import com.foobnix.pdf.info.model.BookCSS;
+import com.foobnix.pdf.info.model.OutlineLinkWrapper;
+import com.foobnix.pdf.info.wrapper.DocumentController;
+import com.foobnix.pdf.search.activity.msg.InvalidateMessage;
+import com.foobnix.pdf.search.activity.msg.MessageAutoFit;
+import com.foobnix.pdf.search.activity.msg.MessageCenterHorizontally;
+import com.foobnix.pdf.search.activity.msg.MessagePageXY;
+import com.foobnix.pdf.search.activity.msg.MovePageAction;
+import com.foobnix.sys.Colors;
+import com.foobnix.sys.ImageExtractor;
+import com.foobnix.sys.TempHolder;
+import com.foobnix.tts.TTSEngine;
+import com.foobnix.tts.TTSNotification;
+import com.foobnix.ui2.AppDB;
+import com.foobnix.ui2.FileMetaCore;
+
+import org.ebookdroid.common.settings.SettingsManager;
+import org.ebookdroid.core.PageSearcher;
+import org.ebookdroid.core.codec.CodecDocument;
+import org.ebookdroid.core.codec.CodecPage;
+import org.ebookdroid.core.codec.CodecPageInfo;
+import org.ebookdroid.core.codec.OutlineLink;
+import org.ebookdroid.core.codec.PageLink;
+import org.ebookdroid.droids.mupdf.codec.MuPdfLinks;
+import org.ebookdroid.droids.mupdf.codec.TextWord;
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+
+public abstract class HorizontalModeController extends DocumentController {
+
+    int currentPage;
+    String bookPath;
+    CodecDocument codeDocument;
+    int imageWidth, imageHeight;
+    private int pagesCount;
+    private CopyAsyncTask searchTask;
+    private boolean isTextFormat = false;
+    private SharedPreferences matrixSP;
+    private volatile boolean isClosed = false;
+
+    @Override public CodecDocument getCodecDocument() {
+        return codeDocument;
+    }
+
+    /** Whether pen strokes or erasing have changed the PDF since it was opened or saved. */
+    @Override public boolean hasPDFAnnotations() {
+        final CodecDocument doc = codeDocument;
+        return doc != null && !doc.isRecycled() && isAnnotationsInsideDocument() && doc.hasChanges();
+    }
+
+    /** Writes the PDF's changed annotations into the file at a path, off the main thread. */
+    @Override public void saveAnnotations(final String path, final Runnable done) {
+        new Thread("@T saveAnnotations") {
+            @Override public void run() {
+                try {
+                    final CodecDocument doc = codeDocument;
+                    if (doc != null && !doc.isRecycled() && doc.hasChanges()) {
+                        doc.saveAnnotations(path);
+                    }
+                } catch (Exception e) {
+                    LOG.e(e);
+                }
+                handler.post(done);
+            }
+        }.start();
+    }
+
+    public HorizontalModeController(Activity activity, int w, int h) {
+        super(activity);
+
+        isTextFormat = ExtUtils.isTextFomat(activity.getIntent());
+        udpateImageSize(isTextFormat, w, h);
+
+        matrixSP = activity.getSharedPreferences("matrix", Context.MODE_PRIVATE);
+
+        PageImageState.get()
+                      .cleanSelectedWords();
+        PageImageState.get().pagesText.clear();
+        // Keep crop rectangles in lockstep with the text they are used to map.
+        PageImageState.get().clearPagesCrop();
+
+        if (isTextFormat) {
+            AppSP.get().isCrop = false;
+            AppSP.get().isCut = false;
+            AppSP.get().isLocked = true;
+        }
+
+        bookPath = Apps.getBookPathFromActivity(activity);
+        setCurrentBook(new File(bookPath));
+
+        AppBook bs = SettingsManager.getBookSettings(bookPath);
+
+        if (bs != null) {
+            LOG.d("isRTL", "AppBook.rtl", bs.rtl);
+            AppSP.get().isRTL = bs.rtl;
+            AppSP.get().isCut = bs.sp;
+            AppSP.get().isCrop = bs.cp;
+            AppSP.get().isDouble = bs.dp;
+            AppSP.get().isDoubleCoverAlone = bs.dc;
+            AppSP.get().isLocked = bs.getLock(isTextFormat, AppState.get().lockBooksByDefault);
+            TempHolder.get().pageDelta = bs.d;
+
+            if (AppState.get().isCropPDF && !isTextFormat) {
+                AppSP.get().isCrop = true;
+            }
+        }
+
+        if (AppState.get().alwaysTwoPages) {
+            AppSP.get().isDouble = true;
+            AppSP.get().isCut = false;
+            AppSP.get().isDoubleCoverAlone = false;
+        }
+
+        FileMetaCore.checkOrCreateMetaInfo(activity);
+        BookCSS.get()
+               .detectLang(bookPath);
+
+        String pasw = activity.getIntent()
+                              .getStringExtra(EXTRA_PASSWORD);
+        pasw = TxtUtils.nullToEmpty(pasw);
+
+        if (AppSP.get().isDouble && isTextFormat) {
+            imageWidth = Dips.screenWidth() / 2;
+        }
+
+        codeDocument = ImageExtractor.getNewCodecContext(bookPath, pasw, imageWidth, imageHeight);
+        if (codeDocument != null) {
+            pagesCount = codeDocument.getPageCount(imageWidth, imageHeight, BookCSS.get().fontSizeSp);
+        } else {
+            pagesCount = 0;
+        }
+
+        if (pagesCount <= 0) {
+            CacheZipUtils.emptyAllCacheDirs();
+            throw new IllegalArgumentException("Pages count: "+pagesCount);
+        }
+
+        try {
+            FileMeta meta = AppDB.get()
+                                 .load(bookPath);
+            // A reflowable book is as many pages here as its font makes it: it keeps the standard
+            // pages of its text, so it is sorted with the others by one measure
+            if (meta != null && !PageEstimate.isEstimated(bookPath, meta.getChild())) {
+                meta.setPages(pagesCount);
+                AppDB.get()
+                     .update(meta);
+                LOG.d("update openDocument.getPageCount()", bookPath, pagesCount);
+            }
+
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+
+        AppDB.get()
+             .addRecent(bookPath);
+
+        float percent = Intents.getFloatAndClear(activity.getIntent(), DocumentController.EXTRA_PERCENT);
+
+        if (percent > 0.0f) {
+            currentPage = getBookmarkPage(percent, activity.getIntent().getStringExtra(EXTRA_BOOKMARK_TEXT),
+                                          activity.getIntent().getStringExtra(EXTRA_BOOKMARK_PAGE_TEXT)) - 1;
+        } else if (pagesCount > 0) {
+            currentPage = findBookmarkPage(bs.getCurrentPage(getPageCount()).viewIndex + 1, null, bs.pt, bs.cfi) - 1;
+        }
+        if (AppState.get().isAlwaysOpenOnPage1) {
+            currentPage = 0;
+        }
+
+        if (false) {
+            PageImageState.get().needAutoFit = true;
+        } else {
+            if (TxtUtils.isNotEmpty(bookPath) && !ExtUtils.isTextFomat(bookPath)) {
+                String string = matrixSP.getString(bookPath.hashCode() + "", "");
+                LOG.d("MATRIX", "READ STR", string);
+                if (TxtUtils.isEmpty(string) || AppSP.get().isCut || AppSP.get().isCrop) {
+                    PageImageState.get().needAutoFit = true;
+                } else {
+                    PageImageState.get().needAutoFit = false;
+                }
+                Matrix matrix = PageImageState.fromString(string);
+                PageImageState.get()
+                              .getMatrix()
+                              .set(matrix);
+
+                LOG.d("MATRIX", "READ", bookPath.hashCode() + "", PageImageState.get()
+                                                                                .getMatrixAsString());
+
+            }
+        }
+
+    }
+
+    public static String getTempTitle(Activity a) {
+        try {
+            return getTitle(Apps.getBookPathFromActivity(a));
+        } catch (Exception e) {
+            LOG.e(e);
+            return "";
+        }
+    }
+
+    public static String getTitle(String path) {
+        if (ExtUtils.hasTitle(path)) {
+            return AppDB.get()
+                        .getOrCreate(path)
+                        .getTitle();
+        }
+        return new File(path).getName();
+    }
+
+    @Override public void updateRendering() {
+
+    }
+
+    @Override public void onScrollYPercent(float value) {
+        int page2 = Math.round(value * getPageCount());
+        onGoToPage(page2);
+    }
+
+    public void udpateImageSize(boolean isTextFormat, int w, int h) {
+        LOG.d("udpateImageSize", w, h, isTextFormat);
+        imageWidth = isTextFormat ? w :
+                (int) (Math.min(Dips.screenWidth(), Dips.screenHeight()) * AppState.get().pageQuality);
+        imageHeight = isTextFormat ? h :
+                (int) (Math.max(Dips.screenWidth(), Dips.screenHeight()) * AppState.get().pageQuality);
+    }
+
+    @Override public int getBookHeight() {
+        return imageHeight;
+    }
+
+    @Override public int getBookWidth() {
+        return imageWidth;
+    }
+
+    @Override public void onLinkHistory() {
+        if (!getLinkHistory().isEmpty()) {
+            final int last = getLinkHistory().removeLast();
+            onGoToPage(last);
+        }
+    }
+
+    @Override public float getOffsetY() {
+        return getCurentPageFirst1();
+    }
+
+    @Override public void cleanImageMatrix() {
+        try {
+            PageImageState.get()
+                          .getMatrix()
+                          .reset();
+            matrixSP.edit()
+                    .remove("" + bookPath.hashCode())
+                    .commit();
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+    }
+
+    @Override public void saveAnnotationsToFile() {
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int page) {
+        currentPage = page;
+        syncTtsPlace();
+    }
+
+    @Override public int getCurentPageFirst1() {
+        return currentPage + 1;
+    }
+
+    public int getOpenPageNumber() {
+        return currentPage;
+    }
+
+    @Override public PageUrl getPageUrl(int page) {
+        PageUrl build = PageUrl.build(getBookPath(), page, imageWidth, imageHeight);
+        build.setDoText(true);
+        return build;
+    }
+
+    public abstract void onGoToPageImpl(int page);
+
+    public abstract void notifyAdapterDataChanged();
+
+    public abstract void showInterstialAndClose();
+
+    /** The page on screen, to map a pen stroke drawn over it onto the book. */
+    public abstract PageImaveView getPageView();
+
+    /** Renders the page on screen again, after an annotation was drawn on it or erased. */
+    public abstract void reloadPage();
+
+    @Override public void onGoToPage(int page) {
+        if (page <= getPageCount()) {
+            onGoToPageImpl(page - 1);
+        }
+    }
+
+    @Override public void onSrollLeft() {
+        throw new RuntimeException("Not Implemented");
+    }
+
+    public TextWord[][] getPageText(int number) {
+        LOG.d("Get page text for page", number);
+        try {
+            CodecPage page = codeDocument.getPage(number);
+            if (!page.isRecycled()) {
+                TextWord[][] text = page.getText();
+                return text;
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+        return null;
+    }
+
+    @Override public synchronized String getTextForPage(int page) {
+        try {
+            CodecPage codecPage = codeDocument.getPage(page);
+            if (!codecPage.isRecycled()) {
+                String pageHTML = codecPage.getPageHTML();
+                codecPage.recycle();
+                pageHTML = TxtUtils.replaceHTMLforTTS(pageHTML);
+                pageHTML = pageHTML.replace(TxtUtils.TTS_PAUSE, " ");
+                pageHTML = pageHTML.replace(TxtUtils.NON_BREAKE_SPACE, " ");
+                return pageHTML;
+
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+        return "";
+    }
+
+    @Override public String getPageHtml() {
+        try {
+            CodecPage codecPage = codeDocument.getPage(getCurentPageFirst1() - 1);
+            if (!codecPage.isRecycled()) {
+                String pageHTML = codecPage.getPageHTML();
+                pageHTML = TxtUtils.replaceHTMLforTTS(pageHTML);
+                pageHTML = pageHTML.replace(TxtUtils.TTS_PAUSE, TxtUtils.TTS_PAUSE_VIEW);
+
+                return pageHTML;
+
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+        return "";
+    }
+
+    @Override public List<PageLink> getLinksForPage(int page) {
+        try {
+            return codeDocument.getPage(page)
+                               .getPageLinks();
+        } catch (Exception e) {
+            LOG.e(e);
+            return Collections.emptyList();
+        }
+    }
+
+    @Override public void onSrollRight() {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void onNextPage(boolean animate) {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void onPrevPage(boolean animate) {
+        throw new RuntimeException("Not Implemented");
+    }
+
+    @Override public void onNextScreen(boolean animate) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override public boolean isCropCurrentBook() {
+        return false;
+    }
+
+    @Override public void onPrevScreen(boolean animate) {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void onZoomInc() {
+        EventBus.getDefault()
+                .post(new MovePageAction(MovePageAction.ZOOM_PLUS, getCurentPage()));
+    }
+
+    @Override public void onZoomDec() {
+        EventBus.getDefault()
+                .post(new MovePageAction(MovePageAction.ZOOM_MINUS, getCurentPage()));
+    }
+
+    @Override public void onZoomInOut(int x, int y) {
+
+    }
+
+    @Override public String getFootNote(String text, String chapter) {
+        try {
+            return TxtUtils.getFooterNote(text, chapter, codeDocument.getFootNotes());
+        } catch (Exception e) {
+            LOG.e(e);
+            return "";
+        }
+    }
+
+    @Override public List<String> getMediaAttachments() {
+        try {
+            return codeDocument.getMediaAttachments();
+        } catch (Exception e) {
+            LOG.e(e);
+            return Collections.emptyList();
+        }
+    }
+
+    @Override public void onScrollDown() {
+    }
+
+    @Override public void onScrollUp() {
+    }
+
+    @Override public void onCloseActivityFinal(final Runnable run) {
+        stopTimer();
+        TTSEngine.get()
+                 .stop();
+        TTSNotification.hideNotification();
+
+        Safe.run(new Runnable() {
+
+            @Override public void run() {
+                isClosed = true;
+                if (codeDocument != null) {
+                    codeDocument.recycle();
+                    codeDocument = null;
+                }
+                try {
+                    if (!ExtUtils.isTextFomat(bookPath)) {
+                        matrixSP.edit()
+                                .putString(bookPath.hashCode() + "", PageImageState.get()
+                                                                                   .getMatrixAsString())
+                                .commit();
+                        LOG.d("MATRIX", "SAVE", bookPath.hashCode() + "", PageImageState.get()
+                                                                                        .getMatrixAsString());
+                    }
+                } catch (Exception e) {
+                    LOG.e(e);
+                }
+
+                //saveCurrentPage();
+                LOG.d("_PAGE", "SAVE", getCurentPage());
+                final Intent i = new Intent();
+                i.putExtra("page", getCurentPage());
+                activity.setResult(Activity.RESULT_OK, i);
+                activity.finish();
+
+                ImageExtractor.clearCodeDocument();
+                if (run != null) {
+                    run.run();
+                }
+            }
+        });
+    }
+
+    @Override public void onCloseActivityAdnShowInterstial() {
+        showInterstialAndClose();
+
+    }
+
+    @Override public void onNightMode() {
+    }
+
+    @Override public void onCrop() {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void onFullScreen() {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public int getCurentPage() {
+        LOG.d("_PAGE", "getCurentPage", currentPage);
+        return currentPage;
+    }
+
+    @Override public int getPageCount() {
+        return PageUrl.realToFake(pagesCount);
+    }
+
+    @Override public void onScrollY(int value) {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void onAutoScroll() {
+        throw new RuntimeException("Not Implemented");
+
+    }
+
+    @Override public void clearSelectedText() {
+        EventBus.getDefault()
+                .post(new MessagePageXY(MessagePageXY.TYPE_HIDE));
+        AppState.get().selectedText = null;
+        PageImageState.get()
+                      .cleanSelectedWords();
+        EventBus.getDefault()
+                .post(new InvalidateMessage());
+    }
+
+    /**
+     * A pen stroke drawn over the page, written into the PDF as an ink annotation the way scroll
+     * mode writes one. Paged mode has no decode service, so the stroke goes straight into the
+     * document the pages are rendered from, and the page is rendered again to show it.
+     */
+    @Override public void saveChanges(final List<PointF> points, final int color) {
+        final PageImaveView view = getPageView();
+        final CodecDocument doc = codeDocument;
+        if (view == null || doc == null || points.isEmpty() || !isAnnotationsInsideDocument()) {
+            return;
+        }
+        // Points 0..1 of the page under each one; a stroke over both pages of a spread is a
+        // stroke on each
+        final Map<Integer, List<PointF>> byPage = new LinkedHashMap<Integer, List<PointF>>();
+        for (PointF p : points) {
+            final Pair<Integer, PointF> onPage = view.toPage(p.x, p.y);
+            if (onPage == null) {
+                continue;
+            }
+            List<PointF> list = byPage.get(onPage.first);
+            if (list == null) {
+                list = new ArrayList<PointF>();
+                byPage.put(onPage.first, list);
+            }
+            list.add(onPage.second);
+        }
+        if (byPage.isEmpty()) {
+            return;
+        }
+        final float width = AppState.get().editLineWidth * 3;
+        final float alpha = AppState.get().editAlphaColor;
+        final float[] mupdfColor = Colors.toMupdfColor(color);
+
+        new Thread("@T saveChanges") {
+            @Override public void run() {
+                try {
+                    for (Map.Entry<Integer, List<PointF>> entry : byPage.entrySet()) {
+                        final CodecPageInfo info = doc.getPageInfo(entry.getKey());
+                        if (info == null || doc.isRecycled()) {
+                            continue;
+                        }
+                        final List<PointF> list = entry.getValue();
+                        final PointF[][] path = new PointF[1][list.size()];
+                        for (int i = 0; i < list.size(); i++) {
+                            path[0][i] = new PointF(list.get(i).x * info.width, list.get(i).y * info.height);
+                        }
+                        final CodecPage page = doc.getPage(entry.getKey());
+                        try {
+                            page.addAnnotation(mupdfColor, path, width, alpha);
+                        } finally {
+                            page.recycle();
+                        }
+                    }
+                } catch (Exception e) {
+                    LOG.e(e);
+                }
+                handler.post(HorizontalModeController.this::reloadPage);
+            }
+        }.start();
+    }
+
+    /**
+     * Erases an annotation of the PDF. The handle the annotation came with belongs to a page
+     * long since recycled - pages are opened only to be rendered - so the page is opened again.
+     *
+     * @param page the page as the annotation counts it, from 1
+     */
+    @Override public void deleteAnnotation(long pageHander, final int page, final int index) {
+        final CodecDocument doc = codeDocument;
+        if (doc == null) {
+            return;
+        }
+        new Thread("@T deleteAnnotation") {
+            @Override public void run() {
+                try {
+                    if (doc.isRecycled()) {
+                        return;
+                    }
+                    final CodecPage codecPage = doc.getPage(page - 1);
+                    try {
+                        doc.deleteAnnotation(codecPage.getPageHandle(), index);
+                    } finally {
+                        codecPage.recycle();
+                    }
+                } catch (Exception e) {
+                    LOG.e(e);
+                }
+                handler.post(HorizontalModeController.this::reloadPage);
+            }
+        }.start();
+    }
+
+    /**
+     * A mark on the words selected in paged mode.
+     *
+     * Paged mode has no decode service to write a PDF annotation through - it renders through
+     * {@link com.foobnix.sys.ImageExtractor} - so every format, a PDF included, is marked in
+     * Librera's own store here. A PDF read in scroll mode still gets a real PDF annotation, and
+     * the two are drawn the same way, so a book marked in one mode reads correctly in the other.
+     */
+    @Override public void underlineText(final int color, float width, final AnnotationType type) {
+        final int page = currentPage;
+        final List<TextWord> words = PageImageState.get().getSelectedWords(page);
+        if (words == null || words.isEmpty()) {
+            LOG.d("underlineText: nothing selected");
+            return;
+        }
+        final String colorText = AnnotationsPainter.toHex(color);
+        // Grouped by which of the two pages on screen each word is on, so a selection dragged
+        // across the fold is two marks, each anchored to its own page
+        final Map<Integer, List<TextWord>> byNumber = new LinkedHashMap<Integer, List<TextWord>>();
+        for (TextWord word : new ArrayList<TextWord>(words)) {
+            List<TextWord> group = byNumber.get(word.number);
+            if (group == null) {
+                group = new ArrayList<TextWord>();
+                byNumber.put(word.number, group);
+            }
+            group.add(word);
+        }
+        new Thread("@T underlineText") {
+            @Override public void run() {
+                try {
+                    for (Map.Entry<Integer, List<TextWord>> entry : byNumber.entrySet()) {
+                        final int docPage = docPageOf(page, entry.getKey());
+                        final List<RectF> rects = AnnotationsFinder.mergeLines(entry.getValue());
+                        final AppAnnotation annotation = createAnnotation(docPage, rects,
+                                AnnotationsFinder.textOf(entry.getValue()), type, colorText);
+                        if (annotation == null) {
+                            continue;
+                        }
+                        // Show it now; the page is not going to be rendered again by itself
+                        final List<AnnotationsFinder.Drawn> shown = PageImageState.get().pagesMarks.get(docPage);
+                        final List<AnnotationsFinder.Drawn> marks = shown == null
+                                ? new ArrayList<AnnotationsFinder.Drawn>()
+                                : new ArrayList<AnnotationsFinder.Drawn>(shown);
+                        marks.add(new AnnotationsFinder.Drawn(annotation, rects));
+                        PageImageState.get().pagesMarks.put(docPage, marks);
+                    }
+                    activity.runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            clearSelectedText();
+                        }
+                    });
+                } catch (Throwable e) {
+                    LOG.e(e);
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public int[] getSelectionPlace(final String text) {
+        final List<TextWord> words = PageImageState.get().getSelectedWords(currentPage);
+        if (words == null || words.isEmpty()) {
+            return null;
+        }
+        final TextWord first = words.get(0);
+        final int page = docPageOf(currentPage, first.number);
+        return new int[]{page, AnnotationsFinder.occurrenceOf(PageImageState.get().pagesText.get(page), first, text)};
+    }
+
+    /**
+     * Which page of the book one of the pages on screen is, keyed as the links and the text are.
+     *
+     * @param number 0 for a single page, 1 and 2 for the left and right of a two-page spread
+     */
+    private int docPageOf(final int page, final int number) {
+        if (!AppSP.get().isDouble || number == 0) {
+            return page;
+        }
+        int first = page * 2;
+        if (AppSP.get().isDoubleCoverAlone) {
+            first--;
+        }
+        return number == 1 ? first : first + 1;
+    }
+
+    /** Who asked for the contents while they were still being read; see getOutline. */
+    private final List<com.foobnix.android.utils.ResultResponse<List<OutlineLinkWrapper>>> outlineWaiting =
+            new ArrayList<>();
+
+    @Override
+    public void getOutline(final com.foobnix.android.utils.ResultResponse<List<OutlineLinkWrapper>> outlineResonse,
+                           boolean forse) {
+
+        if (Apps.isDestroyedActivity(activity)) {
+            return;
+        }
+
+        if (codeDocument == null) {
+            outlineResonse.onResultRecive(Collections.emptyList());
+            return;
+        }
+
+        synchronized (outlineWaiting) {
+            if (outline != null) {
+                outlineResonse.onResultRecive(outline);
+                return;
+            }
+            // Asked again while the contents are still being read - the panel opened straight
+            // after the book did. It waits for the whole list rather than being handed an empty
+            // one it would show as a blank panel.
+            outlineWaiting.add(outlineResonse);
+            if (outlineWaiting.size() > 1) {
+                return;
+            }
+        }
+
+        final ArrayList<OutlineLinkWrapper> cached =
+                (ArrayList<OutlineLinkWrapper>) CacheZipUtils.loadJavaCache(getCurrentBook(), getPageCount());
+        // An empty list is what a read that failed or timed out left behind, not the book's
+        // contents, so it is read again rather than kept
+        if (cached != null && !cached.isEmpty()) {
+            publishOutline(cached);
+            return;
+        }
+
+        AppsConfig.executorServiceSingle.execute(() -> {
+            final ArrayList<OutlineLinkWrapper> result = new ArrayList<>();
+            try {
+                for (OutlineLink ol : codeDocument.getOutline()) {
+                    if (TempHolder.get().loadingCancelled.get()) {
+                        return;
+                    }
+
+                    if (Apps.isDestroyedActivity(activity)) {
+                        return;
+                    }
+
+                    if (codeDocument.isRecycled()) {
+                        return;
+                    }
+                    if (TxtUtils.isNotEmpty(ol.getTitle())) {
+                        if (ol.getLink() != null && ol.getLink()
+                                                      .startsWith("#") && !ol.getLink()
+                                                                             .startsWith("#0")) {
+                            result.add(
+                                    new OutlineLinkWrapper(ol.getTitle(), ol.getLink(), ol.getLevel(), ol.linkUri));
+                        } else {
+                            int page = MuPdfLinks.getLinkPageWrapper(ol.docHandle, ol.linkUri) + 1;
+                            result.add(
+                                    new OutlineLinkWrapper(ol.getTitle(), "#" + page, ol.getLevel(), ol.linkUri));
+                        }
+                    }
+                }
+
+                if (!result.isEmpty()) {
+                    CacheZipUtils.savaJavaCache(result, getCurrentBook(), getPageCount());
+                }
+            } catch (Exception e) {
+                LOG.e(e);
+            }
+            getActivity().runOnUiThread(() -> publishOutline(result));
+        });
+    }
+
+    /** Keeps the contents and hands them to everyone who asked while they were being read. */
+    private void publishOutline(final ArrayList<OutlineLinkWrapper> result) {
+        final List<com.foobnix.android.utils.ResultResponse<List<OutlineLinkWrapper>>> waiting;
+        synchronized (outlineWaiting) {
+            outline = result;
+            waiting = new ArrayList<>(outlineWaiting);
+            outlineWaiting.clear();
+        }
+        for (com.foobnix.android.utils.ResultResponse<List<OutlineLinkWrapper>> response : waiting) {
+            if (response != null) {
+                response.onResultRecive(result);
+            }
+        }
+
+    }
+
+    @Override public void recyclePage(int number) {
+        if (codeDocument == null) {
+            return;
+        }
+        try {
+            CodecPage page = codeDocument.getPage(number);
+            page.recycle();
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+    }
+
+    @Override public void doSearch(final String text, final com.foobnix.android.utils.ResultResponse<Integer> result,
+                                   int firstPage, int lastPage) {
+        if (searchTask != null && searchTask.getStatus() != CopyAsyncTask.Status.FINISHED) {
+            return;
+        }
+
+        searchTask = new CopyAsyncTask() {
+
+            @Override protected Object doInBackground(Object... params) {
+                try {
+                    PageImageState.get()
+                                  .cleanSelectedWords();
+                    String textLowCase = text.toLowerCase(Locale.US);
+                    String bookPath = getBookPath();
+                    int prev = -1;
+
+                    boolean nextWorld = false;
+                    String firstPart = "";
+                    TextWord firstWord = null;
+                    int firstWordIndex = 0;
+
+                    PageSearcher pageSearcher = new PageSearcher();
+                    pageSearcher.setTextForSearch(text);
+                    pageSearcher.setListener(new PageSearcher.OnWordSearched() {
+                        @Override public void onSearch(TextWord word, Object data) {
+                            if (!(data instanceof Integer)) return;
+                            Integer pageNumber = (Integer) data;
+                            LOG.d("Find on page_", pageNumber, text, word);
+                            List<TextWord> selectedWords = PageImageState.get()
+                                                                         .getSelectedWords(pageNumber);
+                            if (selectedWords == null || selectedWords.size() <= 0) {
+                                result.onResultRecive(pageNumber);
+                                LOG.d("Find on page", pageNumber, text);
+                            }
+                            if (selectedWords == null || !selectedWords.contains(word)) {
+                                PageImageState.get()
+                                              .addWord(pageNumber, word);
+                            }
+                        }
+                    });
+
+                    for (int i = firstPage; i < lastPage; i++) {
+                        if (!TempHolder.isSeaching) {
+                            result.onResultRecive(Integer.MAX_VALUE);
+                            return null;
+                        }
+
+                        if (isClosed) {
+                            TempHolder.isSeaching = false;
+                            return null;
+                        }
+                        if (i > 1) {
+                            result.onResultRecive(i * -1);
+                        }
+
+                        TextWord[][] pageText = getPageText(i);
+                        recyclePage(i);
+                        if (pageText == null) {
+                            continue;
+                        }
+                        int index = 0;
+                        List<TextWord> find = new ArrayList<TextWord>();
+                        for (TextWord[] line : pageText) {
+                            find.clear();
+                            index = 0;
+                            for (TextWord word : line) {
+                                if (AppState.get().selectingByLetters) {
+                                    String it = String.valueOf(textLowCase.charAt(index));
+                                    if (word.w.toLowerCase(Locale.US)
+                                              .equals(it)) {
+                                        index++;
+                                        find.add(word);
+                                    } else {
+                                        index = 0;
+                                        find.clear();
+                                    }
+
+                                    if (index == text.length()) {
+                                        index = 0;
+                                        if (prev != i) {
+                                            result.onResultRecive(i);
+                                            prev = i;
+                                        }
+                                        for (TextWord t : find) {
+                                            PageImageState.get()
+                                                          .addWord(i, t);
+                                        }
+                                    }
+
+                                } else if (word.w.toLowerCase(Locale.US)
+                                                 .contains(textLowCase)) {
+                                    LOG.d("Contains 1", word.w);
+                                    if (prev != i) {
+                                        result.onResultRecive(i);
+                                        prev = i;
+                                    }
+                                    PageImageState.get()
+                                                  .addWord(i, word);
+                                } else if (word.w.length() >= 3 && word.w.endsWith("-")) {
+                                    nextWorld = true;
+                                    firstWord = word;
+                                    firstWordIndex = i;
+                                    firstPart = word.w.replace("-", "");
+                                } else if (nextWorld && (firstPart + word.w.toLowerCase(Locale.US)).contains(text)) {
+                                    LOG.d("Contains 2", firstPart, word.w, text);
+                                    PageImageState.get()
+                                                  .addWord(firstWordIndex, firstWord);
+                                    PageImageState.get()
+                                                  .addWord(i, word);
+                                    nextWorld = false;
+                                    firstWord = null;
+                                    firstPart = "";
+                                    if (prev != firstWordIndex) {
+                                        result.onResultRecive(firstWordIndex);
+                                        prev = firstWordIndex;
+                                    }
+                                    if (prev != i) {
+                                        result.onResultRecive(i);
+                                        prev = i;
+                                    }
+
+                                } else if (nextWorld && TxtUtils.isNotEmpty(word.w)) {
+                                    nextWorld = false;
+                                    firstWord = null;
+                                }
+                                pageSearcher.addWord(new PageSearcher.WordData(word, i));
+                            }
+                        }
+
+                    }
+                    result.onResultRecive(-1);
+                } catch (Exception e) {
+                    result.onResultRecive(-1);
+                }
+                TempHolder.isSeaching = false;
+                return null;
+            }
+
+            @Override protected void onPostExecute(Object result) {
+                EventBus.getDefault()
+                        .post(new InvalidateMessage());
+            }
+
+            ;
+
+        }.execute();
+
+    }
+
+    public String getBookPath() {
+        return bookPath;
+    }
+
+    @Override public File getCurrentBook() {
+        return new File(getBookPath());
+    }
+
+    @Override public String getTitle() {
+        return getTitle(getBookPath());
+    }
+
+    @Override public void alignDocument() {
+        PageImageState.get().isAutoFit = true;
+        EventBus.getDefault()
+                .post(new MessageAutoFit(getCurentPage()));
+    }
+
+    @Override public void centerHorizontal() {
+        PageImageState.get().isAutoFit = true;
+        EventBus.getDefault()
+                .post(new MessageCenterHorizontally(getCurentPage()));
+    }
+
+}

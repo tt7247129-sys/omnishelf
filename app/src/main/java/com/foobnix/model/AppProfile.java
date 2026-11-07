@@ -1,0 +1,547 @@
+package com.foobnix.model;
+
+import com.foobnix.android.utils.JsonDB;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.os.Environment;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+
+import com.foobnix.android.utils.BaseItemLayoutAdapter;
+import com.foobnix.android.utils.IO;
+import com.foobnix.android.utils.Keyboards;
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.ResultResponse;
+import com.foobnix.android.utils.TxtUtils;
+import com.foobnix.drive.GFile;
+import com.foobnix.pdf.info.ExtUtils;
+import com.foobnix.pdf.info.FontExtractor;
+import com.foobnix.pdf.info.R;
+import com.foobnix.pdf.info.TintUtil;
+import com.foobnix.pdf.info.model.BookCSS;
+import com.foobnix.pdf.info.view.AlertDialogs;
+import com.foobnix.pdf.info.view.DragingPopup;
+import com.foobnix.pdf.info.wrapper.PasswordState;
+import com.foobnix.pdf.search.view.AsyncProgressResultToastTask;
+import com.foobnix.ui2.AppDB;
+import com.foobnix.ui2.FileMetaCore;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class AppProfile {
+
+    public static final String PROFILE_PREFIX = "profile.";
+    public static final String DEVICE_PREFIX = "device.";
+    public static File DOWNLOADS_DIR =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    public static final String DEVICE_MODEL = DEVICE_PREFIX + String.valueOf(Build.MODEL).replace(" ", "_");
+    public static final String APP_STATE_JSON = "app-State.json";
+    public static final String APP_CSS_JSON = "app-CSS.json";
+    public static final String APP_RECENT_JSON = "app-Recent.json";
+    public static final String APP_EXCLUDE_JSON = "app-Exclude.json";
+    public static final String APP_FAVORITE_JSON = "app-Favorite.json";
+    public static final String APP_BOOKMARKS_JSON = "app-Bookmarks.json";
+    public static final String APP_ANNOTATIONS_JSON = "app-Annotations.json";
+    public static final String APP_PROGRESS_JSON = "app-Progress.json";
+    public static final String APP_TAGS_JSON = "app-Tags.json";
+    public static final String APP_TAGS_JSON2 = "app-Tags2.json";
+
+    public static final String APP_WEB_DICT = "app-WebDict.json";
+    public static final String APP_WEB_SEARCH = "app-WebSearch.json";
+    public static final String APP_TEXT_REPLACEMENT = "app-TextReplacement.json";
+
+    public static final String SYNC_FOLDER_ROOT_KEY = "syncFolderRoot";
+    public static final String APP_PROFILE_SP = "AppProfile";
+
+    public static File SYNC_FOLDER_ROOT;
+    public static File SYNC_FOLDER_BOOKS;
+    public static File SYNC_FOLDER_DICT;
+    public static File SYNC_FOLDER_PROFILE;
+    public static File SYNC_FOLDER_DEVICE_PROFILE;
+    public static File syncRecent;
+    public static File syncFavorite;
+    public static File syncExclude;
+    public static File syncState;
+    public static File syncTags;
+    public static File syncTags2;
+    public static File syncCSS;
+    public static File syncPlaylist;
+    public static File syncProgress;
+    public static File syncBookmarks;
+
+    /** The reader's own highlights and underlines; see AnnotationsData. */
+    public static File syncAnnotations;
+
+    public static File syncFontFolder;
+
+    public static File syncTestFolder;
+
+    public static File FONT_LOCAL_ZIP;
+
+    public static String profile = "";
+    /** Where {@link #profile} was loaded from; see init. */
+    private static String profileRootPath = "";
+    public static long bookCount;
+
+
+    public synchronized static void init(Context c) {
+
+        if (c == null) {
+            LOG.d("AppProfile init null");
+            return;
+        }
+
+
+//        if (TxtUtils.isNotEmpty(profile)) {
+//            LOG.d("AppProfile exist");
+//            return;
+//        }
+        AppSP.get()
+             .init(c);
+
+        // The same profile in another place is another profile: granting the permission moves
+        // the settings from Download/Librera to /storage/emulated/0/Librera under the same name,
+        // and skipped on the name alone the app went on reading - and writing - the old place.
+        final String rootPath = AppSP.get().getRootPath(c);
+        if (profile.equals(getCurrent()) && rootPath.equals(profileRootPath)) {
+            LOG.d("AppProfile skip", profile);
+            return;
+        }
+        profile = getCurrent();
+        profileRootPath = rootPath;
+        // the profile kept in a Librera folder handed over through the picker is brought in first,
+        // and with the permission, the one kept in Download/Librera without it
+        LibreraSafSync.pull(c);
+        LibreraSafSync.mergeDownloadLibrera(c);
+        String appDB = "db-" + AppSP.get().getRootPath(c).hashCode() + "-" + profile;
+        AppDB.get()
+             .open(c, appDB);
+
+        bookCount = AppDB.get()
+                         .getCount();
+        AppData.get().clearRecentCache();
+        FileMetaCore.startEstimatingMissingPages();
+        LOG.d("AppProfile init bookCount", profile, bookCount,appDB);
+
+        SYNC_FOLDER_ROOT = new File(AppSP.get().getRootPath(c));
+        SYNC_FOLDER_BOOKS = new File(SYNC_FOLDER_ROOT, "Books");
+        SYNC_FOLDER_DICT = new File(SYNC_FOLDER_ROOT, "dict");
+        FONT_LOCAL_ZIP = new File(SYNC_FOLDER_ROOT, "fonts.zip.pack");
+        syncFontFolder = new File(SYNC_FOLDER_ROOT, "Fonts");
+        syncTestFolder = new File(SYNC_FOLDER_ROOT, "Test");
+
+        SYNC_FOLDER_PROFILE = new File(SYNC_FOLDER_ROOT, PROFILE_PREFIX + getCurrent());
+        SYNC_FOLDER_DEVICE_PROFILE = new File(SYNC_FOLDER_PROFILE, DEVICE_MODEL);
+        SYNC_FOLDER_DEVICE_PROFILE.mkdirs();
+
+        syncFavorite = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_FAVORITE_JSON);
+        syncExclude = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_EXCLUDE_JSON);
+        syncTags = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_TAGS_JSON);
+        syncTags2 = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_TAGS_JSON2);
+
+        syncPlaylist = new File(SYNC_FOLDER_DEVICE_PROFILE, "playlists");
+        syncBookmarks = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_BOOKMARKS_JSON);
+        syncAnnotations = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_ANNOTATIONS_JSON);
+        syncProgress = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_PROGRESS_JSON);
+        syncRecent = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_RECENT_JSON);
+
+        syncState = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_STATE_JSON);
+        syncCSS = new File(SYNC_FOLDER_DEVICE_PROFILE, APP_CSS_JSON);
+
+        final boolean isLoaded = AppState.get()
+                                         .loadInit(c);
+        if (isLoaded) {
+            AppState.get()
+                    .load(c);
+        }
+
+        TintUtil.init();
+        BookCSS.get()
+               .load1(c);
+
+        PasswordState.get()
+                     .load(c);
+        DragingPopup.loadCache(c);
+        ExtUtils.init(c);
+        FontExtractor.extractFonts(c);
+
+    }
+
+    /**
+     * The folders the library is built from: the user's, and Librera/Books, where synced books
+     * arrive. That one is not theirs to manage, so it stays out of the list settings shows, and it
+     * is left out here too when a folder of theirs already holds it.
+     */
+    public static List<String> libraryFolders() {
+        final List<String> folders = new ArrayList<>(JsonDB.get(BookCSS.get().searchPathsJson));
+        if (SYNC_FOLDER_BOOKS == null) {
+            return folders;
+        }
+        final String books = SYNC_FOLDER_BOOKS.getPath() + "/";
+        for (String folder : folders) {
+            if (folder != null && books.startsWith(folder.endsWith("/") ? folder : folder + "/")) {
+                return folders;
+            }
+        }
+        folders.add(SYNC_FOLDER_BOOKS.getPath());
+        return folders;
+    }
+
+    public static List<File> getAllFiles(String name) {
+
+        List<File> list = new ArrayList<>();
+        if (AppProfile.SYNC_FOLDER_PROFILE == null) {
+            return list;
+        }
+
+        final File[] files = AppProfile.SYNC_FOLDER_PROFILE.listFiles();
+        if (files == null) {
+            return list;
+        }
+        for (File f : files) {
+            if (f.isDirectory() && f.getName()
+                                    .startsWith(DEVICE_PREFIX)) {
+                File file = new File(f, name);
+                if (file.isFile()) {
+                    list.add(file);
+                    LOG.d("getAllFiles", file);
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public static Drawable getProfileColorDrawable(Context c, String profile) {
+        // Mutated, so each profile's round keeps its own colour instead of every round shown
+        // taking the colour of the last one set.
+        GradientDrawable background =
+                (GradientDrawable) ContextCompat.getDrawable(c, R.drawable.bg_circular)
+                                                .mutate();
+        AppState s = new AppState();
+        File syncState = new File(AppProfile.SYNC_FOLDER_ROOT,
+                PROFILE_PREFIX + profile + "/" + DEVICE_MODEL + "/" + APP_STATE_JSON);
+        IO.readObj(syncState, s);
+        background.setColor(s.tintThemeColor);
+        return background;
+    }
+
+    public static Drawable getProfileColorDrawable(Context c, int color) {
+        GradientDrawable background =
+                (GradientDrawable) ContextCompat.getDrawable(c, R.drawable.bg_circular)
+                                                .mutate();
+        background.setColor(color);
+        return background;
+    }
+
+    public static synchronized void save(Context a) {
+        if (a == null) {
+            return;
+        }
+
+        if (TxtUtils.isNotEmpty(profile)) {
+            DragingPopup.saveCache(a);
+            PasswordState.get()
+                         .save(a);
+            AppState.get()
+                    .save(a);
+            BookCSS.get()
+                   .save(a);
+            AppSP.get()
+                 .save();
+            LibreraSafSync.pushLater(a);
+        }
+    }
+
+    public static String getCurrent() {
+        return AppSP.get().currentProfile;
+    }
+
+    public static void saveCurrent(Context c, String name) {
+        AppSP.get().currentProfile = name;
+        save(c);
+
+    }
+
+    public static List<String> getAllProfiles() {
+        final File[] files = SYNC_FOLDER_ROOT.listFiles();
+        if (files == null) {
+            return Collections.emptyList();
+        }
+        List<String> res = new ArrayList<>();
+        for (File file : files) {
+            if (file.getName()
+                    .startsWith(PROFILE_PREFIX)) {
+                res.add(file.getName()
+                            .replace(PROFILE_PREFIX, ""));
+            }
+        }
+        Collections.sort(res, String.CASE_INSENSITIVE_ORDER);
+        return res;
+    }
+
+    public static void ceateProfiles(Context c, String name) {
+        name = name.replace(" ", "");
+        final File profileFolder = new File(SYNC_FOLDER_ROOT, PROFILE_PREFIX + name + "/" + DEVICE_MODEL);
+        profileFolder.mkdirs();
+
+        File state = new File(profileFolder, APP_STATE_JSON);
+        File css = new File(profileFolder, APP_CSS_JSON);
+
+        final AppState appState = new AppState();
+        appState.defaults(c);
+        IO.writeObjSync(state, appState);
+        final BookCSS bookCss = new BookCSS();
+        bookCss.resetToDefault(c);
+        IO.writeObjSync(css, bookCss);
+        LOG.d("Profile Created");
+
+    }
+
+    public static void deleteProfiles(Activity a, String name, ResultResponse<Boolean> result) {
+        new AsyncProgressResultToastTask(a, result) {
+
+            @Override protected Boolean doInBackground(Object... objects) {
+                try {
+                    final File file = new File(SYNC_FOLDER_ROOT, PROFILE_PREFIX + name);
+                    GFile.deleteRemoteFile(file);
+                    ExtUtils.deleteRecursive(file);
+                    //GFile.runSyncService(a);
+                } catch (Exception e) {
+                    LOG.e(e);
+                    return false;
+                }
+                return true;
+            }
+
+        }.execute();
+
+    }
+
+    public static void showDialog(Activity a, ResultResponse<String> onclick, Runnable onRestoreDefaults) {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(a);
+        // builder.setTitle(R.string.tag);
+
+        View inflate = LayoutInflater.from(a)
+                                     .inflate(R.layout.dialog_profiles, null, false);
+
+        final ListView list = (ListView) inflate.findViewById(R.id.listView1);
+        final TextView add = (TextView) inflate.findViewById(R.id.addTag);
+        // Drawn as a ringed button, as the panel draws its own.
+        asRingedButton(add);
+
+        final TextView restore = inflate.findViewById(R.id.onRestoreDefaults);
+        final TextView close = inflate.findViewById(R.id.onClose);
+        // Smaller than the dialog's own buttons were: a lower floor under the width, and the
+        // word's own size rather than the dialog bar's.
+        TintUtil.asLinkButton(restore, 80);
+        TintUtil.asLinkButton(close, 80);
+
+        final List<String> profiles = getAllProfiles();
+
+        final BaseItemLayoutAdapter<String> adapter =
+                new BaseItemLayoutAdapter<String>(a, R.layout.tag_item_text, profiles) {
+                    @Override public void populateView(View layout, final int position, final String tagName) {
+                        TextView text = layout.findViewById(R.id.text1);
+                        text.setText(tagName);
+
+                        // The profile's letter on its theme colour, as the profile menu has it.
+                        TextView letter = layout.findViewById(R.id.profileLetter);
+                        letter.setVisibility(View.VISIBLE);
+                        letter.setText(TxtUtils.getFirstLetter(tagName));
+                        letter.setBackground(getProfileColorDrawable(a, tagName));
+
+                        ImageView delete = (ImageView) layout.findViewById(R.id.delete1);
+                        // The cross in the colour links are drawn in, like the cross that drops
+                        // a folder.
+                        final int rowColor = TxtUtils.getLinkTextColor(a);
+                        TintUtil.setTintImageNoAlpha(delete, rowColor);
+                        // The profile in use is named in bold and cannot be dropped. Rows come
+                        // back recycled, so the others are set back to plain.
+                        final boolean isCurrent = tagName.equals(getCurrent());
+                        text.setTypeface(null, isCurrent ? Typeface.BOLD : Typeface.NORMAL);
+                        delete.setVisibility(isCurrent ? View.GONE : View.VISIBLE);
+
+                        delete.setOnClickListener(new View.OnClickListener() {
+
+                            @Override public void onClick(View v) {
+                                AlertDialogs.showOkDialog(a,
+                                        a.getString(R.string.do_you_want_to_delete_) + " " + tagName, new Runnable() {
+
+                                            @Override public void run() {
+
+                                                deleteProfiles(a, tagName, new ResultResponse<Boolean>() {
+                                                    @Override public boolean onResultRecive(Boolean result) {
+                                                        if (result) {
+                                                            profiles.clear();
+                                                            profiles.addAll(getAllProfiles());
+                                                            notifyDataSetChanged();
+                                                        }
+                                                        return false;
+                                                    }
+                                                });
+
+                                            }
+                                        });
+
+                            }
+                        });
+
+                    }
+                };
+        add.setOnClickListener(new View.OnClickListener() {
+
+            @Override public void onClick(View v) {
+                addDialog(a, new Runnable() {
+
+                    @Override public void run() {
+                        profiles.clear();
+                        profiles.addAll(getAllProfiles());
+                        adapter.notifyDataSetChanged();
+
+                    }
+                });
+            }
+        });
+
+        list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                onclick.onResultRecive(profiles.get(position));
+            }
+        });
+
+        builder.setView(inflate);
+
+        AlertDialog create = builder.create();
+
+        close.setOnClickListener(v -> create.dismiss());
+        if (onRestoreDefaults != null) {
+            restore.setOnClickListener(v -> {
+                onRestoreDefaults.run();
+                create.dismiss();
+            });
+        } else {
+            restore.setVisibility(View.GONE);
+        }
+
+        create.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+            @Override public void onDismiss(DialogInterface dialog) {
+                Keyboards.close(a);
+                Keyboards.hideNavigation(a);
+
+            }
+        });
+        create.show();
+
+    }
+
+    /** Draws a word as a button the way the settings panel does: a ring cut from its own colour. */
+    private static void asRingedButton(TextView button) {
+        if (button == null) {
+            return;
+        }
+        TintUtil.asLinkButton(button);
+        // The air above and below is left to the rows around it; the padding alone gives the
+        // ring its room.
+        if (button.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) button.getLayoutParams();
+            lp.topMargin = lp.bottomMargin = 0;
+            button.setLayoutParams(lp);
+        }
+        TintUtil.setRingColor(button, button.getCurrentTextColor());
+    }
+
+    public static void addDialog(final Activity a, final Runnable onRefresh) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(a);
+        builder.setTitle(R.string.profile);
+
+        final EditText edit = new EditText(a);
+        edit.setHint(R.string.name);
+
+        builder.setView(edit);
+
+        builder.setNegativeButton(R.string.cancel, new AlertDialog.OnClickListener() {
+
+            @Override public void onClick(DialogInterface dialog, int which) {
+                Keyboards.close(edit);
+            }
+        });
+
+        builder.setPositiveButton(R.string.add, new AlertDialog.OnClickListener() {
+
+            @Override public void onClick(DialogInterface dialog, int which) {
+                Keyboards.close(edit);
+            }
+        });
+
+        final AlertDialog create = builder.create();
+        create.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+            @Override public void onDismiss(DialogInterface dialog) {
+            }
+        });
+        create.show();
+
+        create.getButton(AlertDialog.BUTTON_POSITIVE)
+              .setOnClickListener(new View.OnClickListener() {
+
+                  @Override public void onClick(View v) {
+                      String text = edit.getText()
+                                        .toString()
+                                        .trim();
+                      text = text.replace(" ", "");
+                      text = text.replaceAll("[|\\?*<\":>+/']", "_");
+
+                      if (TxtUtils.isEmpty(text)) {
+                          Toast.makeText(a, R.string.incorrect_value, Toast.LENGTH_SHORT)
+                               .show();
+                          return;
+                      }
+
+                      if (getAllProfiles().contains(text)) {
+                          Toast.makeText(a, R.string.incorrect_value, Toast.LENGTH_SHORT)
+                               .show();
+                          return;
+                      }
+                      create.dismiss();
+
+                      ceateProfiles(a, text);
+                      GFile.runSyncService(a);
+
+                      onRefresh.run();
+
+                      Keyboards.close(edit);
+                      Keyboards.hideNavigation((Activity) a);
+
+                  }
+              });
+    }
+
+    public static void clear() {
+        profile = "";
+        profileRootPath = "";
+        AppState.get().isLoaded = false;
+    }
+}

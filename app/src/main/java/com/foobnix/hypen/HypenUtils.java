@@ -1,0 +1,337 @@
+package com.foobnix.hypen;
+
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.TxtUtils;
+import com.foobnix.model.AppData;
+import com.foobnix.model.AppState;
+import com.foobnix.model.SimpleMeta;
+import com.foobnix.pdf.info.model.BookCSS;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+
+public class HypenUtils {
+
+    /**
+     * The soft hyphen the hyphenator breaks words with, written as a numeric character reference
+     * rather than {@code &shy;}.
+     *
+     * The name {@code shy} is an HTML entity. It is not defined in XML, and the books this is
+     * written into are XHTML carrying no DTD that would define it - so an XML parser stops dead
+     * at the first one. MuPDF parses the markup loosely and never minded, but foliate-js hands
+     * each section to the browser's own XML parser, which rejects the document and renders only
+     * the part before the first break. A hyphenated section came out blank: an empty reading page
+     * and an empty thumbnail for every page in it. {@code &#173;} is the same character, is valid
+     * XML with no DTD at all, and is read identically by both engines.
+     */
+    public static final String SHY = "&#173;";
+    public static Map<String, String> cache = new HashMap<>();
+    static boolean ignore = false;
+    static boolean ignore1 = false;
+    /** The tag being read if it opens a stylesheet or a script, whose text is not book text. */
+    private static String rawOpening = null;
+    /** The stylesheet or script being read: a soft hyphen in `text-anchor` breaks the rule. */
+    private static String rawElement = null;
+    private static DefaultHyphenator instance = new DefaultHyphenator(HyphenPattern.error);
+
+    public static void applyLanguage(String lang) {
+        if (lang == null) {
+            return;
+        }
+        try {
+            if (lang.length() > 2) {
+                lang = lang.substring(0, 2).toLowerCase(Locale.US);
+            }
+            if ("sp".equals(lang)) {
+                lang = "es";
+            }
+
+            HyphenPattern pattern = HyphenPattern.error;
+
+            HyphenPattern[] values = HyphenPattern.values();
+            for (HyphenPattern p : values) {
+                if (p.lang.equals(lang)) {
+                    pattern = p;
+                }
+            }
+            if (instance.pattern != pattern) {
+                instance = new DefaultHyphenator(pattern);
+                cache.clear();
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+            instance = new DefaultHyphenator(HyphenPattern.error);
+        }
+        LOG.d("My-pattern-lang", instance.pattern.lang);
+
+    }
+
+    public static String applyHypnes(String htmlEncode) {
+        List<SimpleMeta> replacements = AppData.get().getAllTextReplaces();
+        return applyHypnesNewMy(htmlEncode, replacements);
+    }
+
+    public static String applyHypnes(String htmlEncode, List<SimpleMeta> replacements) {
+        return applyHypnesNewMy(htmlEncode, replacements);
+    }
+
+    private static String applyHypnesNewMy(final String input2, List<SimpleMeta> replacements) {
+        if (input2 == null || input2.length() == 0) {
+            return "";
+        }
+        //LOG.d("applyHypnesNewMy-input",input);
+
+        String input = input2;
+        // Read once per line rather than once per word: AppState.get() is synchronized
+        final boolean bionic = AppState.get().isBionicMode;
+        final boolean hyphens = BookCSS.get().isAutoHypens;
+
+        if (AppState.get().isEnableTextReplacement && replacements != null) {
+            for (SimpleMeta it : replacements) {
+                if (TxtUtils.isNotEmpty(it.name)) {
+                    if (it.name.startsWith("*")) {
+                        String regexp = it.name.substring(1);
+                        input = TxtUtils.replaceAll(input, regexp, it.path);
+                    } else {
+                        input = input.replace(it.name, it.path);
+                    }
+                }
+            }
+        }
+
+        // Room for a soft hyphen in a word in every few, so the text is not copied as it grows
+        final StringBuilder res = new StringBuilder(input.length() + input.length() / 4);
+
+        tokenize(input, new TokensListener() {
+
+            @Override
+            public void findOther(char ch) {
+                res.append(ch);
+            }
+
+            @Override
+            public void findText(String w) {
+
+
+                if (bionic) {
+                    res.append(TxtUtils.toBionicWord(w));
+                    return;
+                }
+                if (!hyphens) {
+                    res.append(w);
+                    return;
+                }
+
+                if (w.length() <= 3) {
+                    res.append(w);
+                } else {
+                    String obj = cache.get(w);
+                    if (obj != null) {
+                        res.append(obj);
+                    } else {
+                        try {
+                            StringBuilder result = new StringBuilder();
+                            instance.hyphenate(w, result, SHY);
+                            String join = result.toString();
+                            res.append(join);
+                            cache.put(w, join);
+                        } catch (Exception e) {
+                            res.append(w);
+                            cache.put(w, w);
+                        }
+                    }
+                }
+            }
+
+        });
+
+        String out = res.toString();
+        //LOG.d("applyHypnesNewMy-out",out);
+
+        return out;
+    }
+
+    public static String applyHypnesOld2(String input) {
+        if (input == null || input.length() == 0) {
+            return "";
+        }
+        // hack
+        input = input.replace("<", " <").replace(">", "> ");
+
+        StringTokenizer split = new StringTokenizer(input, " ", true);
+        StringBuilder res = new StringBuilder();
+
+        while (split.hasMoreTokens()) {
+            String w = split.nextToken();
+
+            if (w.equals(" ")) {
+                res.append(" ");
+                continue;
+            }
+
+            if (w.length() <= 3) {
+                res.append(w);
+                continue;
+            }
+
+            if (w.contains("<") || w.contains(">") || w.contains("=") || w.contains("&")) {
+                res.append(w);
+                continue;
+            }
+
+            char first = w.charAt(0);
+            boolean startWithOther = false;
+            if (!Character.isLetter(first)) {
+                startWithOther = true;
+                w = w.substring(1, w.length());
+            }
+
+            int endIndex = -1;
+            String last = "";
+            for (int i = w.length() / 2 + 1; i < w.length(); i++) {
+                if (!Character.isLetter(w.charAt(i))) {
+                    endIndex = i;
+                    last = w.substring(endIndex);
+                    w = w.substring(0, endIndex);
+                    break;
+                }
+            }
+
+            String result = null;
+            if (w.contains("-")) {
+                int find = w.indexOf("-");
+                String p1 = w.substring(0, find);
+                String p2 = w.substring(find + 1, w.length());
+                result = join(instance.hyphenate(p1), SHY) + "-" + join(instance.hyphenate(p2), SHY);
+                if (p2.contains("-")) {
+                    result = result.replace("-" + SHY, "-");
+                }
+
+            } else {
+                result = join(instance.hyphenate(w), SHY);
+            }
+
+            if (startWithOther) {
+                result = String.valueOf(first) + result;
+            }
+
+            if (endIndex > 1) {
+                result = result + last;
+            }
+            res.append(result);
+
+        }
+
+        String result = res.toString();
+        result = result.replace(" <", "<").replace("> ", ">");
+        return result;
+    }
+
+    public static String join(List<String> list, String delimiter) {
+        if (list == null || list.size() == 0) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder(list.get(0));
+        for (int i = 1; i < list.size(); i++) {
+            result.append(delimiter).append(list.get(i));
+        }
+        String string = result.toString();
+        return string;
+        // return string.replace(SHY + SHY, SHY);
+    }
+
+    public static void resetTokenizer() {
+        ignore = false;
+        ignore1 = false;
+        rawOpening = null;
+        rawElement = null;
+    }
+
+    private static boolean isTagAt(String in, int at, String tag) {
+        final int end = at + tag.length();
+        if (!in.regionMatches(true, at, tag, 0, tag.length())) {
+            return false;
+        }
+        if (end == in.length()) {
+            return true;
+        }
+        final char next = in.charAt(end);
+        return next == '>' || next == '/' || Character.isWhitespace(next);
+    }
+
+
+    public static void tokenize(String in, TokensListener listener) {
+        StringBuilder res = new StringBuilder();
+        final int length = in.length();
+        for (int i = 0; i < length; i++) {
+            char ch = in.charAt(i);
+
+            if (ch == '<') {
+                ignore1 = true;
+                if (rawElement != null) {
+                    if (isTagAt(in, i, "</" + rawElement)) {
+                        rawElement = null;
+                    }
+                } else if (isTagAt(in, i, "<style")) {
+                    rawOpening = "style";
+                } else if (isTagAt(in, i, "<script")) {
+                    rawOpening = "script";
+                }
+            }
+            if (ch == '>') {
+                ignore1 = false;
+                if (rawOpening != null) {
+                    final boolean selfClosed = i > 0 && in.charAt(i - 1) == '/';
+                    rawElement = selfClosed ? null : rawOpening;
+                    rawOpening = null;
+                }
+            }
+            if (ch == '&') {
+                ignore = true;
+            }
+            if (ch == ';') {
+                ignore = false;
+            }
+
+            if (ch == '_') {
+                ignore = false;
+            }
+
+            if (ignore || ignore1 || rawElement != null) {
+                if (res.length() > 0) {
+                    listener.findText(res.toString());
+                    res.setLength(0);
+                }
+
+                listener.findOther(ch);
+                continue;
+            }
+
+            if (Character.isLetter(ch)) {
+                res.append(ch);
+            } else {
+                if (res.length() > 0) {
+                    listener.findText(res.toString());
+                    res.setLength(0);
+                }
+                listener.findOther(ch);
+            }
+
+        }
+        if (res.length() > 0) {
+            listener.findText(res.toString());
+            res.setLength(0);
+        }
+
+    }
+
+    public static interface TokensListener {
+        void findText(String text);
+
+        void findOther(char ch);
+    }
+}

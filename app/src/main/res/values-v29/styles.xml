@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="StyledIndicatorsWhite" parent="Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
+        <item name="android:actionOverflowMenuStyle">@style/PopupMenuRoundOverflow</item>
+        <item name="android:listPopupWindowStyle">@style/ListPopupWindowRound</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerPopupRound</item>
+        <item name="popupMenuStyle">@style/PopupMenuRoundCompat</item>
+        <item name="actionOverflowMenuStyle">@style/PopupMenuRoundCompatOverflow</item>
+        <item name="listPopupWindowStyle">@style/ListPopupWindowRoundCompat</item>
+        <item name="android:alertDialogTheme">@style/DialogRoundLight</item>
+    </style>
+
+    <style name="StyledIndicatorsBlack" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
+        <item name="android:actionOverflowMenuStyle">@style/PopupMenuRoundOverflow</item>
+        <item name="android:listPopupWindowStyle">@style/ListPopupWindowRound</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerPopupRound</item>
+        <item name="popupMenuStyle">@style/PopupMenuRoundCompat</item>
+        <item name="actionOverflowMenuStyle">@style/PopupMenuRoundCompatOverflow</item>
+        <item name="listPopupWindowStyle">@style/ListPopupWindowRoundCompat</item>
+        <item name="android:alertDialogTheme">@style/DialogRoundDark</item>
+    </style>
+
+</resources>

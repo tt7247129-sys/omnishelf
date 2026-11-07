@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    OmniShelf notification small icon.
+
+    Notification icons are alpha masks: the system recolours them, so only shape and
+    transparency matter. Four blocks reading as books on a shelf.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M12,30 H30 V78 H12 Z M34,22 H50 V78 H34 Z M54,38 H68 V78 H54 Z M8,80 H76 V88 H8 Z" />
+</vector>

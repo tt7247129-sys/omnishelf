@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+
+    <!-- OmniShelf adaptive icon background. Keep in sync with scripts/make_icons.py -->
+    <gradient
+        android:angle="270"
+        android:startColor="#0F1B2D"
+        android:endColor="#1E3A5F"
+        android:type="linear" />
+
+</shape>

@@ -1,0 +1,293 @@
+package com.foobnix;
+
+import static com.foobnix.pdf.info.AppsConfig.SEARCH_FRAGMENT_WORKER_NAME;
+
+import android.app.Activity;
+import android.app.Application;
+import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.work.Configuration;
+import androidx.work.WorkManager;
+
+import com.foobnix.android.utils.Dips;
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.TxtUtils;
+import com.foobnix.ext.CacheZipUtils;
+import com.foobnix.hypen.HypenUtils;
+import com.foobnix.pdf.info.ADS;
+import com.foobnix.pdf.info.AppsConfig;
+import com.foobnix.pdf.info.IMG;
+import com.foobnix.pdf.info.Prefs;
+import com.foobnix.pdf.info.TintUtil;
+import com.foobnix.sys.TempHolder;
+import com.foobnix.tts.TTSNotification;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.concurrent.atomic.AtomicReference;
+
+public class LibreraApp extends Application {
+    public static Context context;
+
+    /**
+     * The activity on screen, if any.
+     *
+     * Only the foliate-js engine needs this, and it needs it for a hard reason: Chromium builds no
+     * subframe tree for a WebView that is not attached to a window, so the iframe foliate
+     * paginates a book in never navigates and never reports its size. The engine therefore parks
+     * its WebView off-screen in whatever activity is up. See
+     * {@link org.ebookdroid.droids.foliate.codec.FoliateRenderer}.
+     */
+    private static final AtomicReference<Activity> resumed = new AtomicReference<Activity>();
+
+    /** The activity on screen, or <code>null</code>. */
+    public static Activity getResumedActivity() {
+        return resumed.get();
+    }
+
+
+    @Override
+    public void onCreate() {
+
+//        if (AppsConfig.IS_EMULATOR) {
+//            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                    .detectDiskReads()
+//                    .detectDiskWrites()
+//                    .detectNetwork()
+//                              //.detectAll()
+//                              //.penaltyLog()
+//                    .build());
+//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                    .detectLeakedSqlLiteObjects()
+//                    .detectLeakedClosableObjects()
+//                    //.penaltyLog()
+//                              //.detectAll()
+//                    .penaltyDeath()
+//                    .build());
+//        }
+        super.onCreate();
+
+        //AppsConfig.loadEngine(this);
+
+        context = getApplicationContext();
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override public void onActivityResumed(final Activity activity) {
+                resumed.set(activity);
+            }
+
+            @Override public void onActivityPaused(final Activity activity) {
+                resumed.compareAndSet(activity, null);
+            }
+
+            @Override public void onActivityDestroyed(final Activity activity) {
+                resumed.compareAndSet(activity, null);
+            }
+
+            @Override public void onActivityCreated(final Activity activity, final Bundle state) {
+            }
+
+            @Override public void onActivityStarted(final Activity activity) {
+            }
+
+            @Override public void onActivityStopped(final Activity activity) {
+            }
+
+            @Override public void onActivitySaveInstanceState(final Activity activity, final Bundle state) {
+            }
+        });
+
+        // The DjVu render service's process draws pages for another app and nothing else:
+        // it needs none of the reader, and must not cancel or prune the reader's work.
+        if (isDjvuRenderProcess()) {
+            return;
+        }
+        if (!WorkManager.isInitialized()) {
+            WorkManager.initialize(this, new Configuration.Builder().setMinimumLoggingLevel(Log.DEBUG).build());
+        }
+
+
+//        FirebaseAnalytics analytics = FirebaseAnalytics.getInstance(this);
+//        analytics.setUserProperty("APP_NAME", Apps.getApplicationName(this));
+//        analytics.setUserProperty("APP_VERSION", Apps.getVersionName(this));
+
+
+
+        AppsConfig.init(this);
+        Dips.init(this);
+        Prefs.get().init(this);
+
+        try {
+            if (AppsConfig.isShowAdsInApp(this)) {
+                LOG.d("ADS1", "MobileAds.initialize");
+
+//                AdSettings.addTestDevice("e13a44ef-2006-41e0-8597-ed1afcc727b6");
+//                if (!AudienceNetworkAds.isInitialized(context)) {
+//                    if(AppsConfig.IS_LOG) {
+//                        AdSettings.turnOnSDKDebugger(context);
+//                    }
+//
+//                    AudienceNetworkAds
+//                            .buildInitSettings(context)
+//                            .withInitListener(initResult -> LOG.d("FBads",initResult,initResult.getMessage()))
+//                            .initialize();
+//                }
+//                AdSettings.addTestDevice("e13a44ef-2006-41e0-8597-ed1afcc727b6");
+
+                MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                    @Override
+                    public void onInitializationComplete(
+                            @NonNull
+                            InitializationStatus initializationStatus) {
+                        LOG.d("ads-complete");
+                    }
+                });
+//                new Thread(){
+//                    @Override public void run() {
+//                        try {
+//                            LOG.d("AppsConfig", "getAdvertisingIdInfo",
+//                                    AdvertisingIdClient.getAdvertisingIdInfo(LibreraApp.this));
+//                            LOG.d("AppsConfig", "getAdvertisingIdInfo-debug",
+//                                    AdvertisingIdClient.getIsAdIdFakeForDebugLogging(LibreraApp.this));
+//                        }catch (Exception e){
+//                            LOG.e(e);
+//                        }
+//                    }
+//                }.start();
+
+
+
+
+                LOG.d("AppsConfig.IS_TEST_DEVICE", AppsConfig.IS_TEST_DEVICE);
+                if (AppsConfig.IS_TEST_DEVICE) {
+                    RequestConfiguration
+                            configuration =
+                            new RequestConfiguration.Builder().setTestDeviceIds(AppsConfig.testDevices).build();
+                    MobileAds.setRequestConfiguration(configuration);
+
+                    //AdSettings.addTestDevice("be454c77-6dd2-4931-933c-d279f5da225d");
+                    //AdSettings.addTestDevice("72a461e0-9268-4d1f-80f4-f9b45a692124");
+                }
+            }
+        } catch (Exception e) {
+            LOG.e(e);
+        }
+
+        Log.d("Build", "Build.TestDeviceID :" + ADS.getByTestID(this));
+        Log.d("Build", "Build.MODEL :" + Build.MODEL);
+        Log.d("Build", "Build.DEVICE:" + Build.DEVICE);
+
+        TTSNotification.initChannels(this);
+
+        CacheZipUtils.init(this);
+
+        IMG.init(this);
+        TempHolder.get().loadingCancelled.set(true);
+
+        LOG.d("Build", "Build.MANUFACTURER", Build.MANUFACTURER);
+        LOG.d("Build", "Build.PRODUCT", Build.PRODUCT);
+        LOG.d("Build", "Build.DEVICE", Build.DEVICE);
+        LOG.d("Build", "Build.BRAND", Build.BRAND);
+        LOG.d("Build", "Build.MODEL", Build.MODEL);
+        LOG.d("Build", "Build.VERSION.SDK_INT", Build.VERSION.SDK_INT);
+
+        LOG.d("Build", "Build.screenWidth", Dips.screenWidthDP(), Dips.screenWidth());
+
+        LOG.d("Build.Context", "Context.getFilesDir()", getFilesDir());
+        LOG.d("Build.Context", "Context.getCacheDir()", getCacheDir());
+        LOG.d("Build.Context", "Context.getExternalCacheDir", getExternalCacheDir());
+        LOG.d("Build.Context", "Context.getExternalFilesDir(null)", getExternalFilesDir(null));
+        LOG.d("Build.Context", "Environment.getExternalStorageDirectory()", Environment.getExternalStorageDirectory());
+        LOG.d("Build.Height", Dips.screenHeight());
+
+        if (TxtUtils.isEmpty(AppsConfig.FLAVOR)) {
+            throw new RuntimeException("Application not configured correctly!");
+        }
+
+        if (AppsConfig.IS_WRITE_LOGS) {
+            LOG.writeCrashTofile = true;
+            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, final Throwable e) {
+                    LOG.uncaughtException(e);
+
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                    System.exit(0);
+                }
+            });
+        }
+
+        WorkManager.getInstance(context).cancelUniqueWork(SEARCH_FRAGMENT_WORKER_NAME);
+        WorkManager.getInstance(context).pruneWork();
+
+
+
+    }
+
+
+
+
+
+
+    private static boolean isDjvuRenderProcess() {
+        String name = null;
+        if (Build.VERSION.SDK_INT >= 28) {
+            name = Application.getProcessName();
+        } else {
+            try (java.io.FileInputStream in = new java.io.FileInputStream("/proc/self/cmdline")) {
+                byte[] buf = new byte[256];
+                int n = in.read(buf);
+                if (n > 0) {
+                    int end = 0;
+                    while (end < n && buf[end] != 0) {
+                        end++;
+                    }
+                    name = new String(buf, 0, end);
+                }
+            } catch (Exception e) {
+                LOG.e(e);
+            }
+        }
+        return name != null && name.endsWith(":djvu");
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        LOG.d("AppState save onLowMemory");
+        IMG.clearMemoryCache();
+        TintUtil.clean();
+        HypenUtils.cache.clear();
+        TempHolder.get().loadingCancelled.set(true);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        LOG.d("onTrimMemory", level);
+        IMG.releaseMemory();
+        TempHolder.get().loadingCancelled.set(true);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        IMG.clearMemoryCache();
+        LOG.d("onTerminate", "onTerminate APP");
+        TempHolder.get().loadingCancelled.set(true);
+        AppsConfig.executorService.shutdown();
+    }
+}

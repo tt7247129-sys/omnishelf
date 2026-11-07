@@ -1,0 +1,122 @@
+package com.foobnix.model;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
+
+import com.foobnix.android.utils.LOG;
+import com.foobnix.android.utils.Objects;
+import com.foobnix.pdf.info.Android6;
+import com.foobnix.pdf.info.Urls;
+
+import java.io.File;
+
+public class AppSP {
+
+    private static AppSP instance = new AppSP();
+    public String lastBookPath;
+
+    public int lastBookPage = 0;
+    public int lastBookPageCount = 0;
+    public int tempBookPage = 0;
+    public volatile int lastBookParagraph = 0;
+    public String lastBookTitle;
+    public int lastBookWidth = 0;
+    public int lastBookHeight = 0;
+    public int lastFontSize = 0;
+    public String lastBookLang = "";
+    public boolean isLocked = false;
+    public boolean isFirstTimeVertical = true;
+    public boolean isFirstTimeHorizontal = true;
+
+    public int readingMode = AppState.READING_MODE_BOOK;
+    // the view handed to LibreraX when readingMode is not one, see LibreraX.view
+    public int libreraXView = AppState.READING_MODE_BOOK;
+    public long syncTime;
+    public int syncTimeStatus;
+    public String hypenLang = null;
+    public boolean isCut = false;
+    public boolean isDouble = false;
+    public boolean isRTL = Urls.isRtl();
+    public boolean isDoubleCoverAlone = false;
+    public boolean isCrop = false;
+    public boolean isCropSymetry = false;
+    public boolean isEnableSync;
+    public String syncRootID;
+
+    public String currentProfile = "";
+    public String rootPath1 = getRootDir();
+
+    transient SharedPreferences sp;
+
+    public long interstitialLoadAdTime = 0;
+    public long interstitialAdShowTime = 0;
+
+    public long rewardedAdLoadedTime = 0;
+    public long rewardShowTime = 0;
+
+
+    public static AppSP get() {
+        return instance;
+    }
+
+    public void init(Context c) {
+        sp = c.getSharedPreferences("AppTemp", Context.MODE_PRIVATE);
+        load(c);
+        getRootPath(c);
+    }
+
+    public String getTempDir(Context c){
+        return new File(c.getExternalFilesDir(null), "Demo").toString();
+    }
+    public String getRootDir(){
+        return new File(Environment.getExternalStorageDirectory(), "Librera").toString();
+    }
+    public File getTempDownloadBooks(Context c){
+        return new File(c.getExternalFilesDir(null), "TempDownloads");
+    }
+
+    public String getRootPath(Context c){
+        LOG.d("rootPath2","getRootPath-1",rootPath1, currentProfile);
+        if(instance.currentProfile.isEmpty()) {
+            if (!Android6.canWrite(c)) {
+                if (LibreraSafSync.isActive(c)) {
+                    // the Librera folder handed over: the app's own copy, kept in step with it
+                    instance.rootPath1 = getTempDir(c);
+                    instance.currentProfile = LibreraSafSync.sharedProfile();
+                } else if (LibreraSafSync.isDownloadLibreraUsable(c)) {
+                    // the settings in plain sight, in Download/Librera, written there directly
+                    instance.rootPath1 = LibreraSafSync.downloadLibrera().getPath();
+                    instance.currentProfile = LibreraSafSync.sharedProfile();
+                } else {
+                    // Download/Librera holds an earlier install's settings, which this one cannot
+                    // read until the folder is handed over through the picker
+                    instance.rootPath1 = getTempDir(c);
+                    instance.currentProfile = "Demo";
+                }
+            } else {
+                instance.rootPath1 =getRootDir();
+                instance.currentProfile = LibreraSafSync.sharedProfile();
+            }
+
+        }
+        LOG.d("rootPath2","getRootPath-2",rootPath1, currentProfile);
+        return instance.rootPath1;
+    }
+
+    public void load(Context c) {
+        Objects.loadFromSp(instance, sp);
+        // LibreraX is opened for one book at a time now; a stored one goes back to the view it replaced
+        if (instance.readingMode == AppState.READING_MODE_LIBRERAX) {
+            instance.readingMode = instance.libreraXView;
+        }
+    }
+
+    public void save() {
+        Objects.saveToSP(instance, sp);
+        LOG.d("rootPath2","save-1",rootPath1, currentProfile);
+        LOG.d("rootPath2","save-2",get().rootPath1, get().currentProfile);
+
+    }
+
+}

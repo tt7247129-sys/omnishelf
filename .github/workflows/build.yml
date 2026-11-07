@@ -1,0 +1,104 @@
+# 构建流水线:跑到 GitHub 的服务器上,你的电脑不需要装任何开发工具。
+#
+# 触发:仓库页面 → Actions → build → Run workflow
+#
+# 产出两个文件:
+#   omnishelf-debug-apk   —— 可直接装到手机测试
+#   omnishelf-release-aab —— 未签名,下载后由本地用上传密钥签名再交给 Play
+#
+# 不需要配置任何 Secrets。
+
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  MUPDF_VERSION: "1.28.5"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 安装 SDK 组件
+        run: sdkmanager --install "platforms;android-37.0" "build-tools;36.0.0" "platform-tools"
+
+      - name: 选择 NDK
+        run: |
+          set -euo pipefail
+          WANT="ndk;27.2.12479018"
+          if sdkmanager --list 2>/dev/null | grep -q "$WANT"; then
+            PKG="$WANT"
+          else
+            PKG=$(sdkmanager --list 2>/dev/null | grep -oE 'ndk;[0-9.]+' | sort -uV | tail -1)
+          fi
+          echo "安装 $PKG"
+          sdkmanager --install "$PKG"
+          echo "NDK_DIR=$ANDROID_HOME/${PKG/;/}" >> "$GITHUB_ENV"
+
+      - name: 缓存原生库(MuPDF 编一次约 40 分钟,必须缓存)
+        id: native
+        uses: actions/cache@v4
+        with:
+          path: |
+            Builder/mupdf-${{ env.MUPDF_VERSION }}
+            app/src/main/jniLibs
+          key: mupdf-${{ env.MUPDF_VERSION }}-${{ hashFiles('Builder/jni/**') }}-${{ runner.os }}
+
+      - name: 写入构建配置
+        run: |
+          mkdir -p "$HOME/.gradle"
+          {
+            echo "librera_ndk_dir=$NDK_DIR"
+            echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8"
+          } >> "$HOME/.gradle/gradle.properties"
+
+      - name: 编译 MuPDF 与 4 个 ABI 的原生库
+        if: steps.native.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p Builder/mupdf-${{ env.MUPDF_VERSION }}
+          bash Builder/link_to_mupdf_${MUPDF_VERSION}.sh
+
+      - name: 校验原生库齐备
+        run: |
+          set -euo pipefail
+          for abi in armeabi-v7a arm64-v8a x86 x86_64; do
+            test -f "app/src/main/jniLibs/$abi/libmupdf.so" || { echo "缺少 $abi/libmupdf.so"; exit 1; }
+          done
+
+      - name: 构建
+        run: ./gradlew --no-daemon :app:assembleProDebug :app:bundleProRelease
+
+      - name: 收集产物
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/pro/debug/*.apk out/omnishelf-debug.apk
+          cp app/build/outputs/bundle/proRelease/*.aab out/omnishelf-release-unsigned.aab
+          ls -lh out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: omnishelf-build
+          path: out/*
+          if-no-files-found: error
+          retention-days: 30

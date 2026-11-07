@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/bg_pdf_reader_pro" />
+
+    <!-- 前景已按 66/108 安全区绘制,不能再套 23% inset,否则图形会被缩到过小 -->
+    <foreground android:drawable="@mipmap/adaptive_pdf_reader" />
+
+    <monochrome android:drawable="@drawable/glyphicons_589_book_open_icon" />
+
+
+</adaptive-icon>
