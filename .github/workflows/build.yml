@@ -62,7 +62,7 @@ jobs:
           fi
           echo "安装 $PKG"
           "$SDKM" --install "$PKG"
-          echo "NDK_DIR=$ANDROID_HOME/${PKG/;/}" >> "$GITHUB_ENV"
+          echo "NDK_DIR=$ANDROID_HOME/$(echo "$PKG" | tr ';' '/')" >> "$GITHUB_ENV"
 
       - name: 缓存原生库(MuPDF 编一次约 40 分钟,必须缓存)
         id: native
