@@ -34,6 +34,9 @@ First release. Independent fork of Librera Reader `master` (2026-11-07, `f043c00
   `Urls.openPdfPro()`. All three are gone, and `AppsConfig.isShowAdsInApp()` now always
   returns false. As a side effect `isRewardActivated()` is always true, so features that
   upstream locked behind watching a rewarded ad are simply unlocked here.
+- **A second permission dialog that duplicated upstream's own.** Upstream already explains
+  "All files access" with a dialog before asking, so the extra explanation added here only
+  made two prompts appear in a row; the direct jump is restored.
 - **Storage folders still named "Librera"** (`/sdcard/Librera`, `Downloads/Librera`, the SAF
   profile and the Drive root). They are created by string constant and by concatenation, so
   the first rebrand pass missed them.

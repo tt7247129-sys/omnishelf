@@ -60,15 +60,10 @@ public class Android6 {
             LOG.d("Environment.isExternalStorageManager()", Environment.isExternalStorageManager(), Build.VERSION.SDK_INT);
 
             if (!Environment.isExternalStorageManager()) {
-                // OmniShelf: Play's "All files access" policy expects the request to be explained
-                // before the system settings screen is opened. Without this the app demands the
-                // permission cold on first launch, which reads as abusive to a reviewer.
-                new AlertDialog.Builder(a)
-                        .setTitle(R.string.storage)
-                        .setMessage(R.string.you_need_grant_permission5)
-                        .setPositiveButton(R.string.allow, (d, which) -> openAllFilesAccessSettings(a))
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+                // Upstream already explains the permission with its own dialog
+                // (add_all_books_with_permission) before this point, so jumping straight to the
+                // system screen keeps it to one explanation instead of two in a row.
+                openAllFilesAccessSettings(a);
             } else {
                 AppProfile.init(a);
                 //FontExtractor.extractFonts(a);
