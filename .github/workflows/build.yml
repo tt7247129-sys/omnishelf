@@ -73,12 +73,19 @@ jobs:
             app/src/main/jniLibs
           key: mupdf-${{ env.MUPDF_VERSION }}-${{ hashFiles('Builder/jni/**') }}-${{ runner.os }}
 
-      - name: 写入构建配置
+      - name: 写入构建配置与签名密钥
         run: |
+          set -euo pipefail
           mkdir -p "$HOME/.gradle"
+          echo "librera_ndk_dir=$NDK_DIR" >> "$HOME/.gradle/gradle.properties"
+          echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8" >> "$HOME/.gradle/gradle.properties"
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          ls -l "$RUNNER_TEMP/upload.jks"
           {
-            echo "librera_ndk_dir=$NDK_DIR"
-            echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8"
+            echo "RELEASE_STORE_FILE=$RUNNER_TEMP/upload.jks"
+            echo "RELEASE_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            echo "RELEASE_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}"
+            echo "RELEASE_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}"
           } >> "$HOME/.gradle/gradle.properties"
 
       - name: 编译 MuPDF 与 4 个 ABI 的原生库
@@ -95,16 +102,27 @@ jobs:
           done
 
       - name: 构建
-        run: ./gradlew --no-daemon :app:assembleProDebug :app:bundleProRelease
+        run: ./gradlew --no-daemon :app:assembleProRelease :app:bundleProRelease
 
       - name: 收集产物
         run: |
           set -euo pipefail
           mkdir -p out
-          find app/build/outputs/apk -name '*.apk' -exec cp {} out/ \;
+          # 只保留上架用的 AAB 和一台手机能装的 arm64 安装包,产物从 280MB 降到约 116MB
           find app/build/outputs/bundle -name '*.aab' -exec cp {} out/ \;
+          find app/build/outputs/apk -name '*arm64*.apk' -exec cp {} out/ \;
           test -n "$(ls -A out)" || { echo "没有产物"; exit 1; }
           ls -lh out
+
+      - name: 验证签名(未签名则构建失败)
+        run: |
+          set -euo pipefail
+          AAB=$(ls out/*.aab | head -1)
+          APK=$(ls out/*.apk | head -1)
+          jarsigner -verify "$AAB" | grep -q "jar verified" || { echo "AAB 未签名"; exit 1; }
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs "$APK"
+          echo "签名校验通过"
+
 
       - uses: actions/upload-artifact@v4
         with:
