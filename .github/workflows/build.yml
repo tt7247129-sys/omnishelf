@@ -99,9 +99,11 @@ jobs:
 
       - name: 收集产物
         run: |
+          set -euo pipefail
           mkdir -p out
-          cp app/build/outputs/apk/pro/debug/*.apk out/omnishelf-debug.apk
-          cp app/build/outputs/bundle/proRelease/*.aab out/omnishelf-release-unsigned.aab
+          find app/build/outputs/apk -name '*.apk' -exec cp {} out/ \;
+          find app/build/outputs/bundle -name '*.aab' -exec cp {} out/ \;
+          test -n "$(ls -A out)" || { echo "没有产物"; exit 1; }
           ls -lh out
 
       - uses: actions/upload-artifact@v4
