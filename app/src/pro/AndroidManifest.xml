@@ -6,7 +6,7 @@
              The protocol is src/main/aidl/mobi/librera/djvu/IDjvuRenderer.aidl. -->
         <service
             android:name="mobi.librera.djvu.DjvuRenderService"
-            android:exported="true"
+            android:exported="false"
             android:process=":djvu">
             <intent-filter>
                 <action android:name="mobi.librera.djvu.RENDER" />

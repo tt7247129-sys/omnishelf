@@ -310,24 +310,14 @@
 
         <activity
             android:name="com.foobnix.ui2.CloudrailActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${applicationId}" />
-                <data android:scheme="omnishelf" />
-            </intent-filter>
-        </activity>
+            android:exported="false"
+            android:launchMode="singleTask" />
 
 
         <activity
             android:name="com.foobnix.test.ActivityA"
             android:launchMode="singleTop"
-            android:exported="true">
+            android:exported="false">
 
         </activity>
 
