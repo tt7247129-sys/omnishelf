@@ -37,23 +37,31 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Android SDK
-        uses: android-actions/setup-android@v3
-
+      # runner 自带 Android SDK;不再使用 android-actions/setup-android,
+      # 它会去安装已下线的 "tools" 包而失败。
       - name: 安装 SDK 组件
-        run: sdkmanager --install "platforms;android-37.0" "build-tools;36.0.0" "platform-tools"
+        run: |
+          set -euo pipefail
+          SDKM=$(command -v sdkmanager || true)
+          if [ -z "$SDKM" ]; then
+            SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -1)
+          fi
+          echo "sdkmanager: $SDKM"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" --install "platforms;android-37.0" "build-tools;36.0.0" "platform-tools"
 
       - name: 选择 NDK
         run: |
           set -euo pipefail
           WANT="ndk;27.2.12479018"
-          if sdkmanager --list 2>/dev/null | grep -q "$WANT"; then
+          SDKM=$(command -v sdkmanager || ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | head -1)
+          if "$SDKM" --list 2>/dev/null | grep -q "$WANT"; then
             PKG="$WANT"
           else
-            PKG=$(sdkmanager --list 2>/dev/null | grep -oE 'ndk;[0-9.]+' | sort -uV | tail -1)
+            PKG=$("$SDKM" --list 2>/dev/null | grep -oE 'ndk;[0-9.]+' | sort -uV | tail -1)
           fi
           echo "安装 $PKG"
-          sdkmanager --install "$PKG"
+          "$SDKM" --install "$PKG"
           echo "NDK_DIR=$ANDROID_HOME/${PKG/;/}" >> "$GITHUB_ENV"
 
       - name: 缓存原生库(MuPDF 编一次约 40 分钟,必须缓存)
