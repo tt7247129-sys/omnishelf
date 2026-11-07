@@ -236,7 +236,7 @@
     </style>
 
     <!-- OmniShelfActivity: no screen of its own, only the popup when OmniShelf is missing. -->
-    <style name="OmniShelfWhite" parent="StyledIndicatorsWhite">
+    <style name="LibreraXWhite" parent="StyledIndicatorsWhite">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@null</item>
@@ -244,7 +244,7 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
-    <style name="OmniShelfBlack" parent="StyledIndicatorsBlack">
+    <style name="LibreraXBlack" parent="StyledIndicatorsBlack">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@null</item>
