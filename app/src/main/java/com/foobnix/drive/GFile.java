@@ -311,7 +311,7 @@ public class GFile {
      * then read the listing back and keep the oldest, and the empty one that lost goes to the trash.
      */
     private static File createLibreraSync() throws Exception {
-        final File created = GFile.createFolder("root", "Librera");
+        final File created = GFile.createFolder("root", "OmniShelf");
         debug("\n Create remote [Librera]");
         final File oldest = GFile.findLibreraSync();
         if (oldest == null || oldest.getId().equals(created.getId())) {
@@ -801,7 +801,7 @@ public class GFile {
 //                try {
 //                    final File execute = GFile.googleDriveService.files().get(AppSP.get().syncRootID).execute();
 //                    if (execute.getTrashed() == true) {
-//                        File syncRoot = GFile.createFolder("root", "Librera");
+//                        File syncRoot = GFile.createFolder("root", "OmniShelf");
 //                        debug("\n Create remote [Librera]");
 //                        AppSP.get().syncRootID = syncRoot.getId();
 //                        AppProfile.save(c);
@@ -809,7 +809,7 @@ public class GFile {
 //                } catch (GoogleJsonResponseException e) {
 //                    LOG.e(e);
 //                    if (e.getDetails().getCode() == 404) {
-//                        File syncRoot = GFile.createFolder("root", "Librera");
+//                        File syncRoot = GFile.createFolder("root", "OmniShelf");
 //                        debug("\n Create remote [Librera]");
 //                        AppSP.get().syncRootID = syncRoot.getId();
 //                        AppProfile.save(c);

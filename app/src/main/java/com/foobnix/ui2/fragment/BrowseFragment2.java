@@ -459,7 +459,7 @@ import java.util.Map;
                 }
                 if (AppSP.get().isEnableSync) {
                     menu.getMenu()
-                        .add("Librera" + "/" + "Sync")
+                        .add("OmniShelf" + "/" + "Sync")
                         .setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                             @Override public boolean onMenuItemClick(MenuItem item) {

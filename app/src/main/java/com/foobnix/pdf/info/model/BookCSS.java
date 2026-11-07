@@ -333,7 +333,7 @@ public class BookCSS {
         fontWeight = 400;
 
         fontFolder = AppProfile.syncFontFolder.getPath();
-        downlodsPath = new File(AppProfile.DOWNLOADS_DIR, "Librera").getPath();
+        downlodsPath = new File(AppProfile.DOWNLOADS_DIR, "OmniShelf").getPath();
         displayFontName = BUNDLED_FONT + ".ttf";
         normalFont = bundledFont("Regular");
         boldFont = bundledFont("Bold");

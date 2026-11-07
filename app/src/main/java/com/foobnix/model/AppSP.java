@@ -70,7 +70,7 @@ public class AppSP {
         return new File(c.getExternalFilesDir(null), "Demo").toString();
     }
     public String getRootDir(){
-        return new File(Environment.getExternalStorageDirectory(), "Librera").toString();
+        return new File(Environment.getExternalStorageDirectory(), "OmniShelf").toString();
     }
     public File getTempDownloadBooks(Context c){
         return new File(c.getExternalFilesDir(null), "TempDownloads");

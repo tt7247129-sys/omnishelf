@@ -109,8 +109,8 @@ jobs:
           set -euo pipefail
           mkdir -p out
           # 只保留上架用的 AAB 和一台手机能装的 arm64 安装包,产物从 280MB 降到约 116MB
-          find app/build/outputs/bundle -name '*.aab' -exec cp {} out/ \;
-          find app/build/outputs/apk -name '*arm64*.apk' -exec cp {} out/ \;
+          cp "$(find app/build/outputs/bundle -name '*.aab' | head -1)" out/OmniShelf.aab
+          cp "$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)" out/OmniShelf-arm64.apk
           test -n "$(ls -A out)" || { echo "没有产物"; exit 1; }
           ls -lh out
 

@@ -65,7 +65,7 @@ public class LibreraSafSync {
     private static final String STATE_PREFIX = "f:";
     private static final String EXTERNAL_STORAGE = "com.android.externalstorage.documents";
     private static final String MIME_FILE = "application/octet-stream";
-    private static final String LIBRERA = "Librera";
+    private static final String LIBRERA = "OmniShelf";
 
     /** The profile that only ever exists without the permission; it is not the user's to share. */
     private static final String LOCAL_ONLY_PROFILE = AppProfile.PROFILE_PREFIX + "Demo";
@@ -242,7 +242,7 @@ public class LibreraSafSync {
 
     /** The profile the Librera folder is read with when the app has the permission. */
     public static String sharedProfile() {
-        return AppsConfig.IS_LOG ? "BETA" : "Librera";
+        return AppsConfig.IS_LOG ? "BETA" : "OmniShelf";
     }
 
     /** The files a device's profile folder holds. */
