@@ -118,6 +118,13 @@ public class AppsConfig {
     }
 
     public static boolean isShowAdsInApp(final Context a) {
+        // OmniShelf ships without advertising and without any paid tier, so nothing is ever
+        // shown or offered. Upstream used this same flag to put a "PRO" item in the overflow
+        // menu that led to its paid app; that path is gone with the flag.
+        return false;
+    }
+
+    private static boolean isShowAdsInAppUpstreamLogic(final Context a) {
         if (a == null) {
             LOG.d("no-ads error context null");
             return false;

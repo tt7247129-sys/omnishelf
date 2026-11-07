@@ -29,6 +29,15 @@ First release. Independent fork of Librera Reader `master` (2026-11-07, `f043c00
 
 ### Removed
 
+- **Every path to the upstream author's paid app.** Upstream offered it from the overflow
+  menu (labelled with the app's own name), from a row in the settings screen, and through
+  `Urls.openPdfPro()`. All three are gone, and `AppsConfig.isShowAdsInApp()` now always
+  returns false. As a side effect `isRewardActivated()` is always true, so features that
+  upstream locked behind watching a rewarded ad are simply unlocked here.
+- **Storage folders still named "Librera"** (`/sdcard/Librera`, `Downloads/Librera`, the SAF
+  profile and the Drive root). They are created by string constant and by concatenation, so
+  the first rebrand pass missed them.
+
 - **Google Drive entry** in the library panel. `AppsConfig.isCloudsEnable` is
   hard-wired to `false` upstream, so the entry only ever opened an empty screen.
   It is now hidden for every flavour, not just `fdroid`.

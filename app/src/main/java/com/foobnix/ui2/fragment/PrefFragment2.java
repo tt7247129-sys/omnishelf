@@ -2638,8 +2638,8 @@ public class PrefFragment2 extends UIFragment {
         TextView proText = inflate.findViewById(R.id.downloadPRO);
         // Nothing to sell to a reader who is already on PRO, and the F-Droid builds are not
         // published on the store the offer leads to.
-        boolean isPro = AppsConfig.PRO_LIBRERA_READER.equals(Apps.getPackageName(getActivity()));
-        ((View) proText.getParent()).setVisibility(TxtUtils.visibleIf(!isPro && !AppsConfig.IS_FDROID));
+        // OmniShelf: there is no paid tier to offer, so this row is hidden for every build.
+        ((View) proText.getParent()).setVisibility(View.GONE);
         asButton(proText);
         proText.setText(getText(R.string.librera_pro));
         ((View) proText.getParent()).

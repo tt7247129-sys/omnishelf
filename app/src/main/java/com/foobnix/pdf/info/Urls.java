@@ -110,12 +110,9 @@ public class Urls {
     }
 
     public static void openPdfPro(Context a) {
-        try {
-            open(a, "market://details?id=com.foobnix.pro.pdf.reader");
-        } catch (Exception e) {
-            // android 1.6
-            open(a, "https://play.google.com/store/apps/details?id=cc.omnishelf.reader");
-        }
+        // OmniShelf: this used to open a paid app by the upstream author. There is no paid
+        // tier here, so the entry point is kept only so callers still compile.
+        LOG.d("openPdfPro ignored: no paid tier in OmniShelf");
     }
 
     public static void openWhatIsNew(Context a) {
@@ -140,7 +137,7 @@ public class Urls {
     public static void rateIT(Context a) {
         try {
             if (AppsConfig.IS_FDROID) {
-                Urls.open(a, "https://github.com/foobnix/LibreraReader");
+                Urls.open(a, "https://github.com/tt7247129-sys/omnishelf");
             } else {
                 Urls.open(a, "market://details?id=" + a.getPackageName());
             }
