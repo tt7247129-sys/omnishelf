@@ -3099,30 +3099,14 @@ public class PrefFragment2 extends UIFragment {
     }
 
     /**
-     * The LibreraX block is not a link, but it stands in a column with two that are and has to
-     * read as one of them: it is given the same ring, in the colour the pass has just settled
-     * on, and the same insets TintUtil.asLinkButton gives a button.
+     * OmniShelf: upstream showed a card here that promoted a different app by the same author.
+     * There is no such app for this fork, so the card is simply hidden.
      */
     private void paintLibreraXBlock(View inflate) {
         View block = inflate.findViewById(R.id.libreraXBlock);
-        TextView link = inflate.findViewById(R.id.whatIsNew);
-        if (block == null || link == null) {
-            return;
+        if (block != null) {
+            block.setVisibility(View.GONE);
         }
-        // OmniShelf: this card promoted a different app by the upstream author. Hidden.
-        block.setVisibility(View.GONE);
-        return;
-        block.setBackgroundResource(R.drawable.bg_button_outline_card);
-        // The same insets a button with a mark inside it takes, so the marks of the three
-        // boxes start at one edge.
-        block.setPadding(Dips.DP_10, Dips.DP_8, Dips.DP_10, Dips.DP_8);
-        if (block.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) block.getLayoutParams();
-            lp.leftMargin = lp.rightMargin = Dips.DP_8;
-            lp.topMargin = lp.bottomMargin = Dips.DP_4;
-            block.setLayoutParams(lp);
-        }
-        TintUtil.setRingColor(block, link.getCurrentTextColor());
     }
 
     /**
