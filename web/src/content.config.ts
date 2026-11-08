@@ -12,4 +12,17 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+/**
+ * Every page's copy lives here, not in the .astro template. The templates only
+ * decide where the text goes.
+ */
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    eyebrow: z.string().default(''),
+  }),
+});
+
+export const collections = { articles, pages };

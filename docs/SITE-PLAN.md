@@ -1,158 +1,179 @@
-# OmniShelf.cc 站点交付说明
+# OmniShelf.cc — 交付说明
 
-> 技术栈:Astro 5.18(static output),零 JavaScript 也能读到全文。
-> 构建:`cd web && pnpm build` → 产物在 `web/dist/`。
-> 已构建验证:**17 个页面 + sitemap.xml + robots.txt**,无 404、无占位页。
+> 修订版。与上一版的差异:页面文案全部迁入内容集合、独立 `tokens.css`、指定字体栈、
+> 部署工作流与 Cloudflare 切换顺序。
+>
+> 构建:`cd web && pnpm build` → `web/dist/`。已验证 **17 页 + sitemap + robots**,0 死链。
 
 ---
 
-## 1. 站点地图
+## 1. 仓库结构与部署
 
-| URL | 核心主题 | 实际字数 |
+```
+omnishelf/
+├── .github/workflows/deploy.yml    构建 web/ 并发布 dist 到 Pages
+├── web/
+│   ├── astro.config.mjs            site: https://omnishelf.cc, output: static
+│   ├── package.json                astro 5.18 + 两个自托管字体包
+│   ├── public/                     robots.txt / icon.png / apple-touch-icon.png
+│   └── src/
+│       ├── content.config.ts       collections: articles, pages
+│       ├── content/articles/*.md   9 篇长文
+│       ├── content/pages/*.md      首页 / why / about / contact / privacy / terms / shelf
+│       ├── layouts/Base.astro      <head>、Header、Footer
+│       ├── layouts/Page.astro      渲染一个 pages 条目
+│       ├── components/             Header / Footer / ArticleCard / Prose
+│       ├── pages/                  路由 + sitemap.xml.ts
+│       └── styles/tokens.css       全部视觉变量
+└── site/                           旧的静态占位页,域名切完即删
+```
+
+`astro.config.mjs` 关键三项:`site: 'https://omnishelf.cc'`、`output: 'static'`、`build.format: 'directory'`。
+
+`deploy.yml` 要点:
+
+- 触发:`push` 到 **`site-live`** 分支 + `workflow_dispatch`。**刻意不挂 master** —— 域名迁移期间,一次普通推送就把线上的隐私政策页打掉是不可接受的。
+- Node 22 / pnpm 9 / `--frozen-lockfile`
+- 构建后先自检:`index.html`、`privacy/index.html`、`sitemap.xml`、`robots.txt` 必须存在,且页面数 ≥ 17,否则失败
+- 产物 `web/dist` 经 `upload-pages-artifact` → `deploy-pages`
+
+### Cloudflare 与 GitHub Pages 的切换顺序(顺序错了会进重定向循环)
+
+目标是 **CNAME → `tt7247129-sys.github.io`,橙色云,SSL Full (strict)**。但这不是第一步:
+
+1. GitHub → Settings → Pages → Custom domain 填 `omnishelf.cc`,保存
+2. Cloudflare DNS 先加**灰色云**两条:`@` 与 `www` → `tt7247129-sys.github.io`
+3. 等 GitHub 签发证书(几分钟到一小时),`https://omnishelf.cc` 直连可访问
+4. Cloudflare SSL/TLS 改为 **Full (strict)**,开启 Always Use HTTPS
+5. 两条记录再切**橙色云**
+6. 验证:`curl -sI https://omnishelf.cc | head -1` 为 200/301,浏览器证书有效且无循环
+
+> 橙色云先开会挡住证书验证;Full (strict) 先设会 526。
+
+---
+
+## 2. 站点地图(实测渲染字数)
+
+| URL | 主题 | 字数 |
 |---|---|---|
-| `/` | 编辑导言:为什么"阅读不是格式问题" | 768 |
-| `/why/` | 设计主张:与主流阅读器的根本分歧 | 1002 |
-| `/notes/` | 文章索引 + 栏目说明 | 580 |
-| `/notes/01-pdf-page-numbers/` | PDF 重排与引用页码的冲突 | 1062 |
-| `/notes/02-two-kinds-of-position/` | 一个书架里两套"读到哪了" | 921 |
-| `/notes/03-highlights-in-greyscale/` | 高亮在灰度屏上的存亡 | 992 |
-| `/notes/04-tap-zones/` | 单手拿手机时的翻页热区几何 | 1015 |
-| `/notes/05-hyphenation-default/` | 为什么自动断字默认关闭 | 934 |
-| `/notes/06-tts-foreground-service/` | 息屏朗读是权限问题,不是语音问题 | 847 |
-| `/notes/07-library-scan/` | "找到我的书"到底需要什么权限 | 849 |
-| `/notes/08-format-list/` | 34 种格式不是卖点,是失败模式的承诺 | 1086 |
-| `/notes/09-error-dialogs/` | 打不开文件时该说什么 | 968 |
-| `/shelf/` | 应用现状与变更记录(轻量) | 421 |
-| `/about/` | 谁在维护、为何建站、如何被资助、不是什么 | 526 |
-| `/contact/` | 联系方式与有效 bug 报告的四要素 | 337 |
-| `/privacy/` | Cookie、第三方广告、AdSense、退出机制 | 804 |
-| `/terms/` | 服务条款、AGPLv3、无担保 | 556 |
+| `/` | 编辑导言:阅读不是格式问题 | 928(含 3 张卡片摘要,正文约 700) |
+| `/why/` | 设计主张 | 1002 |
+| `/notes/` | 文章索引 | 580 |
+| `/notes/01-pdf-page-numbers/` | 重排与页码引用 | 1062 |
+| `/notes/02-two-kinds-of-position/` | 两套"读到哪了" | 921 |
+| `/notes/03-highlights-in-greyscale/` | 高亮在灰度屏 | 992 |
+| `/notes/04-tap-zones/` | 单手翻页热区 | 1015 |
+| `/notes/05-hyphenation-default/` | 断字默认关闭 | 934 |
+| `/notes/06-tts-foreground-service/` | 息屏朗读与权限 | 847 |
+| `/notes/07-library-scan/` | 找到我的书需要什么 | 849 |
+| `/notes/08-format-list/` | 格式清单的真相 | 1086 |
+| `/notes/09-error-dialogs/` | 打不开时该说什么 | 968 |
+| `/shelf/` | 应用现状与变更记录 | 421 |
+| `/about/` | 谁在运营、为何建站、不是什么 | 526 |
+| `/contact/` | 联系方式与有效报告 | 341 |
+| `/privacy/` | Cookie / AdSense / 个性化广告 / 退出机制 | 818 |
+| `/terms/` | 条款、AGPLv3、无担保 | 554 |
 
-合计约 **13,000 词**,其中可被 AdSense 视为"内容主体"的长文 **9 篇 / 8,600 词**。
+合计约 **13,700 词**,其中 9 篇长文 **8,600 词**。
 
 ---
 
-## 2. 九篇文章:标题与核心论点
+## 3. 九篇文章:标题与核心论点
 
-| # | 标题 | 一句话论点 |
+| # | 标题 | 论点 |
 |---|---|---|
-| 01 | A PDF on a phone does not lose resolution — it loses the page number | 重排把引用赖以为生的页码变成了一个计算产物,所以原文页码必须作为唯一真相保留 |
-| 02 | One shelf, two ideas of where I stopped | PDF 的位置是坐标、EPUB 的位置是文本指针,把两者塞进一个书库是一次不可见的工程妥协 |
-| 03 | A highlight that disappears on an e-ink screen | 高亮颜色不能按色相选,必须按亮度差选,否则在墨水屏上等同于没标 |
-| 04 | The left-edge tap zone that a one-handed reader cannot reach | 翻页热区要按手的几何设计,不能按布局的几何设计 |
-| 05 | Why automatic hyphenation is off until you ask for it | 默认值应该选择"失败得可以理解"的那一侧:断字错误的破坏力远大于右缘不齐 |
-| 06 | Listening with the screen off is a policy problem before it is a voice problem | 息屏朗读是前台服务权限问题,权限是功能的一部分,申报材料也是 |
-| 07 | What "find my books" actually requires from Android | SAF 与 MediaStore 都无法索引跨目录的既有书库,这是广域文件权限唯一的正当理由 |
-| 08 | Thirty-four formats is not a feature, it is a promise about failure | 格式清单不是能力分数,是"哪些解析器会在你的文件上运行、崩溃时怎样"的承诺 |
-| 09 | What a reader should say when the file will not open | 错误路径是产品价值观最藏不住的地方——我们在这里发现了一个付费导流入口 |
+| 01 | A PDF on a phone does not lose resolution — it loses the page number | 重排把页码变成计算产物,原文页码必须作为唯一真相 |
+| 02 | One shelf, two ideas of where I stopped | PDF 位置是坐标、EPUB 是指针,同库共存是一次不可见的妥协 |
+| 03 | A highlight that disappears on an e-ink screen | 高亮按亮度差选色,否则墨水屏上等于没标 |
+| 04 | The left-edge tap zone that a one-handed reader cannot reach | 热区要按手的几何设计,不是按布局的几何设计 |
+| 05 | Why automatic hyphenation is off until you ask for it | 默认应选"失败得可以理解"的一侧 |
+| 06 | Listening with the screen off is a policy problem before it is a voice problem | 息屏朗读先是前台服务权限问题,申报材料也是功能的一部分 |
+| 07 | What "find my books" actually requires from Android | SAF 与 MediaStore 都无法索引跨目录书库,这是广域文件权限唯一的正当理由 |
+| 08 | Thirty-four formats is not a feature, it is a promise about failure | 格式清单是"哪些解析器会跑、崩了怎么办"的承诺 |
+| 09 | What a reader should say when the file will not open | 错误路径最藏不住产品价值观——我们在这里删掉了一个付费导流入口 |
 
-每篇都包含至少一处具体的技术选择或可观察行为(重排后的页码换算、灰度亮度分离、360dp 下的 72dp 热区、前台服务类型申报、树形 URI 授权的三条限制、崩溃循环的预写标记等),不是形容词堆砌。
-
----
-
-## 3. 首页文案
-
-已在 `web/src/pages/index.astro`,**768 词**,结构:
-
-- `h1` Reading is not a format problem.
-- 小标题:书架即论点 / 我们删掉了什么,以及这不是道德立场 / 我们保留了什么,代价是什么 / 这个站点是干什么的
-
-主 CTA **不是** "Download now",而是指向 `/why/` 与文章的内链。下载入口只出现在 `/shelf/`。
+每篇结尾是**下一篇的真实标题内链**(不是 "Read more"),`ArticleCard` 整卡可点。
 
 ---
 
-## 4. Why OmniShelf
+## 4. 首页文案
 
-`web/src/pages/why.astro`,**1002 词**,七个部分:格式是文件的属性而非阅读生活的属性 / 删掉的东西就是论点 / 离线是默认而非模式 / 字体排印不是装饰 / 应用不会做的事 / 这是给谁的。
+`web/src/content/pages/index.md`。结构:`# Reading is not a format problem.` →
+导语 → `## The shelf is the argument` → `## What we removed, and why it is not a moral
+position` → `## What we kept, and what it costs` → `## What this site is for`。
 
-与 librera.mobi 的差异:不做功能对比表,全文没有一个"功能矩阵",所有能力都以论据形式出现。
+主 CTA 不是下载,是指向 `/why/` 与文章的内链。下载入口只在 `/shelf/`。
 
 ---
 
-## 5. 信任页面
+## 5. Why OmniShelf
+
+`web/src/content/pages/why.md`,1002 词。七个部分,无功能对比表,所有能力以论据出现。
+
+---
+
+## 6. 信任页面
 
 | 页面 | 关键内容 |
 |---|---|
-| `/about/` | 维护者身份(开源项目、无公司、无投资人)、真实邮箱、建站目的、资助方式、**明确声明与 Librera 及任何同名产品无关**、纠错机制 |
-| `/contact/` | 邮箱、GitHub Issues、有效 bug 报告四要素、安全问题的私下渠道 |
-| `/privacy/` | 应用零收集 / 站点 Cookie / **Google AdSense 与第三方广告** / **个性化广告** / **退出机制**(Ads Settings、aboutads.info、youronlinechoices、浏览器控制)/ 日志 / 儿童 / 权利 / 变更 |
-| `/terms/` | 站点使用、应用以 AGPLv3 授权、无担保、禁止行为、第三方链接与广告、内容性质、变更、联系方式 |
+| `/about/` | 维护者身份、真实邮箱、建站目的、资助方式、**与 Librera 及任何同名产品无关**、纠错机制 |
+| `/contact/` | 邮箱、GitHub Issues、有效 bug 报告四要素、安全问题私下渠道 |
+| `/privacy/` | 应用零收集 / 站点 Cookie / **AdSense 与第三方广告** / **个性化广告** / **退出机制四渠道** / 日志 / 儿童 / 权利 / 变更 |
+| `/terms/` | AGPLv3 授权、无担保、禁止行为、第三方链接与广告、变更 |
 
-四个页面均可从顶部导航与页脚到达。
+四页均在顶部导航或页脚可达。
 
 ---
 
-## 6. 设计 token
+## 7. 视觉 token 与组件
 
-| 类别 | 值 |
+**`src/styles/tokens.css`** 是唯一变量文件,取值按 brief 固定:
+
+| 变量 | 浅色 | 深色 |
+|---|---|---|
+| `--canvas` | `#F7F5F0` | `#1A1A18` |
+| `--ink` | `#2B2B28` | `#E8E6E1` |
+| `--rule` | `#D8D4CC` | `#3A3A36` |
+| `--accent` | `#4A5D4E` | `#8AA68F` |
+| 正文 | Literata 1.125rem / 1.7 | 同 |
+| 度量 | `68ch` 单栏 | 同 |
+| UI 字体 | IBM Plex Sans(仅导航与元数据) | 同 |
+
+字体通过 `@fontsource/literata` 与 `@fontsource/ibm-plex-sans` **自托管**,不走 CDN。
+
+| 组件 | 纸感约束 |
 |---|---|
-| 浅色底 | `#F7F5F0` |
-| 浅色前景 | `#2B2B28` |
-| 深色底 | `#1A1A18` |
-| 深色前景 | `#E8E6E1` |
-| 分隔线 | `#DDD8CE` / 深色 `#34322D` |
-| 弱化文字 | `#6B6660` / 深色 `#9A958C` |
-| 强调色(唯一) | `#4A5D4E`(墨绿);深色模式 `#8AA68F` |
-| 正文字体 | `"Source Serif 4", "Literata", "Iowan Old Style", Georgia, "Songti SC", serif` |
-| 界面字体 | `ui-sans-serif, system-ui, …`(仅用于 meta、导航、页脚) |
-| 字号层级 | 0.875 / 1.0625 / 1.25 / 1.5 / 2 / 2.5 rem |
-| 行高 | 正文 1.72;标题 1.15–1.35 |
-| 单栏宽度 | `40rem`(约 68–72 字符) |
-| 间距体系 | 0.5 / 0.875 / 1.5 / 2.5 / 4 rem |
-
-**没有主题切换器**:深色模式跟随系统 `prefers-color-scheme`。禁止纯黑 `#000` 与纯白 `#FFF`。
+| `Base.astro` | 每页唯一 title/description/canonical;文章页注入 `Article` JSON-LD;字体自托管 |
+| `Header.astro` | 4 个一级导航;无搜索框、无 CTA;当前页用下划线 |
+| `Footer.astro` | 固定五项 + 一句版权;字号小于正文 |
+| `ArticleCard.astro` | **整卡 `<a>`,没有"阅读更多"按钮**;摘要来自正文真实段落 |
+| `Prose.astro` | 单栏 68ch;无侧边栏;`h1 + p` 由 CSS 承担导语样式(Markdown 无法带 class) |
 
 ---
 
-## 7. 组件清单与约束
+## 8. 审核前自查清单
 
-| 组件 | 纸感阅读下的约束 |
-|---|---|
-| `Base.astro` | 静态输出;每页唯一 title/description/canonical;文章页注入 `Article` 结构化数据;favicon 与 theme-color 跟随明暗 |
-| `Header.astro` | 4 个一级导航;无搜索框、无 CTA 按钮;当前页用下划线而非色块 |
-| `Footer.astro` | 固定五项:About / Contact / Privacy / Terms / Reading Notes;一句版权;不放大字标 |
-| `ArticleCard.astro` | **整卡是 `<a>`,没有"阅读更多"按钮**;标题 + 真实摘要 + 日期与阅读时长;悬浮只加下划线,不做位移与阴影 |
-| `Prose.astro` | 单栏容器;标题、段落、引用、代码、图注样式统一;不插入推荐模块 |
-| `notes/[...slug].astro` | 文章页;结尾是"下一篇"内链而非下载广告;`Article` JSON-LD |
-| `sitemap.xml.ts` | 构建期生成的静态 sitemap,含全部 17 页 |
+- [x] 主落地页非功能列表:首页正文约 700 词 + 3 张文章卡,无截图墙、无图标矩阵、无下载主按钮
+- [x] 无 AI 痕迹内容:9 篇均含具体技术选择(页码换算 / 灰度亮度 / 72dp 热区 / 前台服务类型 / 树形 URI 授权 / 崩溃预写标记)
+- [x] 功能只作论据:全站无 Features / Formats / Settings 栏目
+- [x] 信任页面齐全且双向可达
+- [x] About 有可核验身份、真实邮箱、目的声明、非同源声明
+- [x] Privacy 显式披露 Cookie / AdSense / 第三方广告 / 个性化广告 / 退出机制
+- [x] 全站 HTTPS(部署后)、移动端单栏、17 页无 404 无占位
+- [x] **未部署任何 AdSense 代码**
+- [x] 无需登录
+- [x] 正文存在于 HTML(禁用 JS 可读),文案全部在 Markdown 内容集合
 
----
+### 提交前人工动作
 
-## 8. AdSense 审核前自查清单
+- [ ] 按第 1 节顺序完成域名切换
+- [ ] 手机打开首页与任意文章,确认排版
+- [ ] Search Console 提交 sitemap
+- [ ] AdSense 提交 `https://omnishelf.cc/`
+- [ ] **审核通过后**再加广告位(建议仅置于文章正文之后)
 
-### 红线逐条核对
+### 风险
 
-- [x] **主落地页不是功能列表**:首页 768 词编辑导言 + 文章流,无截图墙、无图标矩阵、无"Download on Google Play"主按钮
-- [x] **无 AI 生成痕迹过重的内容**:9 篇文章均含具体技术选择与可观察行为(页码换算、灰度亮度、72dp 热区、前台服务类型、树形 URI 授权、崩溃预写标记),不是"支持多种格式、体验流畅"
-- [x] **不复刻 librera.mobi 结构**:没有 Features / Formats / Settings 目录式栏目;功能只作为论据出现
-- [x] **信任页面齐全**:Privacy / About / Contact / Terms 四个页面,顶部导航与页脚均可到达
-- [x] **About 有可核验身份感**:维护者身份、真实邮箱、GitHub 仓库、资助方式、与同名产品无关联声明
-- [x] **Privacy 披露完整**:Cookie / 第三方广告服务 / Google AdSense / 个性化广告 / 退出机制(四个渠道)
-- [x] **全站 HTTPS + 移动端可读**:静态站点,`viewport` 已设,窄屏单栏
-- [x] **无 404 / 无 under construction**:17 页全部有内容,构建产物中无占位页
-- [x] **审核前未部署 AdSense 代码**:全站无任何广告脚本
-- [x] **无需登录即可阅读全文**:没有任何登录墙
-
-### 提交前的人工动作(代码之外)
-
-- [ ] 域名解析到站点(Cloudflare → GitHub Pages,灰色云)
-- [ ] 用手机实际打开首页与任意一篇文章,确认排版不溢出
-- [ ] 提交 sitemap 到 Google Search Console
-- [ ] 在 AdSense 后台提交 `https://omnishelf.cc/`,等待审核
-- [ ] 审核通过后才在页面中部署广告位(建议只放在文章页正文之后,不进正文中间)
-
-### 已知风险
-
-1. **域名未解析前站点不可访问**——这是当前唯一阻塞项。
-2. `github.io/omnishelf/privacy/` 是 Play 商店里填的隐私政策地址。**在域名切换完成之前,不要替换 GitHub Pages 上的旧静态页**,否则 Play 侧的链接会 404。
-3. AdSense 对"新站 + 少量长文"的通过率不稳定,9 篇 800–1100 词的长文是下限而非保险;若首次被拒,补充 3–5 篇同规格文章比修改现有文章更有效。
-
----
-
-## 部署(待 DNS 就绪后执行)
-
-1. 在 `web/astro.config.mjs` 保持 `site: 'https://omnishelf.cc'`
-2. 修改 `.github/workflows/pages.yml`:增加 pnpm 安装与 `pnpm build`,上传 `web/dist`
-3. 在仓库 Settings → Pages 设置 Custom domain 为 `omnishelf.cc`
-4. Play 商店的隐私政策地址改为 `https://omnishelf.cc/privacy/`
-5. 确认新地址可访问后,删除旧的 `site/` 目录
+1. 域名未切换前站点不可访问——当前唯一阻塞项。
+2. `github.io/omnishelf/privacy/` 是 Play 商店当前填写的地址;域名切换并确认新地址可用之后,再改 Play 设置,不要提前替换 Pages 内容。
+3. 新站 9 篇长文是下限。首次被拒时,补 3–5 篇同规格文章比修改现有文章有效。

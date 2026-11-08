@@ -1,0 +1,23 @@
+---
+import { render } from 'astro:content';
+import Base from './Base.astro';
+import Prose from '../components/Prose.astro';
+
+interface Props {
+  entry: any;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { entry, jsonLd } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Base title={entry.data.title} description={entry.data.description} jsonLd={jsonLd}>
+  <div class="shell">
+    <Prose>
+      {entry.data.eyebrow && <p class="meta">{entry.data.eyebrow}</p>}
+      <Content />
+    </Prose>
+    <slot />
+  </div>
+</Base>

@@ -1,0 +1,41 @@
+---
+title: "OmniShelf — notes on reading, and a reader that follows them"
+description: "OmniShelf is a free, ad-free ebook reader for Android. This site is where we write about the reading problems behind it: pagination, reflow, highlights in greyscale, and what we chose to leave out."
+eyebrow: "OmniShelf · an independent reader for Android"
+---
+
+# Reading is not a format problem.
+
+OmniShelf opens EPUB, PDF and about thirty other file types. That sentence is the least interesting thing about it, and it is the sentence every reader app puts first. This site is the other sentence: what we noticed about reading on a phone, what we changed because of it, and what we deliberately left out.
+
+## The shelf is the argument
+
+Almost every reader asks you to organise by format. PDFs live here, EPUBs there, comics in a third place, and the thing you actually want — the book you were reading last night — is somewhere in the middle of a folder tree you built two years ago and no longer remember.
+
+We put everything on one shelf instead. That is a small interface decision with a large consequence: a novel, a scanned paper and a 300-page comic have to coexist in one grid, one sort order, one search field. The cost is real. A PDF and an EPUB do not paginate the same way; one has fixed pages measured in points, the other has reflowable text measured in characters per line. When both sit on the same shelf, the shelf has to remember which of the two it is looking at before it can tell you how far through the book you are.
+
+We accepted that cost because the alternative is worse. Format is a property of a file, not of a reading life. Nobody wakes up wanting to read an EPUB; they wake up wanting to finish the chapter they stopped in.
+
+## What we removed, and why it is not a moral position
+
+OmniShelf has no advertising, no in-app purchases, no analytics and no account. People assume that is an ideology. It is closer to a measurement.
+
+A banner ad on a 6-inch phone occupies roughly fifty density-independent pixels at the bottom of the screen. At a comfortable reading size that is a line and a half of text — permanently gone, on every page, for the entire book. A rewarded video is worse: it interrupts the one thing the app exists to do, and it interrupts it at a moment the reader did not choose.
+
+We also removed something less visible. An earlier build carried a menu entry that opened a different, paid reader by the same upstream author. It was labelled with our own name. Nothing about it was broken; it simply meant that a reader who tapped the wrong item was sold something. That entry is gone, and the code path behind it now does nothing at all.
+
+## What we kept, and what it costs
+
+The text-to-speech mode runs in a foreground service so that reading aloud survives the screen turning off. That choice has a price in the store listing: Google requires a video demonstration before it will accept the declaration, and the declaration must be rewritten every time the permission changes. We kept it because listening to a book with the screen off is not an edge case; it is how people use text-to-speech at all.
+
+The library scan asks for broad file access. It is the permission reviewers question most, and rightly. The justification is narrow: a reader has to find books that already exist — in Downloads, on an SD card, in a folder a desktop machine syncs — without asking the reader to re-grant each directory through a system picker every time the app starts. If that justification ever stops being true, the permission should go.
+
+## What this site is for
+
+Reading Notes is a set of essays about the parts of reading that a feature list cannot hold: why paragraph reflow loses citations, why a highlight that looks fine in colour disappears on an e-ink screen, why a page-turn gesture that tested well on a tablet fails on a phone held in one hand.
+
+There is no feature index here, and there will not be one. If you want the list of supported formats, it is in the store listing, where lists belong. If you want to know why we made a particular trade, start with [Why OmniShelf](/why/), then read whichever note is closest to the problem you have.
+
+## Reading Notes
+
+Essays, published as they are finished. [All notes →](/notes/)
