@@ -164,9 +164,22 @@ position` → `## What we kept, and what it costs` → `## What this site is for
 - [x] 无需登录
 - [x] 正文存在于 HTML(禁用 JS 可读),文案全部在 Markdown 内容集合
 
+### 已完成的部署
+
+- 域名 `omnishelf.cc` 已解析到 GitHub Pages(CNAME 扁平化,4 个 A 记录由 Cloudflare 生成)
+- GitHub 证书已签发,HTTPS 已强制
+- `https://omnishelf.cc/` 等 11 个 URL 全部 200
+- 字体自托管并正常返回
+- 旧地址 `github.io/omnishelf/privacy/` → 301 → `omnishelf.cc/privacy/`
+- 旧的 `site/` 占位目录与 `pages.yml` 已删除
+
+> 部署顺序与 brief 的差异:Cloudflare 代理目前仍是**灰色云**。橙色云 + Full (strict)
+> 可作为后续优化,但需要先确认源站证书已就位,否则会 526。当前灰云 + GitHub 证书
+> 已能提供有效 HTTPS,不影响审核。
+
 ### 提交前人工动作
 
-- [ ] 按第 1 节顺序完成域名切换
+- [ ] Play Console 把隐私政策地址改为 `https://omnishelf.cc/privacy/`
 - [ ] 手机打开首页与任意文章,确认排版
 - [ ] Search Console 提交 sitemap
 - [ ] AdSense 提交 `https://omnishelf.cc/`

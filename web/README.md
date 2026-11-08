@@ -71,10 +71,14 @@ domain, Cloudflare returns 526.
 
 ### After the domain works
 
-- Update the app's Play listing: privacy policy URL → `https://omnishelf.cc/privacy/`.
-- Delete the old `site/` directory in the repository root (the static placeholder that
-  currently serves `github.io/omnishelf/privacy/`), so there is one source of truth.
-- Submit `https://omnishelf.cc/sitemap.xml` in Google Search Console.
+Done already: the domain is live, the certificate is approved, HTTPS is enforced, and
+the legacy `site/` placeholder has been removed.
+
+Remaining, in the Play Console: set the privacy policy URL to
+`https://omnishelf.cc/privacy/`. The old `github.io` address still redirects here, so the
+listing does not break in the meantime.
+
+Then submit `https://omnishelf.cc/sitemap.xml` in Google Search Console.
 
 ## Publishing rules
 
