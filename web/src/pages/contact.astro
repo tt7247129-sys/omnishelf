@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import Prose from '../components/Prose.astro';
+---
+
+<Base
+  title="Contact — OmniShelf"
+  description="How to reach the OmniShelf maintainers: email, the public issue tracker, and what to include so a bug can actually be fixed."
+>
+  <div class="shell">
+    <Prose>
+      <p class="meta">Contact</p>
+      <h1>Contact</h1>
+      <p class="lede">
+        One address reaches the people who write the code. There is no ticket system and
+        no first-line support script.
+      </p>
+
+      <h2>Email</h2>
+      <p>
+        <a href="mailto:hello@omnishelf.cc">hello@omnishelf.cc</a>
+      </p>
+      <p>
+        Use it for anything: a bug, a correction to an article, a licensing question, a
+        request to remove something. Messages are read by the maintainers. Most get an
+        answer within a few days; a difficult bug can take longer, and if it will, you
+        will be told rather than left waiting.
+      </p>
+
+      <h2>Bug reports</h2>
+      <p>
+        The public issue tracker is at
+        <a href="https://github.com/tt7247129-sys/omnishelf/issues" rel="noopener" target="_blank"
+          >github.com/tt7247129-sys/omnishelf/issues</a
+        >. It is the fastest route for anything reproducible, because the report stays
+        searchable for the next person who hits it.
+      </p>
+      <p>A report that can be acted on contains four things:</p>
+      <ul>
+        <li>The Android version and the device model.</li>
+        <li>The file format and, if possible, the file itself or a page from it.</li>
+        <li>What you did, in order, including whether the book came from local storage or a download.</li>
+        <li>What happened instead of what you expected.</li>
+      </ul>
+      <p>
+        A screenshot of a rendering problem is useful. A screenshot of a crash is not —
+        the stack trace is, and it can be captured from a connected device with
+        <code>adb logcat</code> if you are comfortable doing that.
+      </p>
+
+      <h2>Privacy and data requests</h2>
+      <p>
+        The application collects no data, so there is nothing to export or delete. For
+        anything relating to this website, including cookies and advertising systems, see
+        the <a href="/privacy/">privacy policy</a> and write to the address above.
+      </p>
+
+      <h2>Security</h2>
+      <p>
+        If you believe you have found a security problem, write to the address above with
+        "security" in the subject line rather than opening a public issue. You will get an
+        acknowledgement, and the fix will be credited in the release notes unless you ask
+        otherwise.
+      </p>
+    </Prose>
+  </div>
+</Base>

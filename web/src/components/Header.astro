@@ -1,0 +1,25 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const items = [
+  { href: '/notes/', label: 'Reading Notes' },
+  { href: '/why/', label: 'Why OmniShelf' },
+  { href: '/shelf/', label: 'Shelf' },
+  { href: '/about/', label: 'About' },
+];
+
+const isCurrent = (href: string) => path === href.replace(/\/$/, '');
+---
+
+<header class="site-header">
+  <div class="shell">
+    <a class="wordmark" href="/">OmniShelf<span>a reader's notebook</span></a>
+    <nav class="site-nav" aria-label="Sections">
+      {items.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

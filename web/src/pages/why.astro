@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import Prose from '../components/Prose.astro';
+---
+
+<Base
+  title="Why OmniShelf — a reader built around one shelf"
+  description="The design disagreement behind OmniShelf: why format is a file property and not a reading life, why we removed advertising and accounts, and what each of those decisions cost."
+>
+  <div class="shell">
+    <Prose>
+      <p class="meta">Why OmniShelf</p>
+      <h1>The disagreement is about where reading starts</h1>
+      <p class="lede">
+        Most reader apps start from the file. You pick a format, then a file, then a
+        reading mode. OmniShelf starts from the reader: you pick up the book you were
+        already in. Everything else in the app follows from that one reversal, including
+        the parts that are inconvenient.
+      </p>
+
+      <h2>Format is a property of a file, not of a reading life</h2>
+      <p>
+        A shelf that separates PDF from EPUB is a shelf organised by the people who built
+        it, not by the person using it. Real reading is mixed. A week might contain a
+        scanned paper, a purchased novel, a public-domain text pulled from a catalogue,
+        and a comic someone sent you. Those are not four activities. They are one
+        evening.
+      </p>
+      <p>
+        Putting them together is easy to draw and hard to build. A PDF has fixed pages:
+        the page is the unit, and page 214 means the same rectangle of paper on every
+        device. An EPUB has no pages at all until the reading system decides on a screen
+        size, a font size and a margin, and then manufactures them. A shelf that holds
+        both has to store two different notions of "where I stopped" and present them as
+        one progress indicator that does not lie.
+      </p>
+      <p>
+        We chose to keep both models underneath and unify only what the reader sees: the
+        cover, the title, the position, the way back in. The cost is that some operations
+        are deliberately format-specific — text reflow exists for PDFs and is meaningless
+        for EPUBs — and the interface has to admit that rather than pretend otherwise.
+      </p>
+
+      <h2>What we removed is the argument</h2>
+      <p>
+        OmniShelf has no advertising, no in-app purchases, no subscription, no account
+        and no analytics. This is usually presented as a virtue. It is better understood
+        as a constraint we were willing to accept.
+      </p>
+      <p>
+        Advertising is not a rectangle at the bottom of a screen. It is a permanent
+        reduction of the reading area, paid for on every page of every book, and it
+        introduces an incentive that runs against the reader: the longer you stay on a
+        screen, the more inventory is sold, and the most reliable way to keep someone on
+        a screen is not to finish the chapter. A purchase prompt is worse in a different
+        way — it turns a missing feature into a sales moment.
+      </p>
+      <p>
+        Removing them also removed a class of bug that is hard to see from the outside:
+        code paths that only exist to decide whether to show an ad, and the state machines
+        they bring with them. What is left is smaller, and it is auditable. You can read
+        the whole application's source and confirm that nothing is sent anywhere.
+      </p>
+
+      <h2>Offline is the default, not a mode</h2>
+      <p>
+        A reader that requires a connection to open a file you already own is not a
+        reader. OmniShelf reads from local storage, indexes local folders, and renders
+        without a network. Online catalogues (OPDS) exist, but they are a way to find
+        books, not a way to read them: once a file is downloaded it behaves exactly like
+        a file that was always there.
+      </p>
+      <p>
+        This is why the app asks for broad file access, and it is the only honest
+        justification for it. A library has to be found where it already lives — in
+        Downloads, on removable storage, in a directory a desktop machine syncs — without
+        asking the reader to re-authorise each folder through a system picker on every
+        launch. If a future version can find books with narrower access, the permission
+        should be removed rather than defended.
+      </p>
+
+      <h2>Typography is not decoration</h2>
+      <p>
+        Reading speed and comprehension change with line length, leading and hyphenation.
+        A reader that ships one font and one margin is asking every reader to adapt to
+        the defaults of whoever wrote the app. OmniShelf exposes margins, line spacing,
+        alignment, hyphenation and font choice, and it ships a serif family as the default
+        because that is what long-form text is set in nearly everywhere else.
+      </p>
+      <p>
+        The defaults matter more than the controls. Most people never open the settings
+        panel, so the first page has to be readable as shipped: a measure that does not
+        run the full width of a phone, enough leading that lines do not collide, and
+        hyphenation off by default because automatic hyphenation in a language it does
+        not understand produces worse text than ragged right.
+      </p>
+
+      <h2>What the app will not do</h2>
+      <p>
+        It will not ask you to create an account. It will not sync your library to a
+        server we operate, because we do not operate one. It will not show you a
+        recommendation feed, because a recommendation feed is an advertising product with
+        a reading interface attached.
+      </p>
+      <p>
+        It will also not pretend that every format is equally good. A comic rendered as a
+        reflowable document is a worse comic; a scanned PDF forced into a single column is
+        a worse paper. Where a format has a native way to be read, that is the default,
+        and the alternatives are offered rather than imposed.
+      </p>
+
+      <h2>Who this is for</h2>
+      <p>
+        Someone with a folder of books they did not buy from a single store. Someone who
+        reads a paper in the morning and a novel at night and does not want to think about
+        which application to open. Someone who has noticed that the reading experience
+        degrades a little every year as the business model behind the app becomes more
+        important than the reading.
+      </p>
+      <p>
+        If that is you, the app is free and the source is public. If it is not, there are
+        excellent readers that will sell you a subscription and recommend books to you;
+        they are just solving a different problem.
+      </p>
+    </Prose>
+  </div>
+</Base>

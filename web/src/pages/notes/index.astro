@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Prose from '../../components/Prose.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+
+const notes = (await getCollection('articles')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="Reading Notes — OmniShelf"
+  description="Essays on reading on a screen: pagination, reflow, citations, highlights in greyscale, and the trade-offs behind an open-source Android reader."
+>
+  <div class="shell">
+    <Prose>
+      <p class="meta">Reading Notes</p>
+      <h1>Notes on the parts a feature list cannot hold</h1>
+      <p class="lede">
+        Each note starts from a specific problem — a page of a PDF, a highlight on an
+        e-ink screen, a gesture that worked in one hand and not the other — and follows
+        it to the decision we made. They are written as we finish them, not as a
+        schedule.
+      </p>
+    </Prose>
+
+    <ul class="note-list">
+      {notes.map((note) => (
+        <ArticleCard
+          href={`/notes/${note.id}/`}
+          title={note.data.title}
+          summary={note.data.summary}
+          date={note.data.date}
+          readingMinutes={note.data.readingMinutes}
+        />
+      ))}
+    </ul>
+  </div>
+</Base>
