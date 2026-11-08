@@ -1,0 +1,43 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from './Base.astro';
+import Prose from '../components/Prose.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+
+interface Props {
+  collection: 'readingCraft' | 'whereToRead' | 'readingLife';
+  page: string;
+  path: string;
+}
+
+const { collection, page, path } = Astro.props;
+
+const intro = await getEntry('pages', page);
+if (!intro) throw new Error(`missing intro page: ${page}`);
+const { Content: Intro } = await render(intro);
+
+const items = (await getCollection(collection)).sort((a, b) =>
+  a.data.pubDate < b.data.pubDate ? 1 : -1,
+);
+---
+
+<Base title={intro.data.title} description={intro.data.description}>
+  <div class="shell">
+    <Prose>
+      <p class="meta">{intro.data.eyebrow}</p>
+      <Intro />
+    </Prose>
+
+    <ul class="note-list">
+      {items.map((item) => (
+        <ArticleCard
+          href={`${path}${item.id}/`}
+          title={item.data.title}
+          summary={item.data.description}
+          date={item.data.pubDate}
+          readingMinutes={item.data.readingMinutes}
+        />
+      ))}
+    </ul>
+  </div>
+</Base>

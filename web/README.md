@@ -11,10 +11,13 @@ web/
 ├── package.json
 ├── public/                   robots.txt, icon, apple-touch-icon
 └── src/
-    ├── content.config.ts     collections: articles, pages
+    ├── content.config.ts     collections: readingCraft, whereToRead, readingLife, articles, pages
     ├── content/
-    │   ├── articles/         9 long-form notes (800–1,100 words each)
-    │   └── pages/            home, why, about, contact, privacy, terms, shelf
+    │   ├── reading-craft/    column A — method and reading technique
+    │   ├── where-to-read/    column B — legal sources, compared
+    │   ├── reading-life/     column C — light, space, physical reading
+    │   ├── articles/         9 engineering notes (how the reader was built)
+    │   └── pages/            home, why, about, contact, privacy, terms, shelf, column intros
     ├── layouts/
     │   ├── Base.astro        <head>, header, footer
     │   └── Page.astro        renders a `pages` entry
@@ -79,6 +82,12 @@ Remaining, in the Play Console: set the privacy policy URL to
 listing does not break in the meantime.
 
 Then submit `https://omnishelf.cc/sitemap.xml` in Google Search Console.
+
+## Publishing cadence
+
+Publish in batches, not all at once. A site that gains 18 articles in one day looks like
+content arbitrage to both a reviewer and a search engine. The plan is 3–5 articles per
+week over six weeks; see `docs/CONTENT-PLAN.md` for the schedule and the remaining titles.
 
 ## Publishing rules
 

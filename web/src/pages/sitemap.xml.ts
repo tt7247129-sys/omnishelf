@@ -3,6 +3,9 @@ import { getCollection } from 'astro:content';
 
 const staticPaths = [
   '/',
+  '/reading-craft/',
+  '/where-to-read/',
+  '/reading-life/',
   '/notes/',
   '/why/',
   '/shelf/',
@@ -14,15 +17,29 @@ const staticPaths = [
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://omnishelf.cc';
-  const notes = await getCollection('articles');
 
-  const urls = [
-    ...staticPaths.map((path) => ({ loc: `${base}${path}`, lastmod: '2026-11-08' })),
-    ...notes.map((note) => ({
-      loc: `${base}/notes/${note.id}/`,
-      lastmod: note.data.date,
-    })),
+  const columns = [
+    { collection: 'readingCraft' as const, path: '/reading-craft/' },
+    { collection: 'whereToRead' as const, path: '/where-to-read/' },
+    { collection: 'readingLife' as const, path: '/reading-life/' },
   ];
+
+  const urls = staticPaths.map((path) => ({ loc: `${base}${path}`, lastmod: '2026-11-08' }));
+
+  for (const column of columns) {
+    const entries = await getCollection(column.collection);
+    for (const entry of entries) {
+      urls.push({
+        loc: `${base}${column.path}${entry.id}/`,
+        lastmod: entry.data.updatedDate ?? entry.data.pubDate,
+      });
+    }
+  }
+
+  const notes = await getCollection('articles');
+  for (const note of notes) {
+    urls.push({ loc: `${base}/notes/${note.id}/`, lastmod: note.data.date });
+  }
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

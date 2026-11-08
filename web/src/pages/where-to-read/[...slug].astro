@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import ColumnArticle from '../../layouts/ColumnArticle.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('whereToRead');
+  return items.map((entry) => ({ params: { slug: entry.id } }));
+}
+
+const { slug } = Astro.params;
+const items = await getCollection('whereToRead');
+const entry = items.find((item) => item.id === slug);
+if (!entry) throw new Error(`unknown where-to-read entry: ${slug}`);
+---
+
+<ColumnArticle entry={entry} collection="whereToRead" />

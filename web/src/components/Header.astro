@@ -2,13 +2,13 @@
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 const items = [
-  { href: '/notes/', label: 'Reading Notes' },
-  { href: '/why/', label: 'Why OmniShelf' },
-  { href: '/shelf/', label: 'Shelf' },
+  { href: '/reading-craft/', label: 'Reading Craft' },
+  { href: '/where-to-read/', label: 'Where to Read' },
+  { href: '/reading-life/', label: 'Reading Life' },
   { href: '/about/', label: 'About' },
 ];
 
-const isCurrent = (href: string) => path === href.replace(/\/$/, '');
+const isCurrent = (href: string) => path.startsWith(href.replace(/\/$/, ''));
 ---
 
 <header class="site-header">

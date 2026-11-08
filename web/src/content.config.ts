@@ -1,6 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+/** Engineering notes: how the reader itself was built. */
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
   schema: z.object({
@@ -10,6 +11,31 @@ const articles = defineCollection({
     order: z.number(),
     readingMinutes: z.number(),
   }),
+});
+
+const columnArticle = z.object({
+  title: z.string(),
+  description: z.string(),
+  category: z.enum(['Reading Craft', 'Where to Read', 'Reading Life']),
+  pubDate: z.string(),
+  updatedDate: z.string().optional(),
+  readingMinutes: z.number(),
+  related: z.array(z.string()).default([]),
+});
+
+const readingCraft = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reading-craft' }),
+  schema: columnArticle,
+});
+
+const whereToRead = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/where-to-read' }),
+  schema: columnArticle,
+});
+
+const readingLife = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/reading-life' }),
+  schema: columnArticle,
 });
 
 /**
@@ -25,4 +51,10 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { articles, pages };
+export const collections = {
+  articles,
+  pages,
+  readingCraft,
+  whereToRead,
+  readingLife,
+};

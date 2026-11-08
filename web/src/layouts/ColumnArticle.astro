@@ -1,0 +1,89 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from './Base.astro';
+import Prose from '../components/Prose.astro';
+
+interface Props {
+  entry: any;
+  collection: 'readingCraft' | 'whereToRead' | 'readingLife';
+}
+
+const { entry, collection } = Astro.props;
+const { Content } = await render(entry);
+
+const categoryPath = {
+  readingCraft: '/reading-craft/',
+  whereToRead: '/where-to-read/',
+  readingLife: '/reading-life/',
+}[collection];
+
+const all = await getCollection(collection);
+const related = (entry.data.related ?? [])
+  .map((slug: string) => all.find((item) => item.id === slug))
+  .filter(Boolean);
+
+const url = new URL(categoryPath, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  description: entry.data.description,
+  datePublished: entry.data.pubDate,
+  dateModified: entry.data.updatedDate ?? entry.data.pubDate,
+  mainEntityOfPage: `${url}${entry.id}/`,
+  author: { '@type': 'Organization', name: 'OmniShelf' },
+  publisher: { '@type': 'Organization', name: 'OmniShelf' },
+  articleSection: entry.data.category,
+};
+---
+
+<Base title={`${entry.data.title} — OmniShelf`} description={entry.data.description} jsonLd={jsonLd} ogType="article">
+  <div class="shell">
+    <Prose>
+      <p class="meta">
+        <a href={categoryPath}>{entry.data.category}</a> ·
+        <time datetime={entry.data.pubDate}>{entry.data.pubDate}</time>
+        {` · ${entry.data.readingMinutes} min`}
+      </p>
+      <h1>{entry.data.title}</h1>
+      <Content />
+    </Prose>
+
+    {related.length > 0 && (
+      <aside class="related" aria-label="Related reading">
+        <p class="meta">Related reading</p>
+        <ul>
+          {related.map((item) => (
+            <li>
+              <a href={`${categoryPath}${item.id}/`}>{item.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+  </div>
+</Base>
+
+<style>
+  .related {
+    max-width: var(--measure);
+    border-top: 1px solid var(--rule);
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+  }
+
+  .related ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .related li + li {
+    margin-top: var(--space-2);
+  }
+
+  .related a {
+    font-size: var(--text-lg);
+    line-height: 1.4;
+  }
+</style>
