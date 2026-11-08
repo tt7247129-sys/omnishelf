@@ -10,6 +10,7 @@ const staticPaths = [
   '/why/',
   '/shelf/',
   '/about/',
+  '/authors/',
   '/contact/',
   '/privacy/',
   '/terms/',
