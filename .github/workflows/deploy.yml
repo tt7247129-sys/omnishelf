@@ -1,12 +1,14 @@
 name: deploy
 
-# The site lives on a branch of its own so that a push to master cannot take the
-# live Pages deployment down while the domain is being moved. Merge to
-# `site-live` when DNS and the custom domain are ready; until then this workflow
-# only runs when started by hand.
+# The custom domain is live (omnishelf.cc, certificate approved, HTTPS enforced),
+# so a push to master can safely publish the site. The github-pages environment
+# only permits deployments from master, which is why the branch is master here.
 on:
   push:
-    branches: [site-live]
+    branches: [master]
+    paths:
+      - "web/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
