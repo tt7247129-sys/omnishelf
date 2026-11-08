@@ -3,6 +3,7 @@ title: "Project Gutenberg has 75,000 books and most people download three"
 description: "The catalogue is not the bottleneck. The bottleneck is that a public-domain library is organised like an archive, and readers arrive with a title rather than a question."
 category: "Where to Read"
 pubDate: "2026-11-08"
+authorNote: "Downloaded the same three novels from this catalogue for a decade before noticing the pattern this note describes."
 readingMinutes: 8
 related: ["standard-ebooks-versus-gutenberg-epub"]
 ---

@@ -45,9 +45,19 @@ const jsonLd = {
         <time datetime={entry.data.pubDate}>{entry.data.pubDate}</time>
         {` · ${entry.data.readingMinutes} min`}
       </p>
+      <p class="byline">By <a href="/authors/">@tt7247129-sys</a></p>
       <h1>{entry.data.title}</h1>
       <Content />
     </Prose>
+
+    <aside class="author-note">
+      <p class="meta">About the author</p>
+      <p>
+        <strong>@tt7247129-sys</strong> builds an open-source Android reader and writes these notes.
+        {entry.data.authorNote ?? 'The notes record what changed the design of the reader, and what did not.'}
+        {' '}<a href="/authors/">More about the author</a>.
+      </p>
+    </aside>
 
     {related.length > 0 && (
       <aside class="related" aria-label="Related reading">
@@ -65,6 +75,22 @@ const jsonLd = {
 </Base>
 
 <style>
+  .byline {
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    color: var(--ink-muted);
+    margin: calc(var(--space-2) * -1) 0 var(--space-3);
+  }
+
+  .author-note {
+    max-width: var(--measure);
+    border-top: 1px solid var(--rule);
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+  }
+
   .related {
     max-width: var(--measure);
     border-top: 1px solid var(--rule);

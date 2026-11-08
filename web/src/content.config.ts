@@ -10,6 +10,7 @@ const articles = defineCollection({
     date: z.string(),
     order: z.number(),
     readingMinutes: z.number(),
+    authorNote: z.string().optional(),
   }),
 });
 
@@ -21,6 +22,8 @@ const columnArticle = z.object({
   updatedDate: z.string().optional(),
   readingMinutes: z.number(),
   related: z.array(z.string()).default([]),
+  /** One sentence tying the author's background to this specific piece. */
+  authorNote: z.string().optional(),
 });
 
 const readingCraft = defineCollection({

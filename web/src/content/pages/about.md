@@ -1,37 +1,78 @@
 ---
-title: "About OmniShelf"
-description: "Who makes OmniShelf, why the site exists, how the project is funded, and what it is not affiliated with."
+title: "About this site"
+description: "Who runs OmniShelf, why a reader of PDFs ended up writing a publication about reading, what we are qualified to say and what we are not, and how to reach a person."
 eyebrow: "About"
 ---
 
-# About this project
+# About this site
 
-OmniShelf is an independent, open-source ebook reader for Android and this site is its notebook. Both are maintained by a small group of people who read a lot and got tired of watching the reading experience degrade.
+This is a publication about reading: how a book behaves on a screen, where to find books
+legally, and what surrounds the act of reading. It is written by the person who builds the
+OmniShelf reader, which is why it can be specific about things that are usually described
+in adjectives.
 
 ## Who runs it
 
-The project is maintained by the OmniShelf maintainers — the same people who write the code, answer the mail and publish these notes. There is no company behind it, no investor, and no advertising business attached to the application. The work is done in the open: every change to the reader is a public commit at [github.com/tt7247129-sys/omnishelf](https://github.com/tt7247129-sys/omnishelf), and the licence is the AGPLv3.
+One editor, publishing under the handle **@tt7247129-sys** — the account that owns the
+application's repository and answers mail at
+[hello@omnishelf.cc](mailto:hello@omnishelf.cc). The handle is a pen name; the account, the
+commit history and the mailbox are real and verifiable, and the mailbox reaches a person.
 
-You can reach a person, not a form, at [hello@omnishelf.cc](mailto:hello@omnishelf.cc). Mail is read by the maintainers; most messages get an answer within a few days.
+There is a full page about who that is and what they are qualified to say:
+[authors](/authors/).
 
 ## Why this site exists
 
-An app store listing has room for a feature list and nothing else. It cannot explain why paragraph reflow breaks citations, why a highlight that reads well in colour vanishes on an e-ink screen, or why a page-turn gesture that works on a tablet fails on a phone held in one hand. Those are the decisions that actually determine whether reading feels right, and they need paragraphs, not bullets.
+It started as a complaint file.
 
-So the notes live here: long-form, specific, and written after the fact rather than as marketing copy before it. When we get something wrong, the correction is published in the same place.
+Reading a 300-page PDF on a phone, the app would tell me I was on page 214 of a document
+whose paper edition had 96 pages, because the text had been reflowed and the page numbers
+had been recomputed. A citation that pointed at page 214 was now a citation that pointed
+nowhere. That is a small bug with a large consequence, and there was no place to write it
+down that anyone would read: a store listing holds forty words, and a changelog holds one
+line.
 
-## How it is funded
+So the notes accumulated outside the product. Then the questions stopped being only about
+the product — which of the public-domain catalogues actually produce a good file, why a
+marginal note works and a highlight does not, why the lamp beside the bed matters more than
+the app's night mode. Those are reading questions, not software questions, and they are
+what this site is for now.
 
-The application is free and has no advertising, no purchases and no subscription. Development is unpaid work by the maintainers, and the infrastructure — a repository, a static site, a domain — costs very little.
+The reader exists because of the same questions. It is free, it has no advertising, and it
+is the instrument these notes were tested on; it is mentioned where relevant and sold
+nowhere.
 
-This website may in future carry third-party advertising to cover that small cost. If it does, the advertising will be clearly separated from the text, it will never appear inside an article, and the privacy policy will describe it before it is deployed. The application itself will not contain advertising under any circumstances; that promise is the reason the project exists.
+## What we are qualified to say, and what we are not
 
-## What OmniShelf is not
+Qualified: what a file does when you open it, how long a task takes on a 6-inch screen,
+what breaks when the font size changes, how a public-domain edition differs from a
+re-edited one, and what a document format does and does not promise.
 
-It is not the official Librera app. OmniShelf began as a fork of the open-source Librera Reader project, and the debt is acknowledged in the app's notice file and in the repository. It is not affiliated with, endorsed by or sponsored by Librera's author.
+Not qualified: copyright law. The notes on public domain and lending describe how the
+systems behave and where the boundaries fall; they are not legal advice and were not
+written by a lawyer. Nor is this a librarian's site — the cataloguing observations come
+from using the catalogues, not from training in them.
 
-It is also not connected to any other company, product or service that happens to use the name OmniShelf. The name was chosen for this project; any similarity to an unrelated product is coincidental and does not imply a relationship.
+Where a claim is an opinion, it is written as one. Where it is a measurement, the device
+and the file are named so it can be repeated.
 
-## Corrections
+## How the notes are made
 
-These notes make technical claims. If one of them is wrong — a rendering behaviour, a file-format detail, a statement about how another reader works — write to [hello@omnishelf.cc](mailto:hello@omnishelf.cc) with the specific sentence. Corrections are published with a visible note rather than edited away silently.
+Every piece starts from something concrete: a file, a device, a room, an evening. If a
+note cannot name what it was tested against, it does not get published — that rule has
+killed more drafts than it has saved.
+
+Corrections are published rather than edited away. If a note is wrong, the sentence changes
+and the change is mentioned; the archive is more useful when it shows its own mistakes.
+
+## How to reach us
+
+[hello@omnishelf.cc](mailto:hello@omnishelf.cc) — read by the editor, answered within a few
+days. For bugs in the application, the public issue tracker is faster:
+[github.com/tt7247129-sys/omnishelf](https://github.com/tt7247129-sys/omnishelf).
+
+The [contact page](/contact/) says what to include so a report can actually be acted on.
+
+---
+
+[authors](/authors/) · [contact](/contact/) · [privacy](/privacy/)

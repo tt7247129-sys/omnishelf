@@ -3,6 +3,7 @@ title: "The bedside light problem is not how bright it is"
 description: "Reading in bed at midnight is a lighting problem with two users: the page and the person asleep next to you. Warm colour temperature and a narrow beam matter more than lumens, and most clip lamps get both wrong."
 category: "Reading Life"
 pubDate: "2026-11-08"
+authorNote: "Measured three bedside lamps with a cheap lux meter for a fortnight — not science, but enough to see where the trade-offs sit."
 readingMinutes: 7
 related: ["a-stand-solves-page-spring-back"]
 ---

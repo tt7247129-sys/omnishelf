@@ -2,30 +2,59 @@
 import { getEntry } from 'astro:content';
 import Page from '../layouts/Page.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 
 const entry = await getEntry('pages', 'index');
-const notes = (await getCollection('articles'))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+const columns = [
+  { collection: 'readingCraft' as const, path: '/reading-craft/' },
+  { collection: 'whereToRead' as const, path: '/where-to-read/' },
+  { collection: 'readingLife' as const, path: '/reading-life/' },
+];
+
+const cards = [];
+for (const column of columns) {
+  for (const item of await getCollection(column.collection)) {
+    cards.push({
+      href: `${column.path}${item.id}/`,
+      title: item.data.title,
+      summary: item.data.description,
+      date: item.data.pubDate,
+      readingMinutes: item.data.readingMinutes,
+    });
+  }
+}
+for (const note of await getCollection('articles')) {
+  cards.push({
+    href: `/notes/${note.id}/`,
+    title: note.data.title,
+    summary: note.data.summary,
+    date: note.data.date,
+    readingMinutes: note.data.readingMinutes,
+  });
+}
+cards.sort((a, b) => (a.date < b.date ? 1 : -1));
 ---
 
 <Page entry={entry}>
   <hr />
 
   <section class="prose">
-    <h2>Reading Notes</h2>
-    <p class="meta">Essays, published as they are finished. <a href="/notes/">All notes →</a></p>
+    <p class="meta">
+      Newest first · <a href="/reading-craft/">Reading Craft</a> ·
+      <a href="/where-to-read/">Where to Read</a> ·
+      <a href="/reading-life/">Reading Life</a> ·
+      <a href="/notes/">Engineering notes</a>
+    </p>
   </section>
 
   <ul class="note-list">
-    {notes.map((note) => (
+    {cards.map((card) => (
       <ArticleCard
-        href={`/notes/${note.id}/`}
-        title={note.data.title}
-        summary={note.data.summary}
-        date={note.data.date}
-        readingMinutes={note.data.readingMinutes}
+        href={card.href}
+        title={card.title}
+        summary={card.summary}
+        date={card.date}
+        readingMinutes={card.readingMinutes}
       />
     ))}
   </ul>

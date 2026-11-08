@@ -1,41 +1,62 @@
 ---
-title: "OmniShelf — notes on reading, and a reader that follows them"
-description: "OmniShelf is a free, ad-free ebook reader for Android. This site is where we write about the reading problems behind it: pagination, reflow, highlights in greyscale, and what we chose to leave out."
-eyebrow: "OmniShelf · an independent reader for Android"
+title: "OmniShelf — notes on reading, and the reader we built"
+description: "A small publication about reading on screens: how documents behave when the page is a viewport, where to find books legally, and what surrounds the act of reading."
+eyebrow: "A publication about reading · edited by @tt7247129-sys"
 ---
 
-# Reading is not a format problem.
+# Notes on reading, and the reader we built
 
-OmniShelf opens EPUB, PDF and about thirty other file types. That sentence is the least interesting thing about it, and it is the sentence every reader app puts first. This site is the other sentence: what we noticed about reading on a phone, what we changed because of it, and what we deliberately left out.
+This site is about what happens to reading when the page becomes a screen. Not the future
+of publishing, not productivity — the specific, testable things: what a page number means
+when text reflows, why a marginal note works and a highlight does not, which public-domain
+catalogue produces a file that actually opens well, and why the lamp beside the bed decides
+whether you read at all.
 
-## The shelf is the argument
+It is written by the person who builds the OmniShelf reader, which is why the notes can be
+concrete. Every piece starts from a device, a file and an observation, and most of them
+record a position that changed once it was measured.
 
-Almost every reader asks you to organise by format. PDFs live here, EPUBs there, comics in a third place, and the thing you actually want — the book you were reading last night — is somewhere in the middle of a folder tree you built two years ago and no longer remember.
+## What you will find here
 
-We put everything on one shelf instead. That is a small interface decision with a large consequence: a novel, a scanned paper and a 300-page comic have to coexist in one grid, one sort order, one search field. The cost is real. A PDF and an EPUB do not paginate the same way; one has fixed pages measured in points, the other has reflowable text measured in characters per line. When both sit on the same shelf, the shelf has to remember which of the two it is looking at before it can tell you how far through the book you are.
+Three columns, each answering a different kind of question.
 
-We accepted that cost because the alternative is worse. Format is a property of a file, not of a reading life. Nobody wakes up wanting to read an EPUB; they wake up wanting to finish the chapter they stopped in.
+**[Reading Craft](/reading-craft/)** takes the classical reading methods seriously and then
+tests them against a phone. Inspection reading assumes you can flip to a contents page; on
+a 6-inch screen you cannot, and
+[the method has to change shape](/reading-craft/inspection-reading-without-a-table-of-contents/)
+or be abandoned. Annotation assumes a margin that holds four words, and
+[an unlimited highlighter removes the constraint that made marginalia useful](/reading-craft/marginalia-budget/).
 
-## What we removed, and why it is not a moral position
+**[Where to Read](/where-to-read/)** compares legal sources for books — public-domain
+collections, open-access catalogues, library lending, second-hand shops — on the dimensions
+that actually differ: formats offered, account friction, metadata quality, and what the
+platform does with the fact that you looked. Nothing here is a grey-market list, and
+nothing is paid placement.
 
-OmniShelf has no advertising, no in-app purchases, no analytics and no account. People assume that is an ideology. It is closer to a measurement.
+**[Reading Life](/reading-life/)** is about the physical setup: light that does not wake
+anyone, a page that stays open, a corner that survives being used every night. Products
+appear as examples of a shape, with their limits stated, because the interesting question
+is which obstacle a thing removes, not how many settings it has.
 
-A banner ad on a 6-inch phone occupies roughly fifty density-independent pixels at the bottom of the screen. At a comfortable reading size that is a line and a half of text — permanently gone, on every page, for the entire book. A rewarded video is worse: it interrupts the one thing the app exists to do, and it interrupts it at a moment the reader did not choose.
+## Why the notes exist
 
-We also removed something less visible. An earlier build carried a menu entry that opened a different, paid reader by the same upstream author. It was labelled with our own name. Nothing about it was broken; it simply meant that a reader who tapped the wrong item was sold something. That entry is gone, and the code path behind it now does nothing at all.
+They started as a complaint file. Reading a 300-page PDF on a phone, the app reported page
+214 of a document whose paper edition had 96 pages: the text had been reflowed, the pages
+recomputed, and a citation that pointed at 214 now pointed nowhere. There was no place to
+write that down that anyone would read — a store listing holds forty words, a changelog
+holds one line.
 
-## What we kept, and what it costs
+So the notes moved out of the product. Then the questions stopped being only about the
+product: which catalogue gives you a good file, why a paper margin disciplines a note and a
+screen does not, why the light in the room matters more than the app's night mode. Those are
+reading questions, and they are what this site is for.
 
-The text-to-speech mode runs in a foreground service so that reading aloud survives the screen turning off. That choice has a price in the store listing: Google requires a video demonstration before it will accept the declaration, and the declaration must be rewritten every time the permission changes. We kept it because listening to a book with the screen off is not an edge case; it is how people use text-to-speech at all.
+## Who writes it
 
-The library scan asks for broad file access. It is the permission reviewers question most, and rightly. The justification is narrow: a reader has to find books that already exist — in Downloads, on an SD card, in a folder a desktop machine syncs — without asking the reader to re-grant each directory through a system picker every time the app starts. If that justification ever stops being true, the permission should go.
+One editor, publishing under the handle **@tt7247129-sys**. There is a page about what that
+person is and is not qualified to say: [authors](/authors/). If you want the design argument
+behind the reader rather than the reading, that lives in [Why OmniShelf](/why/) — it is no
+longer in the top navigation, because this site is a publication about reading first and a
+product page second.
 
-## What this site is for
-
-Reading Notes is a set of essays about the parts of reading that a feature list cannot hold: why paragraph reflow loses citations, why a highlight that looks fine in colour disappears on an e-ink screen, why a page-turn gesture that tested well on a tablet fails on a phone held in one hand.
-
-There is no feature index here, and there will not be one. If you want the list of supported formats, it is in the store listing, where lists belong. If you want to know why we made a particular trade, start with [Why OmniShelf](/why/), then read whichever note is closest to the problem you have.
-
-## Reading Notes
-
-Essays, published as they are finished. [All notes →](/notes/)
+## Latest notes

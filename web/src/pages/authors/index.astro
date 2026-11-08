@@ -1,0 +1,24 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Prose from '../../components/Prose.astro';
+
+const entry = await getEntry('pages', 'authors');
+if (!entry) throw new Error('missing authors page');
+const { Content } = await render(entry);
+---
+
+<Base title={entry.data.title} description={entry.data.description}>
+  <div class="shell">
+    <Prose>
+      <p class="meta">{entry.data.eyebrow}</p>
+      <Content />
+      <hr />
+      <p class="meta">
+        <a href="/contact/">Contact</a> ·
+        <a href="/about/">About this site</a> ·
+        <a href="/privacy/">Privacy</a>
+      </p>
+    </Prose>
+  </div>
+</Base>

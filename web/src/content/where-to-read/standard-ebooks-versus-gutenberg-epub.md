@@ -3,6 +3,7 @@ title: "Standard Ebooks versus the Gutenberg EPUB: where the difference is visib
 description: "Two editions of the same public-domain novel, one transcribed and one re-edited. The typographic gap is real, but it only shows up on certain screens and in certain reading modes — and the metadata difference matters more than the fonts."
 category: "Where to Read"
 pubDate: "2026-11-08"
+authorNote: "Read the same chapter in both editions on three devices, which is how this comparison started."
 readingMinutes: 9
 related: ["gutenberg-three-books"]
 ---

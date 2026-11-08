@@ -3,6 +3,7 @@ title: "The margin note has a budget, and a highlight does not"
 description: "A printed margin holds four words, and that limit is what makes marginalia useful. An electronic highlight has no limit at all, which is why a marked-up book often ends up less useful than an unmarked one."
 category: "Reading Craft"
 pubDate: "2026-11-08"
+authorNote: "Compared a year of marginalia on paper and on screen before choosing the four highlight colours the reader now ships."
 readingMinutes: 9
 related: ["inspection-reading-without-a-table-of-contents"]
 ---

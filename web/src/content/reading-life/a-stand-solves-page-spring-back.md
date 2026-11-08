@@ -3,6 +3,7 @@ title: "A book stand solves page spring-back, not wrist fatigue"
 description: "The reason a paperback will not stay open is structural: the gutter wants to close. A stand, a weighted bookmark or a page holder each solve that problem differently, and none of them solve the one they are sold as solving."
 category: "Reading Life"
 pubDate: "2026-11-08"
+authorNote: "Read trade paperbacks in bed for a month with three different page holders and kept exactly one."
 readingMinutes: 7
 related: ["bedside-light-not-brightness"]
 ---

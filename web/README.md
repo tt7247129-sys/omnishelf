@@ -86,8 +86,19 @@ Then submit `https://omnishelf.cc/sitemap.xml` in Google Search Console.
 ## Publishing cadence
 
 Publish in batches, not all at once. A site that gains 18 articles in one day looks like
-content arbitrage to both a reviewer and a search engine. The plan is 3–5 articles per
-week over six weeks; see `docs/CONTENT-PLAN.md` for the schedule and the remaining titles.
+content arbitrage to both a reviewer and a search engine. Two to four new pieces per week:
+
+| Week | New content |
+|---|---|
+| W1 (done) | Reading Craft ×2, Where to Read ×2, Reading Life ×2 |
+| W2 | `where-to-read/open-library-waiting-list`, `where-to-read/public-domain-is-not-any-use` |
+| W3 | `where-to-read/second-hand-condition-grades`, `where-to-read/bookshop-org-checkout`, `where-to-read/ebook-or-paper-not-a-format-choice` |
+| W4 | `reading-craft/synthesis-across-three-books`, `reading-craft/sq3r-recite-step-skipped` |
+| W5 | `reading-craft/ninety-minutes-offline`, `reading-craft/reading-log-two-methods` |
+| W6 | `reading-life/case-fit-kindle-kobo`, `reading-life/reading-corner-minimum`, `reading-life/reading-glasses-diopters` |
+
+Do not backdate `pubDate` to simulate a rhythm, and do not touch `lastmod` in the sitemap
+to make the site look fresher. The dates in `src/content/**` are the dates work happened.
 
 ## Publishing rules
 

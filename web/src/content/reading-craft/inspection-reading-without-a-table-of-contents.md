@@ -3,6 +3,7 @@ title: "Inspection reading without a table of contents"
 description: "Adler's second reading level assumes you can flip to the contents page. On a phone the contents page is a scrolling menu, and the chapter you want is often not in it at all. What survives, and what we changed."
 category: "Reading Craft"
 pubDate: "2026-11-08"
+authorNote: "Spent two weeks timing how long it takes to reach a chapter on a phone before changing the outline panel described here."
 readingMinutes: 8
 related: ["marginalia-budget"]
 ---
