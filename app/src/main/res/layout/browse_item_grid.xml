@@ -37,6 +37,24 @@
                 android:background="@color/transparent"
                 android:cropToPadding="true"
                 android:padding="0dip" />
+
+            <!-- The reading position, on the cover itself: a corner label reads at a glance
+                 where a line of text under the title does not. -->
+            <TextView
+                android:id="@+id/coverProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_margin="6dip"
+                android:background="@drawable/bg_progress_badge"
+                android:paddingLeft="7dip"
+                android:paddingRight="7dip"
+                android:paddingTop="2dip"
+                android:paddingBottom="2dip"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
         </androidx.cardview.widget.CardView>
 
         <FrameLayout

@@ -225,12 +225,16 @@
         <item name="android:ellipsize">end</item>
     </style>
 
+    <!-- The platform dialog theme carries its own default accent, which is why these
+         dialogs stayed teal after the rest of the app turned green. -->
     <style name="DialogRoundLight" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/omni_accent</item>
         <item name="android:windowBackground">@drawable/bg_dialog_round_light</item>
         <item name="android:windowTitleStyle">@style/DialogRoundTitle</item>
     </style>
 
     <style name="DialogRoundDark" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">@color/omni_accent</item>
         <item name="android:windowBackground">@drawable/bg_dialog_round_dark</item>
         <item name="android:windowTitleStyle">@style/DialogRoundTitle</item>
     </style>

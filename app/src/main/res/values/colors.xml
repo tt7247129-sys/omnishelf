@@ -31,7 +31,9 @@
     <color name="tint_white">#F5F5F5</color>
     <color name="tint_blue">#03A9F4</color>
     <color name="tint_blue_alpha">#aa03A9F4</color>
-    <color name="tint_gray">#009688</color>
+    <!-- Was the Material teal, under a name that promised grey: every dialog button,
+         folder mark and secondary icon inherited it. -->
+    <color name="tint_gray">#6B6660</color>
     <color name="tint_red">#B71C1C</color>
     <color name="tint_yellow">#ffad25</color>
     

@@ -756,6 +756,16 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
             holder.idPercentText.setVisibility(View.INVISIBLE);
         }
 
+        View coverBadge = holder.itemView.findViewById(R.id.coverProgress);
+        if (coverBadge instanceof TextView) {
+            if (recentProgress > 0f) {
+                ((TextView) coverBadge).setText("" + Math.round(100f * recentProgress) + "%");
+                coverBadge.setVisibility(View.VISIBLE);
+            } else {
+                coverBadge.setVisibility(View.GONE);
+            }
+        }
+
         if (adapterType == ADAPTER_GRID && recentProgress > 0f) {
             holder.idPercentText.setText("" + (int) (100 * recentProgress) + "%");
             if (AppState.get().coverBigSize < IMG.TWO_LINE_COVER_SIZE) {
