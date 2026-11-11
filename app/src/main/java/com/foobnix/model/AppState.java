@@ -115,7 +115,7 @@ public class AppState {
 
     public static final List<String> STYLE_COLORS = Arrays.asList(//
             "#1B2A4A", // Oxford navy - the leather-bound blue
-            "#3949AB", // indigo - the blue Librera wore before the redesign
+            "#4A5D4E", // ink green - the OmniShelf accent, one hue for the whole app
             "#6B2131", // oxblood
             "#7A5230", // bronze
             "#000000" //
