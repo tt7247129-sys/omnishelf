@@ -467,8 +467,8 @@ public class AppState {
     @IgnoreHashCode public boolean isRewindEnable = true;
     // The reader's own clock and battery are already up there; a second pair along the foot of
     // the page is the reader's to ask for rather than something to start with.
-    @IgnoreHashCode public boolean isShowTime = false;
-    @IgnoreHashCode public boolean isShowBattery = false;
+    @IgnoreHashCode public boolean isShowTime = true;
+    @IgnoreHashCode public boolean isShowBattery = true;
     public int contrastImage = 0;
     public int brigtnessImage = 0;
     public boolean bolderTextOnImage = false;
