@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.net.Uri;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -61,8 +60,6 @@ import com.foobnix.pdf.info.Android6;
 import com.foobnix.pdf.info.AppsConfig;
 import com.foobnix.pdf.info.ExtUtils;
 import com.foobnix.pdf.info.model.BookCSS;
-import com.foobnix.librerax.LibreraX;
-import com.foobnix.model.AppData;
 import com.foobnix.pdf.info.IMG;
 import com.foobnix.pdf.info.Prefs;
 import android.util.TypedValue;
@@ -94,7 +91,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -121,12 +117,6 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     public int prevLibModeAuthors = NONE;
     public int rememberPos = 0;
     FileMetaAdapter searchAdapter;
-
-    private View continueCard;
-    private ImageView continueCover;
-    private TextView continueTitle;
-    private TextView continueProgress;
-    private FileMeta continueBook;
     AuthorsAdapter2 authorsAdapter;
     TextView countBooks, layoutErrorOnRestart;
     Handler handler;
@@ -430,18 +420,6 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         searchEditText = (AutoCompleteTextView) view.findViewById(R.id.filterLine);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
-        continueCard = view.findViewById(R.id.continueCard);
-        continueCover = view.findViewById(R.id.continueCover);
-        continueTitle = view.findViewById(R.id.continueTitle);
-        continueProgress = view.findViewById(R.id.continueProgress);
-        if (continueCard != null) {
-            continueCard.setOnClickListener(new OnClickListener() {
-                @Override public void onClick(View v) {
-                    openContinueBook();
-                }
-            });
-        }
-
         bindOnGrantPanel(view.findViewById(R.id.layoutOnGrant));
 
         layoutError = view.findViewById(R.id.layoutError);
@@ -663,7 +641,6 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     @Override public void onResume() {
         super.onResume();
         menu2.setVisibility(getActivity().findViewById(R.id.imageMenu1) == null ? View.GONE : View.VISIBLE);
-        updateContinueCard();
     }
 
     @Override public void onStop() {
@@ -1244,56 +1221,4 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         cacheItems = null;
 
     }
-
-    /**
-     * The card above the shelf: the last book that was actually being read, with how far
-     * in. A book that was merely opened does not qualify - progress has to exist.
-     */
-    private void updateContinueCard() {
-        if (continueCard == null) {
-            return;
-        }
-        FileMeta found = null;
-        try {
-            for (FileMeta fileMeta : AppData.get().getAllRecent(true)) {
-                Float progress = fileMeta.getIsRecentProgress();
-                if (progress != null && progress > 0.01 && progress < 0.999) {
-                    found = fileMeta;
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            LOG.e(e);
-        }
-        continueBook = found;
-        if (found == null) {
-            continueCard.setVisibility(View.GONE);
-            return;
-        }
-        continueCard.setVisibility(View.VISIBLE);
-        continueTitle.setText(TxtUtils.getFileMetaBookName(found));
-        Float progress = found.getIsRecentProgress();
-        continueProgress.setText(Math.round(100f * (progress == null ? 0 : progress)) + "% read");
-        try {
-            IMG.getCoverPageWithEffect(continueCover.getContext(), found.getPath(), null).into(continueCover);
-        } catch (Exception e) {
-            LOG.e(e);
-        }
-    }
-
-    private void openContinueBook() {
-        if (continueBook == null || getActivity() == null) {
-            return;
-        }
-        try {
-            Intent intent = new Intent(getActivity(), LibreraX.readerClass());
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setData(Uri.fromFile(new File(continueBook.getPath())));
-            getActivity().startActivity(intent);
-        } catch (Exception e) {
-            LOG.e(e);
-        }
-    }
-
-
 }
