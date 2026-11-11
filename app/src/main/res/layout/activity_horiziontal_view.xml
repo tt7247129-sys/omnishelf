@@ -379,6 +379,7 @@
                     android:contentDescription="@string/full_screen"
                     android:src="@drawable/my_glyphicons_pen" />
 
+                <!-- Settings are in the drawer, one swipe from any page. -->
                 <ImageView
                     android:id="@+id/bookPref"
                     style="@style/buttonWhite"
@@ -386,7 +387,8 @@
                     android:layout_height="@dimen/wh_button"
                     android:layout_weight="0"
                     android:contentDescription="@string/preferences"
-                    android:src="@drawable/glyphicons_137_cogwheel" />
+                    android:src="@drawable/glyphicons_137_cogwheel"
+                    android:visibility="gone" />
             </LinearLayout>
 
 
