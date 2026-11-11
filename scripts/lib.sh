@@ -58,9 +58,11 @@ clear_log() { adb logcat -c >/dev/null 2>&1; }
 # scan_crash NAME — fail the run if the app logged a fatal error or an ANR.
 scan_crash() {
   local label="$1" hits
-  hits=$(adb logcat -d 2>/dev/null | grep -E \
-    "FATAL EXCEPTION|ANR in ${PKG}|Force finishing activity ${PKG}|has died" \
-    | grep -v "START u0" || true)
+  # Only this process counts: the emulator kills system components constantly and
+  # those lines used to be reported as our crashes.
+  hits=$(adb logcat -d 2>/dev/null \
+    | grep -E "FATAL EXCEPTION|ANR in ${PKG}|Force finishing activity ${PKG}" -A2 \
+    | grep -E "${PKG}|FATAL EXCEPTION|ANR in" || true)
   CHECKS=$((CHECKS + 1))
   if [ -n "$hits" ]; then
     FAILURES=$((FAILURES + 1))
@@ -88,12 +90,34 @@ top_activity() {
     | grep -m1 -oE "${PKG}/[A-Za-z0-9_.]+" || echo "none"
 }
 
+# The reader resolves the document from the MIME type; "*/*" is rejected, so the
+# extension decides it here.
+mime_for() {
+  case "${1##*.}" in
+    epub) echo "application/epub+zip" ;;
+    pdf)  echo "application/pdf" ;;
+    mobi|azw3) echo "application/x-mobipocket-ebook" ;;
+    fb2)  echo "application/x-fictionbook+xml" ;;
+    cbz)  echo "application/vnd.comicbook+zip" ;;
+    *)    echo "application/octet-stream" ;;
+  esac
+}
+
+# AppState is persisted on shared storage, not in the app's data dir, so
+# `pm clear` does not reset it. RESET_PROFILE=1 makes a run start from defaults.
+reset_profile() {
+  [ "${RESET_PROFILE:-0}" = "1" ] || return 0
+  adb shell rm -rf /sdcard/OmniShelf/profile.* 2>/dev/null
+  say "  · profile reset"
+}
+
 open_book() {
-  local path="$1"
+  local path="$1" mime
+  mime=$(mime_for "$path")
   adb shell am force-stop "$PKG" >/dev/null 2>&1
   sleep 1
   adb shell am start -a android.intent.action.VIEW \
-    -d "file://${path}" -t "*/*" -n "$OPENER" >/dev/null 2>&1
+    -d "file://${path}" -t "$mime" -n "$OPENER" >/dev/null 2>&1
   sleep 6
 }
 

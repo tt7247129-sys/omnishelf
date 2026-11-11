@@ -52,6 +52,17 @@ Consequences:
   after running `Builder/link_to_mupdf_1.28.5.sh` locally, which needs an NDK (not
   installed) and about 1.2 GB of disk for the NDK alone.
 
+## Settings live outside the app (important for testing)
+
+`AppState` is persisted to **`/sdcard/OmniShelf/profile.<channel>/device.<model>/app-State.json`**,
+not to the app's private data directory. Consequences:
+
+- `adb uninstall` and `pm clear` do **not** reset the theme, reading position or palette.
+- A test that needs default settings must delete `/sdcard/OmniShelf/profile.*` first
+  (`RESET_PROFILE=1 ./scripts/ui-smoke.sh ...`).
+- Anyone upgrading from an older build keeps their saved accent colour, so a rebrand that
+  changes the default only shows on a fresh profile.
+
 ## Emulator: working recipe
 
 A clean AVD boots and shared storage works:

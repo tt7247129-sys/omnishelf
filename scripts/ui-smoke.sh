@@ -15,6 +15,7 @@ cd "$(dirname "$0")/.." || exit 2
 
 LABEL="${1:-smoke}"
 require_device
+reset_profile
 
 step "1. cold launch"
 clear_log
@@ -33,7 +34,8 @@ step "2. open EPUB from the file manager path"
 open_book "/sdcard/Download/pg11.epub"
 top=$(top_activity)
 case "$top" in
-  *DocumentActivity*|*OpenerActivity*) CHECKS=$((CHECKS+1)); say "  ✓ document opened ($top)" ;;
+  *DocumentActivity*|*OpenerActivity*|*HorizontalViewActivity*|*VerticalViewActivity*)
+    CHECKS=$((CHECKS+1)); say "  ✓ document opened ($top)" ;;
   *) CHECKS=$((CHECKS+1)); FAILURES=$((FAILURES+1)); say "  ✗ document did not open, got $top" ;;
 esac
 shot 02-epub-page
