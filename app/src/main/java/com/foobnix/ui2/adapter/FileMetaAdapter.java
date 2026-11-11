@@ -1,6 +1,9 @@
 package com.foobnix.ui2.adapter;
 
 import android.content.Context;
+import com.foobnix.model.Pinned;
+import androidx.appcompat.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -1141,6 +1144,24 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
             idPercentText = (TextView) view.findViewById(R.id.idPercentText);
 
             image = (ImageView) view.findViewById(R.id.browserItemIcon);
+            // Long press on the cover pins the book to the top of the shelf. It lives here
+            // rather than in the overflow menu because that menu dispatches by counting
+            // positions in a chain of ifs, and a new item there could shift "delete".
+            image.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override public boolean onLongClick(View v) {
+                    int pos = getAdapterPosition();
+                    List<FileMeta> items = getItemsList();
+                    if (pos < 0 || pos >= items.size()) {
+                        return false;
+                    }
+                    FileMeta book = items.get(pos);
+                    if (book == null || book.getPath() == null || book.getChild() != null) {
+                        return false;
+                    }
+                    showPinDialog(v.getContext(), book);
+                    return true;
+                }
+            });
             cloudImage = (ImageView) view.findViewById(R.id.cloudImage);
             star = (ImageView) view.findViewById(R.id.starIcon);
             //signIcon = (ImageView) view.findViewById(R.id.signIcon);
@@ -1311,6 +1332,24 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
         public NoneHolder(View view) {
             super(view);
         }
+    }
+
+
+    /**
+     * Pin or unpin one book. Deliberately its own small dialog, not an item in the shared
+     * file menu, so nothing about that menu's positional dispatch changes.
+     */
+    private void showPinDialog(final Context context, final FileMeta book) {
+        final boolean pinned = Pinned.isPinned(context, book.getPath());
+        new AlertDialog.Builder(context).setItems(
+                new String[]{pinned ? "Unpin from the top" : "Pin to the top"},
+                new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        Pinned.toggle(context, book.getPath());
+                        Pinned.partition(context, getItemsList());
+                        notifyDataSetChanged();
+                    }
+                }).show();
     }
 
 }
