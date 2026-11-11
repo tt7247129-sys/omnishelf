@@ -216,7 +216,8 @@ D + T3 中"仿真翻页 + 进度环 + 常驻时间电量"。
 | T2 全屏截图矩阵 | ✅ | `docs/ui-shots/t2-final/` |
 | T3 常驻时间电量 | ✅ 完成(默认开启) | 跟 T1b 一起构建 |
 | T3 封面进度角标 | ✅ 完成 | `docs/ui-shots/t3/01-cover-progress-badge.png` |
-| T3 书架分组置顶 | 待做 | — |
+| T3 书架分组 | ✅ 已存在(标签 + 收藏页分组) | Tags2 / FavoritesFragment2:372 |
+| T3 置顶 | 📋 方案就绪,待真机后实施 | `docs/PINNING-PLAN.md` |
 | T0 补漏:tint_gray 是 teal | ⚠️ 已改,待真机确认 | 106 处引用由青转灰 |
 
 ### T1b 继续阅读为什么回退
