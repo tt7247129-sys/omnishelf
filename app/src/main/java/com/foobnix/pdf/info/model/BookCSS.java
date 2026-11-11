@@ -311,7 +311,10 @@ public class BookCSS {
     }
 
     public void resetToDefault(Context c) {
-        textAlign = TEXT_ALIGN_JUSTIFY;
+        // Ragged right by default. With hyphenation off (see the rules further down), a
+        // justified column on a phone produces rivers wide enough to slow reading down;
+        // the setting is still there for anyone who prefers the other trade.
+        textAlign = TEXT_ALIGN_LEFT;
 
         marginTop = 9;
         marginBottom = 6;
@@ -1019,6 +1022,20 @@ public class BookCSS {
             // Not on span: an em there is the span's own, so a drop cap at font-size:4em would get
             // a line four times as tall, and the book's own line-height for it would lose
             builder.append(String.format("body, div, p{line-height:%s !important;}", em(lineHeight)));
+
+            // Two things the publisher gets wrong often enough to be worth overriding.
+            // Hyphenation: a book that ships hyphenate:auto breaks words at the reader's
+            // column width, which on a phone is narrower than the print edition the
+            // dictionary was written for, and a bad break costs a line of comprehension.
+            // Headings: a title set at 3em in print is 3em of a phone screen, i.e. the whole
+            // page for one word. Both are capped relative to body text, not in points.
+            builder.append("*, *::before, *::after{");
+            builder.append("hyphens:none !important; -webkit-hyphens:none !important;");
+            builder.append("}");
+            builder.append("h1{font-size:1.6em !important; line-height:1.25 !important;}");
+            builder.append("h2{font-size:1.35em !important; line-height:1.28 !important;}");
+            builder.append("h3{font-size:1.2em !important; line-height:1.3 !important;}");
+            builder.append("h4, h5, h6{font-size:1.05em !important; line-height:1.35 !important;}");
             builder.append("sub, sup{");
             builder.append(String.format("line-height:%s !important;", em(lineHeight)));
             builder.append("}");
