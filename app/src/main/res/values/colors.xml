@@ -40,7 +40,7 @@
     <color name="tint_selector">#aa03A9F4</color>
 
     
-    <color name="color_test">#3949AB</color>
+    <color name="color_test">@color/omni_primary</color>
 
     
     <color name="title_text_color">#000000</color>
@@ -55,5 +55,13 @@
     
   
     
+
+    <!-- OmniShelf semantic tokens. One accent, used for the app bar, links and
+         selected states; nothing else introduces a second hue. -->
+    <color name="omni_primary">#4A5D4E</color>
+    <color name="omni_primary_dark">#3C4C40</color>
+    <color name="omni_accent">#4A5D4E</color>
+    <color name="omni_surface">#F7F5F0</color>
+    <color name="omni_on_surface">#2B2B28</color>
 </resources>
 

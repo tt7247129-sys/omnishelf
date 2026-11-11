@@ -15,6 +15,10 @@
     </style>
 
     <style name="StyledIndicatorsBlack" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/omni_primary</item>
+        <item name="colorPrimaryDark">@color/omni_primary_dark</item>
+        <item name="colorAccent">@color/omni_accent</item>
+        <item name="colorControlActivated">@color/omni_accent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
