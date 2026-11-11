@@ -56,6 +56,7 @@ import com.foobnix.android.utils.Views;
 import com.foobnix.dao2.FileMeta;
 import com.foobnix.model.AppProfile;
 import com.foobnix.model.AppState;
+import com.foobnix.model.Pinned;
 import com.foobnix.pdf.info.Android6;
 import com.foobnix.pdf.info.AppsConfig;
 import com.foobnix.pdf.info.ExtUtils;
@@ -761,6 +762,8 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
 
             ExtUtils.removeReadBooks(searchBy);
             ExtUtils.removeNotFound(searchBy);
+            // Pinned books float, everything else keeps the order the reader asked for.
+            Pinned.partition(getActivity(), searchBy);
 
             List<String> result = new ArrayList<String>();
             boolean byGenre = txt.startsWith(SEARCH_IN.GENRE.getDotPrefix());

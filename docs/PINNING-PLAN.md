@@ -1,6 +1,6 @@
 # 书架置顶:实现方案
 
-> 状态:**方案,未写代码。** 等真机验收结果再动手。
+> 状态:**数据与排序已实现,入口未接**(见 3. 的风险)。
 
 ## 一、先澄清一件事:分组已经存在
 
@@ -49,7 +49,23 @@ all.clear(); all.addAll(pinned); all.addAll(rest);
 
 **改一处即可**:`SearchFragment2` 里把结果交给适配器之前。
 
-### 3. 入口:长按卡片
+### 3. 入口:溢出菜单 —— 这一步有真实危险
+
+书卡的 ⋮ 与长按都进入 `ShareDialog`(`DefaultListeners:405`)。它的点击回调是**按下标递进**的:
+
+```java
+int i = 0;
+if (!isImageOrEpub(file)) { if (which == i++) { convert EPUB } if (which == i++) { convert PDF } }
+if (which == i++) { openWith } else if (which == i++) { sendFile }
+else if (canDelete && which == i++) { dialogDelete }        // ← 删除
+else if (isShowInfo && which == i++) { showFileInfo }
+```
+
+条目是**有条件添加**的(图片/EPUB 少两项、`canDelete`、`isShowInfo`),所以插入"置顶"必须让**渲染时的下标与点击时的自增序列完全一致**。错一位,"置顶"就会触发**删除书籍**。
+
+在没有真机把每个分支都点一遍的情况下,这个改动不能做。已经在 `Pinned` 类里做完了存储与排序,入口等设备可用后再接。
+
+### 3b. 入口(原始设想):长按卡片
 
 长按书卡已有上下文菜单(收藏/重命名/删除等)。在同一个菜单里加一项:
 
@@ -78,8 +94,20 @@ all.clear(); all.addAll(pinned); all.addAll(rest);
 
 约 4–6 小时:存储类 1h、重排 1h、菜单项 1–2h、验证 2h。
 
-## 六、为什么现在不做
+## 六、现在完成到哪一步
 
-E 档剩下的两项(tint_gray 视觉确认、置顶)都需要**可靠的真机画面**。当前模拟器在 480×800 下仍会 SystemUI ANR,截图不可信。
+已完成(编译通过,无行为变化):
 
-在这种情况下写置顶,等于再堆一层未验证的改动。等真机截图回来后,先确认灰色是否需要调整,再一次性把置顶做完并验收。
+- `com.foobnix.model.Pinned` — 路径集合的存取、`partition()` 稳定分区
+- `SearchFragment2` 在查询结果注入前调用 `Pinned.partition(...)`
+
+未做:**切换入口**。原因见 3:溢出菜单的下标自增逻辑错一位就会删书。
+
+## 七、恢复施工的条件
+
+任意一个成立即可继续:
+
+1. 有一台可用的真机/模拟器,能逐个分支点一遍溢出菜单
+2. 或者把入口从 `ShareDialog` 换成**独立的长按卡片菜单**(新建一个只含三项的对话框:置顶/书签/信息),不碰现有下标逻辑
+
+第 2 条其实更安全,只是多写一个对话框。
