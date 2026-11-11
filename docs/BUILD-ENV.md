@@ -31,7 +31,48 @@ Output: `app/build/outputs/apk/pro/debug/OmniShelf Pro-1.0.0-mupdf-arm.apk`.
 Do **not** set `ANDROID_SDK_HOME`; AGP 9 treats it as the SDK root and fails with
 `Could not create provider for value source AndroidLocationsBuildService`.
 
-## Emulator: known-broken on this machine
+## Native libraries: local builds cannot run
+
+`assembleProDebug` produces an APK **without** `libmupdf.so`, `libdjvu.so` and the rest of
+the native set, because those are built by `Builder/link_to_mupdf_1.28.5.sh` (MuPDF source
++ NDK) and are not in the repository. Installing such an APK crashes on launch:
+
+```
+java.lang.UnsatisfiedLinkError: dlopen failed: library "libmupdf.so" not found
+    at com.foobnix.pdf.info.AppsConfig.<clinit>(AppsConfig.java:94)
+```
+
+The `proJS` flavour (no MuPDF by design) gets further and then dies on `libdjvu.so`, so it
+is not a substitute.
+
+Consequences:
+
+- Local builds are good for **compile checks only** (Java/XML/资源 errors, AAPT, lint).
+- Anything that has to run must either be built in CI (which caches the MuPDF build) or
+  after running `Builder/link_to_mupdf_1.28.5.sh` locally, which needs an NDK (not
+  installed) and about 1.2 GB of disk for the NDK alone.
+
+## Emulator: working recipe
+
+A clean AVD boots and shared storage works:
+
+```bash
+export JAVA_HOME=/tmp/jdk21b/jdk-21.0.13+9/Contents/Home
+export ANDROID_SDK_ROOT=/tmp/android-sdk ANDROID_HOME=/tmp/android-sdk
+export ANDROID_AVD_HOME=/tmp/avd4            # created by avdmanager, not the broken test33
+/tmp/android-sdk/emulator/emulator -avd ui33 -no-snapshot -no-audio \
+  -no-boot-anim -memory 2048 -gpu swiftshader_indirect
+adb -s emulator-5556 shell ls /sdcard        # must list Alarms, Android, DCIM, ...
+```
+
+Two traps: the AVD's `image.sysdir.1` is written as `android-sdk/...` (relative to `/tmp`)
+and must be changed to `system-images/android-33/...`; and `avdmanager` resolves the SDK
+root to `/tmp`, so `/tmp/android-sdk` must contain symlinks to the real `build-tools`,
+`platforms`, `licenses` and `cmdline-tools`.
+
+Install the **arm64** split; the `-arm` APK fails with `INSTALL_FAILED_NO_MATCHING_ABIS`.
+
+## Emulator: the original broken AVD
 
 The AVD at `/tmp/avd/test33.avd` was created with **96 MB RAM** and a temporary data
 partition, and its shared storage (`/sdcard`, `/storage/emulated/0`) fails with
