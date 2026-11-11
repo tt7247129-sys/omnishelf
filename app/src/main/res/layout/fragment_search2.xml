@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -211,6 +212,47 @@
             app:hideScrollbar="true"
             app:showTrack="false"
             app:trackColor="#bbbbbb"></com.foobnix.ui2.fast.FastScrollRecyclerView>
+
+        <!-- Shown only while the adapter holds no books: an empty shelf used to be a
+             blank rectangle with no way to tell scanning from failure. -->
+        <LinearLayout
+            android:id="@+id/emptyLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="32dip"
+            android:paddingRight="32dip"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="64dip"
+                android:layout_height="64dip"
+                android:importantForAccessibility="no"
+                android:src="@drawable/glyphicons_589_book_open"
+                android:tint="@color/omni_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dip"
+                android:gravity="center"
+                android:text="Your library is empty"
+                tools:ignore="HardcodedText"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:gravity="center"
+                android:lineSpacingExtra="3dip"
+                android:text="Books in Download, on an SD card or in a synced folder show up here. Tap the refresh icon above to scan again."
+                tools:ignore="HardcodedText"
+                android:textSize="14sp" />
+        </LinearLayout>
+
     </FrameLayout>
 
 </LinearLayout>
