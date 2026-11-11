@@ -31,7 +31,26 @@ Output: `app/build/outputs/apk/pro/debug/OmniShelf Pro-1.0.0-mupdf-arm.apk`.
 Do **not** set `ANDROID_SDK_HOME`; AGP 9 treats it as the SDK root and fails with
 `Could not create provider for value source AndroidLocationsBuildService`.
 
-## Native libraries: local builds cannot run
+## Native libraries: how to build them locally
+
+`Builder/link_to_mupdf_1.28.5.sh` clones MuPDF, patches two openjpeg files and runs
+`ndk-build`. For one ABI (the emulator and the phone are both arm64) it takes about
+50 minutes and roughly 1.5 GB of disk:
+
+```bash
+# NDK 27.2 (the version CI uses), unpacked anywhere writable
+echo "librera_ndk_dir=/tmp/ndk-r27c/android-ndk-r27c" >> /tmp/gradle-home/gradle.properties
+
+cp Builder/link_to_mupdf_1.28.5.sh Builder/link_arm64.sh
+# in the copy: clone with --depth 1, comment out the three non-arm64 ndk-build lines
+cd Builder && GRADLE_USER_HOME=/tmp/gradle-home bash link_arm64.sh
+```
+
+It writes `app/src/main/jniLibs/arm64-v8a/*.so` (21 MB for `libmupdf.so` alone), and after
+that `assembleProDebug` produces an installable APK. Delete `Builder/mupdf-1.28.5` afterwards;
+the libraries stay.
+
+## Native libraries: what was broken before
 
 `assembleProDebug` produces an APK **without** `libmupdf.so`, `libdjvu.so` and the rest of
 the native set, because those are built by `Builder/link_to_mupdf_1.28.5.sh` (MuPDF source
