@@ -184,13 +184,10 @@ public class BrowserAdapter extends BaseAdapter {
                 title2.setText("" + info.getAuthor());
             }
 
-            if (!AppState.get().isBrowseGrid && AppState.get().coverSmallSize >= IMG.TWO_LINE_COVER_SIZE) {
-                title1.setSingleLine(false);
-                title1.setLines(2);
-            } else {
-                title1.setSingleLine(true);
-                title1.setLines(1);
-            }
+            // A grid cell is narrow enough that a single line cuts most titles mid-word;
+            // two lines with an ellipsis reads better and keeps the cells even.
+            title1.setSingleLine(false);
+            title1.setLines(2);
 
 
             IMG.getCoverPageWithEffect(imageView.getContext(), file.getPath(), null).into(imageView);
