@@ -450,23 +450,6 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
 
         searchAdapter = new FileMetaAdapter();
 
-        // An empty shelf used to be a blank rectangle: nothing distinguished "no books"
-        // from "still scanning". The observer keeps the message in step with every
-        // adapter update, wherever it comes from.
-        final View emptyLibrary = view.findViewById(R.id.emptyLibrary);
-        if (emptyLibrary != null) {
-            searchAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                private void sync() {
-                    emptyLibrary.setVisibility(searchAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-                }
-
-                @Override public void onChanged() { sync(); }
-                @Override public void onItemRangeInserted(int positionStart, int itemCount) { sync(); }
-                @Override public void onItemRangeRemoved(int positionStart, int itemCount) { sync(); }
-            });
-            emptyLibrary.setVisibility(searchAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-        }
-
         authorsAdapter = new AuthorsAdapter2();
 
         onGridlList = (ImageView) view.findViewById(R.id.onGridList);
