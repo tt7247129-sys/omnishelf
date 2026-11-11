@@ -21,7 +21,8 @@ step "1. cold launch"
 clear_log
 adb shell am force-stop "$PKG" >/dev/null 2>&1
 adb shell am start -n "$MAIN" >/dev/null 2>&1
-sleep 6
+wait_activity "MainTabs2" || true
+sleep 2
 top=$(top_activity)
 case "$top" in
   *MainTabs2*) CHECKS=$((CHECKS+1)); say "  ✓ library is on screen" ;;

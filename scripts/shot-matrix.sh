@@ -16,7 +16,8 @@ require_device
 step "library"
 adb shell am force-stop "$PKG" >/dev/null 2>&1
 adb shell am start -n "$MAIN" >/dev/null 2>&1
-sleep 6
+wait_activity "MainTabs2" || true
+sleep 3
 shot library
 scan_crash "library"
 
@@ -26,6 +27,7 @@ adb shell input keyevent 4; sleep 1
 
 step "reader with text"
 open_book "/sdcard/Download/pg11.epub"
+wait_activity "ViewActivity" || true
 swipe_ratio 80 55 20 55; sleep 2
 shot reader-text
 scan_crash "reader"

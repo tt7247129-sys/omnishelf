@@ -48,9 +48,9 @@ swipe_ratio() {
 shot() {
   local name="$1" dir="${SHOTS}/${LABEL:-run}"
   mkdir -p "$dir"
-  adb shell screencap -p "/sdcard/qa-${name}.png" >/dev/null 2>&1
-  adb pull "/sdcard/qa-${name}.png" "${dir}/${name}.png" >/dev/null 2>&1
-  adb shell rm -f "/sdcard/qa-${name}.png" >/dev/null 2>&1
+  # Straight off the framebuffer: on a freshly booted device /sdcard is sometimes not
+  # writable by shell yet, and a failed pull used to leave an empty file behind.
+  adb exec-out screencap -p > "${dir}/${name}.png" 2>/dev/null || true
 }
 
 clear_log() { adb logcat -c >/dev/null 2>&1; }
@@ -60,9 +60,11 @@ scan_crash() {
   local label="$1" hits
   # Only this process counts: the emulator kills system components constantly and
   # those lines used to be reported as our crashes.
+  # A wedged emulator shows "Process system isn't responding", which never names our
+  # package - and the run then reported zero failures over a screenshot of that dialog.
   hits=$(adb logcat -d 2>/dev/null \
-    | grep -E "FATAL EXCEPTION|ANR in ${PKG}|Force finishing activity ${PKG}" -A2 \
-    | grep -E "${PKG}|FATAL EXCEPTION|ANR in" || true)
+    | grep -E "FATAL EXCEPTION|ANR in |Force finishing activity ${PKG}|isn't responding" -A2 \
+    | grep -E "${PKG}|FATAL EXCEPTION|ANR in|isn't responding" || true)
   CHECKS=$((CHECKS + 1))
   if [ -n "$hits" ]; then
     FAILURES=$((FAILURES + 1))
@@ -83,6 +85,22 @@ check() {
     FAILURES=$((FAILURES + 1))
     say "  ✗ $1 (expected '$2', got '$3')"
   fi
+}
+
+# wait_activity PATTERN [TIMEOUT_S] — block until the resumed activity matches.
+# The screenshots used to be taken while the app was still starting, which produced
+# convincing black rectangles and a green "0 failures".
+wait_activity() {
+  local pattern="$1" limit="${2:-25}" i top
+  for i in $(seq 1 "$limit"); do
+    top=$(top_activity)
+    case "$top" in
+      *"$pattern"*) sleep 2; return 0 ;;
+    esac
+    sleep 1
+  done
+  say "  ! timed out waiting for $pattern (now: $(top_activity))"
+  return 1
 }
 
 top_activity() {

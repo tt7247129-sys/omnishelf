@@ -71,6 +71,16 @@ Consequences:
   after running `Builder/link_to_mupdf_1.28.5.sh` locally, which needs an NDK (not
   installed) and about 1.2 GB of disk for the NDK alone.
 
+## The emulator gets wedged under load
+
+After a few dozen installs the guest shows "Process system isn't responding", then
+"System UI isn't responding", and screenshots come back black or of the launcher. Rebooting
+the guest does not clear it; the whole emulator has to be killed and started again.
+
+What helps: 3072 MB of RAM, 720x1280 at density 320 instead of 1080x2400, and a reboot
+between long runs. What matters more is that the harness must not call a run "passing"
+while a system ANR dialog is on screen - it did, twice.
+
 ## Settings live outside the app (important for testing)
 
 `AppState` is persisted to **`/sdcard/OmniShelf/profile.<channel>/device.<model>/app-State.json`**,
