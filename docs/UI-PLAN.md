@@ -259,6 +259,17 @@ adapter 的 header item**,或者做成 `column` 里被同一套 margin 逻辑接
 2. 观察是否触发重排与页码变化;
 3. 若页码错乱,回退并改走"面板改为覆盖半屏 + 正文滚动偏移"的方案。
 
+### 静态审计(`scripts/ui-audit.sh`)
+
+设备不可用时唯一诚实的验证手段。它在源码里查四件事:
+
+1. 是否还有残留的靛蓝/teal —— 抓到过 `TintUtil.COLOR_TINT_GRAY = "#009688"`,这是 XML 搜索永远找不到的
+2. 每个 ImageView 是否有 `contentDescription` 或显式标为装饰
+3. 被 XML 隐藏、但代码里仍在引用的控件(潜在的死控件)
+4. (待补)同一控件在 XML 与代码里的可见性冲突
+
+当前结果:颜色 0 发现;无障碍剩 2 处(在 `ads.xml`、`slice_dialog.xml`,属于未使用的广告页,不在本次范围)。
+
 ### 截图矩阵的已知问题
 
 `shot-matrix.sh` 在页面渲染完成前就截图,`reader-text.png` 与 `reader-controls.png` 可能抓到空白页。

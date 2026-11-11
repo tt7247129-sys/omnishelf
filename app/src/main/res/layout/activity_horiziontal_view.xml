@@ -54,6 +54,7 @@
 
             <ImageView
                 android:id="@+id/pagesBookmark"
+                android:contentDescription="@string/bookmarks"
                 android:layout_width="40dip"
                 android:layout_height="40dip"
                 android:layout_marginLeft="4dip"
@@ -533,6 +534,7 @@
 
         <ImageView
             android:id="@+id/anchorX"
+            android:importantForAccessibility="no"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"
             android:layout_marginTop="100dip"
@@ -541,6 +543,7 @@
 
         <ImageView
             android:id="@+id/anchorY"
+            android:importantForAccessibility="no"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"
             android:layout_marginTop="150dip"

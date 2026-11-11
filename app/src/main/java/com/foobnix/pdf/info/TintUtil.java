@@ -60,7 +60,9 @@ public class TintUtil {
     private static List<GradientDrawable> drawableFill = new ArrayList<GradientDrawable>();
     private static List<View> drawables1 = new ArrayList<View>();
 
-    public static int COLOR_TINT_GRAY = Color.parseColor("#009688");
+    // The same grey as @color/tint_gray. It was Material's teal, in Java where the
+    // resource rename could not reach it.
+    public static int COLOR_TINT_GRAY = Color.parseColor("#6B6660");
     public static int COLOR_ORANGE = Color.parseColor("#FF8C00");
 
     /**

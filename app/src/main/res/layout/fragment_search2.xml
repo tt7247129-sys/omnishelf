@@ -82,6 +82,7 @@
 
             <ImageView
                 android:layout_marginRight="-8dip"
+                android:importantForAccessibility="no"
                 android:id="@+id/myAutoCompleteImage"
                 style="@style/buttonClear"
                 android:layout_width="@dimen/wh_button_small"
