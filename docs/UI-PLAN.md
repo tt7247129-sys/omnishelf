@@ -212,6 +212,21 @@ D + T3 中"仿真翻页 + 进度环 + 常驻时间电量"。
 | T2 阅读页 | 待做 | — |
 | T3 增强 | 待做 | — |
 
+### T1b 继续阅读为什么回退
+
+两版都被回退,原因不是代码写错,而是撞上了书架页自己的布局算术。
+
+`UIFragment` 给列表设了**负的上边距**,让书页滚到顶部 chrome 底下(`above = holder.getTop() - lp.topMargin`),
+再把 chrome 通过 `bringToFront` 抬到列表之上。任何"插在 chrome 和列表之间"的普通视图:
+
+1. 会被列表盖住(列表后绘制);
+2. 即使 `bringToFront`,列表的起点仍然是卡片顶端,首行会被永久遮住。
+
+`fragment_search2.xml` 里加一个 `wrap_content` 的头部视图参与不进这套计算。**唯一干净的做法是做成
+adapter 的 header item**,或者做成 `column` 里被同一套 margin 逻辑接管的 chrome 子视图。
+
+另外 `FrameLayout` 由 `match_parent` 改成 `0dp + weight=1` 会影响负边距的行为,已验证后一并回退。
+
 ### T1b 空态为什么回退
 
 第一版按 `searchAdapter.getItemCount() == 0` 判断空态。实测不成立:**列表里始终存在分组标题行**
