@@ -927,6 +927,7 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
             searchAdapter.getItemsList()
                          .addAll(items);
             searchAdapter.notifyDataSetChanged();
+            showEmptyState(items.isEmpty());
             handler.postDelayed(new Runnable() {
 
                 @Override public void run() {
@@ -1224,4 +1225,13 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         cacheItems = null;
 
     }
+
+    /** The shelf said nothing when it had nothing; it says so once, here. */
+    private void showEmptyState(boolean empty) {
+        View emptyView = getView() == null ? null : getView().findViewById(R.id.emptyLibrary);
+        if (emptyView != null) {
+            emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        }
+    }
+
 }

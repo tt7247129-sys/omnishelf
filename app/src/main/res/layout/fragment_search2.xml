@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -212,6 +213,45 @@
             app:hideScrollbar="true"
             app:showTrack="false"
             app:trackColor="#bbbbbb"></com.foobnix.ui2.fast.FastScrollRecyclerView>
+
+        <!-- Drawn over the list rather than beside it: the page runs under the chrome, so
+             anything placed before the list would be covered by it. -->
+        <LinearLayout
+            android:id="@+id/emptyLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="32dip"
+            android:paddingRight="32dip"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="56dip"
+                android:layout_height="56dip"
+                android:importantForAccessibility="no"
+                android:src="@drawable/glyphicons_589_book_open"
+                android:tint="@color/omni_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dip"
+                android:text="No books yet"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dip"
+                android:gravity="center"
+                android:lineSpacingExtra="3dip"
+                android:text="Books in Download, on an SD card or in a synced folder appear here."
+                android:textSize="13sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

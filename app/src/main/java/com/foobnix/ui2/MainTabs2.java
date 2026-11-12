@@ -62,6 +62,7 @@ import com.foobnix.model.AppProfile;
 import com.foobnix.pdf.info.widget.PrefDialogs;
 import com.foobnix.model.AppSP;
 import com.foobnix.model.AppState;
+import com.foobnix.model.RebrandMigration;
 import com.foobnix.model.LibreraSafSync;
 import com.foobnix.pdf.SlidingTabLayout;
 import com.foobnix.pdf.info.ADS;
@@ -267,6 +268,7 @@ public class MainTabs2 extends AdsFragmentActivity {
             AppSP.get().currentProfile="";
             AppSP.get().save();
             AppProfile.init(this);
+            RebrandMigration.apply(this);
             onStoragePermissionGranted();
             SearchAllBooksWorker.run(this);
         }
@@ -664,6 +666,7 @@ public class MainTabs2 extends AdsFragmentActivity {
 //        }
 
         Clouds.get().init(this);
+        RebrandMigration.apply(this);
 
         //import settings
 
