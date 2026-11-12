@@ -225,6 +225,7 @@
 
                 <ImageView
                     android:id="@+id/cloudImage"
+                android:importantForAccessibility="no"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/wh_button_small"
                     android:layout_weight="0"
@@ -233,6 +234,7 @@
 
                 <ImageView
                     android:id="@+id/starIcon"
+                android:importantForAccessibility="no"
                     android:layout_width="@dimen/wh_button_small"
                     android:layout_height="@dimen/wh_button_small"
                     android:layout_gravity="center"
@@ -246,6 +248,7 @@
 
                 <ImageView
                     android:id="@+id/itemMenu"
+                android:importantForAccessibility="no"
                     android:layout_width="@dimen/wh_button_small"
                     android:layout_height="@dimen/wh_button_small"
                     android:layout_marginBottom="-1dip"

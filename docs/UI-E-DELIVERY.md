@@ -47,10 +47,16 @@ c681240 docs: t2 typography status
 **2. 空书架没有引导文案**
 试过一版,判据错了(用了 adapter 行数,而列表始终有分组标题行),已回退。正确判据要基于 `AppData` 的真实书籍数。
 
-**3. 广告页残留**
-`ads.xml`、`slice_dialog.xml` 里还有未清理的 UI 与无障碍缺失。运行时不可达(无广告 SDK),建议单独一轮整块删除。
+**3. 无障碍名称缺口 109 处**
 
-**4. 窄屏标签截断**
+`scripts/ui-audit.sh` 统计:45 个布局里还有 109 个 `ImageView` 没有描述、也没标为装饰。
+按数量排前的是 `dialog_fonts.xml`(12)、`dialog_prefs.xml`(10)、`document_title_bar.xml`(8)。
+这不是一轮能清完的,建议作为独立的技术债任务,按文件逐个处理。
+
+**4. 广告页残留**
+`ads.xml` 已删除(零引用)。`showRewardVideo` 那一块仍在 `activity_horiziontal_view.xml` 里,运行时因 `isRewardLoaded()==false` 永不显示,但代码与布局还在,应单独一轮整块删除。
+
+**5. 窄屏标签截断**
 480dp 宽度下底栏标签会截断("Bookm…")。手机正常宽度(≥360dp)下不出现,但 5 寸以下设备会有。
 
 ## 四、验证方式

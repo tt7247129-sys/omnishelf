@@ -185,6 +185,7 @@
 
             <ImageView
                 android:id="@+id/musicTextOk"
+                android:contentDescription="@string/automatic"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_alignParentRight="true"
