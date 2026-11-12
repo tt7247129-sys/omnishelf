@@ -1155,7 +1155,9 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
                         return false;
                     }
                     FileMeta book = items.get(pos);
-                    if (book == null || book.getPath() == null || book.getChild() != null) {
+                    // A book scanned out of a folder carries a child path; only entries
+                    // that are not files at all are skipped here.
+                    if (book == null || book.getPath() == null || book.getPath().isEmpty()) {
                         return false;
                     }
                     showPinDialog(v.getContext(), book);
