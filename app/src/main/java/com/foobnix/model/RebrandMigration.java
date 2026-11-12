@@ -55,7 +55,12 @@ public class RebrandMigration {
                 changed = true;
             }
 
-            if (changed && AppProfile.syncState != null) {
+            if (changed) {
+                if (AppProfile.syncState == null) {
+                    // The profile is not on disk yet; leave the flag unset so the next start
+                    // tries again rather than silently losing the migration.
+                    return;
+                }
                 IO.writeObjSync(AppProfile.syncState, state);
             }
             flags.edit().putBoolean(KEY, true).apply();
