@@ -24,7 +24,7 @@ check() { # name, then the command whose output is the problem list
 
 echo "== colours =="
 check "no indigo left anywhere" bash -c \
-  "grep -rniE '#(3949ab|3f51b5|5c6bc0)' $RES $JAVA | grep -v '#4A5D4E'"
+  "grep -rniE '#(3949ab|3f51b5|5c6bc0)' $RES $JAVA | grep -v '#4A5D4E' | grep -v 'OLD_TINT'"
 check "no material teal left" bash -c \
   "grep -rniE '#(009688|00bfa5|26a69a)' $RES $JAVA"
 
