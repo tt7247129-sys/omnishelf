@@ -38,6 +38,7 @@
 
         <ImageView
             android:id="@+id/onSearch"
+                android:contentDescription="@string/search"
             style="@style/buttonWhiteInverted"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"

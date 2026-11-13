@@ -279,6 +279,7 @@
 
             <ImageView
                 android:id="@+id/toPage"
+                android:contentDescription="@string/go_to_page"
                 style="@style/buttonWhite"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"

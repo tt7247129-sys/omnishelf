@@ -243,6 +243,7 @@
 
                 <ImageView
                     android:id="@+id/bg1"
+                android:importantForAccessibility="no"
                     android:layout_width="60dip"
                     android:layout_height="80dip"
                     android:layout_marginLeft="10dip"
@@ -252,6 +253,7 @@
 
                 <ImageView
                     android:id="@+id/bg2"
+                android:importantForAccessibility="no"
                     android:layout_width="60dip"
                     android:layout_height="80dip"
                     android:layout_marginLeft="10dip"
@@ -270,6 +272,7 @@
 
                 <ImageView
                     android:id="@+id/bg3"
+                android:importantForAccessibility="no"
                     android:layout_width="60dip"
                     android:layout_height="80dip"
                     android:layout_marginLeft="10dip"
@@ -297,6 +300,7 @@
 
                     <ImageView
                         android:id="@+id/bg4"
+                android:importantForAccessibility="no"
                         android:layout_width="60dip"
                         android:layout_height="80dip"
                         android:layout_centerInParent="true"

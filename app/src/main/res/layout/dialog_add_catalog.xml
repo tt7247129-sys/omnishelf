@@ -42,6 +42,7 @@
 
         <ImageView
             android:id="@+id/image"
+                android:importantForAccessibility="no"
             android:layout_width="42dip"
             android:layout_height="42dip"
             android:layout_centerInParent="true"

@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/outline_collapse"
+                android:contentDescription="@string/close"
         android:layout_width="48dip"
         android:layout_height="48dip"
         android:orientation="horizontal"

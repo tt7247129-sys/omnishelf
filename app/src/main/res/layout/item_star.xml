@@ -7,12 +7,14 @@
 
     <ImageView
         android:id="@+id/browserItemIcon"
+                android:importantForAccessibility="no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/starIcon"
+                android:contentDescription="@string/favorites"
           android:background="@drawable/bg_round_press"    
         android:layout_width="20dip"
         android:layout_height="20dip"

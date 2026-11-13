@@ -99,6 +99,7 @@
 
             <ImageView
                 android:id="@+id/onHelp"
+                android:contentDescription="@string/text_to_speech"
                 android:layout_width="@dimen/wh_button_small"
                 android:layout_height="@dimen/wh_button_small"
                 android:background="@drawable/bg_clickable"

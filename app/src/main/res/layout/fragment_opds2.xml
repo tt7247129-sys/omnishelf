@@ -40,6 +40,7 @@
 
         <ImageView
             android:id="@+id/starIcon"
+                android:contentDescription="@string/favorites"
             style="@style/buttonTop"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"

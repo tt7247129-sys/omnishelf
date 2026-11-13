@@ -9,6 +9,7 @@
     <ImageView
         android:visibility="gone"
         android:id="@+id/image1"
+                android:importantForAccessibility="no"
         android:layout_width="@dimen/wh_button_small"
         android:layout_height="@dimen/wh_button_small"
         android:layout_weight="0"

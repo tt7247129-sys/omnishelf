@@ -428,6 +428,7 @@
 
             <ImageView
                 android:id="@+id/isSwipeGestureReverse"
+                android:contentDescription="@string/direction_of_reading_rtl_"
                 android:layout_width="@dimen/wh_button_small"
                 android:layout_height="@dimen/wh_button_small"
                 android:background="@drawable/bg_clickable"

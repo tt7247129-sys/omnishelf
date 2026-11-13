@@ -27,6 +27,7 @@
 
             <ImageView
                 android:id="@+id/image"
+                android:importantForAccessibility="no"
                 android:layout_width="50dip"
                 android:layout_height="75dip"
                 android:layout_weight="0"
@@ -77,6 +78,7 @@
 
                 <ImageView
                     android:id="@+id/cloudImage"
+                android:contentDescription="@string/sync"
                     android:layout_width="@dimen/wh_button_small"
                     android:layout_height="@dimen/wh_button_small"
                     android:layout_alignParentTop="true"

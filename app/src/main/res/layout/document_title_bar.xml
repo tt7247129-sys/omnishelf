@@ -176,6 +176,7 @@
 
             <ImageView
                 android:id="@+id/imageNextScreen"
+                android:contentDescription="@string/next"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="5dip"
@@ -186,6 +187,7 @@
 
             <ImageView
                 android:id="@+id/imageToolbar"
+                android:contentDescription="@string/reading_settings"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="4dip"

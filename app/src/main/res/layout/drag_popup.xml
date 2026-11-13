@@ -29,6 +29,7 @@
 
             <ImageView
                 android:id="@+id/droid"
+                android:importantForAccessibility="no"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_weight="0"
@@ -77,6 +78,7 @@
 
             <ImageView
                 android:id="@+id/onIconAction"
+                android:contentDescription="@string/reading_settings"
                 style="@style/buttonWhiteClose"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"

@@ -20,6 +20,7 @@
         <ImageView
             android:layout_weight="0"
             android:id="@+id/onReverse"
+                android:contentDescription="@string/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dip"
@@ -36,6 +37,7 @@
 
         <ImageView
             android:id="@+id/imageOK"
+                android:contentDescription="@string/ok"
             style="@style/buttonWhite"
             android:tint="@color/tint_gray"
             android:background="@drawable/bg_clickable"

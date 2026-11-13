@@ -25,6 +25,7 @@
 
             <ImageView
                 android:id="@+id/imageDropbox"
+                android:importantForAccessibility="no"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_weight="0"
@@ -52,6 +53,7 @@
 
             <ImageView
                 android:id="@+id/imageGDrive"
+                android:importantForAccessibility="no"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_weight="0"
@@ -79,6 +81,7 @@
 
             <ImageView
                 android:id="@+id/imageOneDrive"
+                android:importantForAccessibility="no"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_weight="0"
@@ -135,6 +138,7 @@
 
         <ImageView
             android:id="@+id/isShowCloudsLine"
+                android:contentDescription="@string/clouds"
             style="@style/buttonTop"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"
@@ -144,6 +148,7 @@
 
         <ImageView
             android:id="@+id/onRefreshDropbox"
+                android:contentDescription="@string/update_library"
             style="@style/buttonTop"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"

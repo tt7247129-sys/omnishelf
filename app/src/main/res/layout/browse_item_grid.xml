@@ -28,6 +28,7 @@
 
             <ImageView
                 android:id="@+id/browserItemIcon"
+                android:importantForAccessibility="no"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -134,6 +135,7 @@
 
                 <ImageView
                     android:id="@+id/cloudImage"
+                android:contentDescription="@string/clouds"
                     android:layout_width="@dimen/wh_button_small"
                     android:layout_height="@dimen/wh_button_small"
                     android:padding="3dip"

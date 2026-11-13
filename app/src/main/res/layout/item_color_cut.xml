@@ -7,6 +7,7 @@
 
     <ImageView
         android:id="@+id/itColor"
+                android:contentDescription="@string/theme_color"
         android:layout_width="@dimen/wh_button"
         android:layout_height="@dimen/wh_button"
         android:padding="5dip"

@@ -24,6 +24,7 @@
     <ImageView
         android:layout_weight="0"
         android:id="@+id/onCancel"
+                android:contentDescription="@string/close"
         android:tint="@color/lt_grey"
         android:padding="2dip"
         android:layout_marginLeft="20dip"

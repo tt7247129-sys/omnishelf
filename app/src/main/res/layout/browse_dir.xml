@@ -27,6 +27,7 @@
 
            <ImageView
                android:id="@+id/image1"
+                android:importantForAccessibility="no"
                android:layout_width="@dimen/wh_button"
                android:layout_height="@dimen/wh_button"
 
@@ -35,6 +36,7 @@
 
            <ImageView
                android:id="@+id/imageCloud"
+                android:contentDescription="@string/sync"
                android:visibility="gone"
                android:layout_alignParentBottom="true"
                android:layout_alignParentRight="true"
@@ -109,6 +111,7 @@
 
         <ImageView
             android:id="@+id/starIcon"
+                android:contentDescription="@string/favorites"
             android:layout_width="@dimen/wh_button_small"
             android:layout_height="@dimen/wh_button_small"
             android:layout_marginRight="4dip"

@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/image1"
+                android:importantForAccessibility="no"
         android:layout_width="40dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dip"
@@ -48,6 +49,7 @@
          in the icon column in front of it. -->
     <ImageView
         android:id="@+id/imageEnd"
+                android:importantForAccessibility="no"
         android:layout_width="20dip"
         android:layout_height="20dip"
         android:layout_marginLeft="8dip"

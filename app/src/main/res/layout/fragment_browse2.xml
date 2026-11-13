@@ -83,6 +83,7 @@
 
         <ImageView
             android:id="@+id/starIcon"
+                android:contentDescription="@string/favorites"
             style="@style/buttonTop"
             android:layout_width="@dimen/wh_button"
             android:layout_height="@dimen/wh_button"
@@ -158,6 +159,7 @@
 
             <ImageView
                 android:id="@+id/openAsbookImage"
+                android:contentDescription="@string/open_folder_as_a_book"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_margin="4dip"
@@ -190,6 +192,7 @@
 
             <ImageView
                 android:id="@+id/starIconDir"
+                android:contentDescription="@string/favorites"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
                 android:layout_marginRight="8dip"
