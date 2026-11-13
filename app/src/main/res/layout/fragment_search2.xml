@@ -175,7 +175,7 @@
             android:layout_marginLeft="@dimen/panel_padding"
             android:layout_marginRight="@dimen/panel_padding"
             android:layout_marginBottom="6dip"
-            android:background="@color/omni_surface"
+            android:background="#22FFFFFF"
             android:orientation="horizontal"
             android:padding="8dip"
             android:visibility="gone">
