@@ -91,9 +91,7 @@ check() {
 wait_text() {
   local pattern="$1" limit="${2:-15}" i
   for i in $(seq 1 "$limit"); do
-    adb shell "uiautomator dump /sdcard/qa-wait.xml" >/dev/null 2>&1 || true
-    adb pull /sdcard/qa-wait.xml /tmp/qa-wait.xml >/dev/null 2>&1 || true
-    adb shell rm -f /sdcard/qa-wait.xml >/dev/null 2>&1 || true
+    ui_dump qa-wait.xml || { sleep 2; continue; }
     if python3 - "$pattern" <<'PY'
 import re, sys
 try:
@@ -113,11 +111,24 @@ PY
 
 # tap_text PATTERN — tap the first visible node whose text contains the pattern.
 # Uses uiautomator, so it is slow (2-4s); for one-off navigation, not per-check.
+# ui_dump FILE — one uiautomator dump with retries; the dump intermittently
+# fails on a slow device and every caller used to read a stale or empty file.
+ui_dump() {
+  local file="$1" i
+  for i in 1 2 3; do
+    rm -f /tmp/"$file" 2>/dev/null
+    adb shell "uiautomator dump /sdcard/$file" >/dev/null 2>&1 || true
+    adb pull /sdcard/"$file" /tmp/"$file" >/dev/null 2>&1 || true
+    adb shell rm -f /sdcard/"$file" >/dev/null 2>&1 || true
+    [ -s /tmp/"$file" ] && return 0
+    sleep 2
+  done
+  return 1
+}
+
 tap_text() {
   local pattern="$1" x y
-  adb shell "uiautomator dump /sdcard/qa-tap.xml" >/dev/null 2>&1 || true
-  adb pull /sdcard/qa-tap.xml /tmp/qa-tap.xml >/dev/null 2>&1 || true
-  adb shell rm -f /sdcard/qa-tap.xml >/dev/null 2>&1 || true
+  ui_dump qa-tap.xml || return 1
   x=$(python3 - "$pattern" <<'PY'
 import re, sys
 try:
@@ -127,7 +138,7 @@ except Exception:
 pat = sys.argv[1]
 best = None
 for m in re.finditer(r'<node[^>]*/>', s):
-    t = re.search(r'text="([^"]*)"', m.group(0))
+    t = re.search(r'(?:text|content-desc)="([^"]*)"', m.group(0))
     b = re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', m.group(0))
     if t and pat.lower() in t.group(1).lower() and b:
         x1, y1, x2, y2 = map(int, b.groups())

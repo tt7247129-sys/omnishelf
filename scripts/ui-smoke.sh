@@ -116,4 +116,11 @@ esac
 adb shell input keyevent 4; sleep 2
 scan_crash "folder tab"
 
+# The bookmark flow (long-press a word, unfold, add, confirm) is verified manually
+# in docs/VERIFICATION.md but is too timing-sensitive for this emulator: the
+# selection panel, a confirm dialog and the bookmarks tab each need a beat the
+# slow device cannot guarantee, and a Google permission prompt hijacks taps.
+# It stays out of the gate on purpose; see the notes there.
+
+
 summary
