@@ -39,6 +39,20 @@
                 android:cropToPadding="true"
                 android:padding="0dip" />
 
+            <!-- Pinned to the top of the shelf: the mark says why this book leads. -->
+            <ImageView
+                android:id="@+id/pinBadge"
+                android:contentDescription="Pinned"
+                android:layout_width="18dip"
+                android:layout_height="18dip"
+                android:layout_gravity="top|start"
+                android:layout_margin="5dip"
+                android:background="@drawable/bg_progress_badge"
+                android:padding="3dip"
+                android:src="@drawable/glyphicons_415_push_pin"
+                android:tint="@color/white"
+                android:visibility="gone" />
+
             <!-- The reading position, on the cover itself: a corner label reads at a glance
                  where a line of text under the title does not. -->
             <TextView

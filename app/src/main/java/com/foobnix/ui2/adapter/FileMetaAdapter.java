@@ -759,6 +759,11 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
             holder.idPercentText.setVisibility(View.INVISIBLE);
         }
 
+        View pinBadge = holder.itemView.findViewById(R.id.pinBadge);
+        if (pinBadge != null) {
+            pinBadge.setVisibility(Pinned.isPinned(holder.itemView.getContext(), fileMeta.getPath()) ? View.VISIBLE : View.GONE);
+        }
+
         View coverBadge = holder.itemView.findViewById(R.id.coverProgress);
         if (coverBadge instanceof TextView) {
             if (recentProgress > 0f) {
