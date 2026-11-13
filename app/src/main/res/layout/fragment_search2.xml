@@ -317,6 +317,22 @@
                 android:text="Books in Download, on an SD card or in a synced folder appear here."
                 android:textSize="13sp"
                 tools:ignore="HardcodedText" />
+
+            <!-- The first thing a new reader should be able to do is point at their books. -->
+            <TextView
+                android:id="@+id/emptyAddFolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dip"
+                android:paddingLeft="14dip"
+                android:paddingRight="14dip"
+                android:paddingTop="8dip"
+                android:paddingBottom="8dip"
+                android:background="@drawable/bg_progress_badge"
+                android:text="Add a folder"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </FrameLayout>
 

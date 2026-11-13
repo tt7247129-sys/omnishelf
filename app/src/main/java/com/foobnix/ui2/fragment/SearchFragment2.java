@@ -478,6 +478,14 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
             }
         });
 
+        // The empty shelf points the way to the books: the same folders panel the
+        // library header opens.
+        view.findViewById(R.id.emptyAddFolder).setOnClickListener(v -> {
+            if (getActivity() instanceof MainTabs2) {
+                ((MainTabs2) getActivity()).showLibraryFolders();
+            }
+        });
+
         sortBy.setOnClickListener(new OnClickListener() {
 
             @Override public void onClick(View v) {

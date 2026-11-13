@@ -42,3 +42,4 @@ google-services.*
 keystore.properties
 __pycache__/
 out/
+app/src/main/jniLibs/
