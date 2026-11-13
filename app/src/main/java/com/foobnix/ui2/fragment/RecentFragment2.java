@@ -34,6 +34,8 @@ import com.foobnix.ui2.adapter.FileMetaAdapter;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Calendar;
+import java.util.ArrayList;
 
 public class RecentFragment2 extends UIFragment<FileMeta> {
     public static final Pair<Integer, Integer> PAIR = new Pair<Integer, Integer>(R.string.recent, R.drawable.glyphicons_422_book_library);
@@ -138,7 +140,7 @@ public class RecentFragment2 extends UIFragment<FileMeta> {
     public void populateDataInUI(List<FileMeta> items) {
         if (recentAdapter != null) {
             recentAdapter.getItemsList().clear();
-            recentAdapter.getItemsList().addAll(items);
+            recentAdapter.getItemsList().addAll(groupedByDay(items));
             recentAdapter.notifyDataSetChanged();
         }
         View empty = getView() == null ? null : getView().findViewById(R.id.recentEmpty);
@@ -221,6 +223,44 @@ public class RecentFragment2 extends UIFragment<FileMeta> {
         LOG.d("RecentFragment2","resetFragment");
         onGridList();
         populate();
+    }
+
+
+    /**
+     * The history reads like a diary: today on top, then each day under its own date.
+     * Headers reuse the library's divider rows; the labels come from system-localised
+     * strings and date formatting, so no new translations are needed.
+     */
+    private List<FileMeta> groupedByDay(List<FileMeta> items) {
+        List<FileMeta> grouped = new ArrayList<>();
+        if (items == null || items.isEmpty()) {
+            return grouped;
+        }
+        Calendar now = Calendar.getInstance();
+        int todayYear = now.get(Calendar.YEAR);
+        int todayDay = now.get(Calendar.DAY_OF_YEAR);
+        java.text.DateFormat fmt = android.text.format.DateFormat.getMediumDateFormat(getContext());
+        Long lastKey = null;
+        for (FileMeta meta : items) {
+            Long t = meta == null ? null : meta.getIsRecentTime();
+            long millis = t == null ? System.currentTimeMillis() : t;
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(millis);
+            int day = c.get(Calendar.DAY_OF_YEAR);
+            int year = c.get(Calendar.YEAR);
+            long key = year * 366L + day;
+            if (lastKey == null || lastKey != key) {
+                FileMeta header = new FileMeta();
+                header.setCusType(FileMetaAdapter.DISPALY_TYPE_LAYOUT_TITLE_DIVIDER);
+                header.setTitle(year == todayYear && day == todayDay
+                        ? getString(R.string.today)
+                        : fmt.format(c.getTime()));
+                grouped.add(header);
+                lastKey = key;
+            }
+            grouped.add(meta);
+        }
+        return grouped;
     }
 
 }
