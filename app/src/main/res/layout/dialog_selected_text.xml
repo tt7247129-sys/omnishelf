@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Capped: the panel used to grow with its contents and cover most of the page,
+     which made every highlight feel like leaving the book. Everything is still
+     reachable, it just scrolls. -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="300dip"
     android:orientation="vertical">
 
     <LinearLayout
