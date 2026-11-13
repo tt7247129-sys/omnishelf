@@ -138,8 +138,8 @@ android {
             applicationId = "com.foobnix.pro.pdf.reader"
             manifestPlaceholders = [
                     appName      : "Librera FD",
-                    appIcon      : "@mipmap/icon_pdf_pro",
-                    appRoundIcon : "@mipmap/icon_pdf_pro",
+                    appIcon      : "@mipmap/ic_omnishelf",
+                    appRoundIcon : "@mipmap/ic_omnishelf",
                     appWebClientId: "",
                     appGdriveKey : "",
                     admobAppId   : "",
@@ -168,8 +168,8 @@ android {
             applicationId = "com.foobnix.pro.pdf.reader"
             manifestPlaceholders = [
                     appName      : "Librera FD-JS",
-                    appIcon      : "@mipmap/icon_pdf_pro",
-                    appRoundIcon : "@mipmap/icon_pdf_pro",
+                    appIcon      : "@mipmap/ic_omnishelf",
+                    appRoundIcon : "@mipmap/ic_omnishelf",
                     appWebClientId: "",
                     appGdriveKey : "",
                     admobAppId   : "",
@@ -185,8 +185,8 @@ android {
             applicationId = "com.foobnix.pro.pdf.reader"
             manifestPlaceholders = [
                     appName      : "Librera PRO-JS",
-                    appIcon      : "@mipmap/icon_pdf_pro",
-                    appRoundIcon : "@mipmap/icon_pdf_pro",
+                    appIcon      : "@mipmap/ic_omnishelf",
+                    appRoundIcon : "@mipmap/ic_omnishelf",
                     appWebClientId: project.findProperty("appWebClientId") ?: "",
                     appGdriveKey : "",
                     admobAppId   : "",
@@ -219,8 +219,8 @@ android {
             applicationId 'cc.omnishelf.reader'
             manifestPlaceholders = [
                     appName      : "OmniShelf",
-                    appIcon      : "@mipmap/icon_pdf_pro",
-                    appRoundIcon : "@mipmap/icon_pdf_pro",
+                    appIcon      : "@mipmap/ic_omnishelf",
+                    appRoundIcon : "@mipmap/ic_omnishelf",
                     appWebClientId: project.findProperty("appWebClientId") ?: "",
                     appGdriveKey : "",
                     admobAppId   : "",
