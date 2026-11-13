@@ -566,9 +566,10 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) public void showResult(MessageSyncFinish event) {
-        layoutError.setVisibility(AppDB.get()
-                                       .getCount() == 0 ? View.VISIBLE : View.GONE);
-
+        // An empty library is normal now, and the empty state explains itself: the
+        // "search was not complete" banner used to appear every time a scan came back
+        // with zero books, accusing a reader with no books of having broken folders.
+        layoutError.setVisibility(View.GONE);
     }
 
     public void showAutoCompleteDialog() {
