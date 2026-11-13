@@ -2866,6 +2866,8 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
         BookCSS.get().setFontSize(false, size);
         SettingsManager.getBookSettings().updateFromAppState();
         SharedBooks.save(SettingsManager.getBookSettings());
+        // The bare number says what just happened; the reader already knows the word for it.
+        Toast.makeText(this, String.valueOf(size), Toast.LENGTH_SHORT).show();
         nullAdapter();
         dc.restartActivity();
         dc.cleanImageMatrix();
