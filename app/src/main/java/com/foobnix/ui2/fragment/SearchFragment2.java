@@ -60,6 +60,7 @@ import com.foobnix.model.AppData;
 import com.foobnix.model.Pinned;
 import com.foobnix.pdf.info.Android6;
 import com.foobnix.pdf.info.AppsConfig;
+import com.foobnix.pdf.info.Clouds;
 import com.foobnix.pdf.info.ExtUtils;
 import com.foobnix.pdf.info.model.BookCSS;
 import com.foobnix.pdf.info.IMG;
@@ -1270,6 +1271,13 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         }
         final FileMeta book = recent.get(0);
         if (book == null || book.getPath() == null) {
+            card.setVisibility(View.GONE);
+            return;
+        }
+        // The recent list can outlive the file (deleted elsewhere): offering a book
+        // that no longer opens would turn the first tap of the day into an error.
+        if (!ExtUtils.isExteralSD(book.getPath()) && !Clouds.isCloud(book.getPath())
+                && !new File(book.getPath()).exists()) {
             card.setVisibility(View.GONE);
             return;
         }

@@ -410,6 +410,10 @@ public class BookmarksFragment2 extends UIFragment<AppBookmark> {
         }
 
         bookmarksAdapter.getItemsList().clear();
+        View empty = getView() == null ? null : getView().findViewById(R.id.bookmarksEmpty);
+        if (empty != null) {
+            empty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+        }
         if (items != null) {
             bookmarksAdapter.getItemsList().addAll(items);
         }
