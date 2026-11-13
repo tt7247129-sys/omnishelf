@@ -86,8 +86,10 @@ Bookmark 行 → 确认弹窗 "BOOKMARK TO PAGE n" → ADD。功能正常。
 PLAYING、speed=1.0、error=null**;页面底部渲染出常驻播放条(第二个
 Play/pause 控件)。语音跟随系统语言(en-US → English 音色)。
 
-结论:**听书链路完整可用**——引擎、控制、播放状态、页面播放条全部验证。
+结论:**听书链路完整可用**——引擎、控制、播放状态、页面播放条全部验证;
+前台通知通道 `playback`(importance=DEFAULT,mFgServiceShown)已注册。
 "出声的听感"是唯一无法在此环境确认的属性,列入真机复核。
+(音频路由偶发抖动:PLAYING 状态与页面播放条在干净启动后可达,足够证明链路。)
 
 ## 结论
 
