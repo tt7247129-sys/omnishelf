@@ -147,6 +147,7 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
     DrawView drawView;
     ImageView editTop2;
     UnderlineImageView onCrop, onBC;
+    Toast fontSizeToast;
     ImageView moveCenter, lockModelImage, linkHistory, onModeChange, outline, onMove, textToSpeach, onPageFlip1,
             anchorX, anchorY, pagesBookmark;
     HorizontalModeController dc;
@@ -2867,7 +2868,12 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
         SettingsManager.getBookSettings().updateFromAppState();
         SharedBooks.save(SettingsManager.getBookSettings());
         // The bare number says what just happened; the reader already knows the word for it.
-        Toast.makeText(this, String.valueOf(size), Toast.LENGTH_SHORT).show();
+        // One reused toast, so rapid taps update it instead of queueing up.
+        if (fontSizeToast != null) {
+            fontSizeToast.cancel();
+        }
+        fontSizeToast = Toast.makeText(this, String.valueOf(size), Toast.LENGTH_SHORT);
+        fontSizeToast.show();
         nullAdapter();
         dc.restartActivity();
         dc.cleanImageMatrix();

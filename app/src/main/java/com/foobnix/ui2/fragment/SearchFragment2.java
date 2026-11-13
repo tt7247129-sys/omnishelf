@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -1312,6 +1313,13 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         Float percent = book.getIsRecentProgress();
         int pct = percent == null ? 0 : Math.round(percent * 100);
         progress.setText(pct > 0 ? pct + "%" : "");
+        View bar = card.findViewById(R.id.continueBar);
+        if (bar != null) {
+            bar.setVisibility(pct > 0 ? View.VISIBLE : View.GONE);
+            if (bar instanceof ProgressBar) {
+                ((ProgressBar) bar).setProgress(pct);
+            }
+        }
 
         if (cover != null) {
             IMG.getCoverPageWithEffect(cover.getContext(), book.getPath(), null).into(cover);

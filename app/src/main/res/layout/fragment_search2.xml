@@ -221,6 +221,19 @@
                     android:layout_marginTop="3dip"
                     android:textColor="@color/tint_gray"
                     android:textSize="12sp" />
+
+                <!-- How far in, drawn where a line of text says it: the same idea as the
+                     badge on the cover, for the book being read. -->
+                <ProgressBar
+                    android:id="@+id/continueBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dip"
+                    android:layout_marginTop="5dip"
+                    android:max="100"
+                    android:progressTint="@color/omni_primary"
+                    android:progressBackgroundTint="@color/tint_gray"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
