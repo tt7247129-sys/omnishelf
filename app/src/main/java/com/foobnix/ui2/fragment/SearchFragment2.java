@@ -940,7 +940,7 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
             searchAdapter.getItemsList()
                          .addAll(items);
             searchAdapter.notifyDataSetChanged();
-            showEmptyState(items.isEmpty());
+            showEmptyState(items.isEmpty(), txt.trim());
             updateContinueCard();
             handler.postDelayed(new Runnable() {
 
@@ -1241,10 +1241,31 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     }
 
     /** The shelf said nothing when it had nothing; it says so once, here. */
-    private void showEmptyState(boolean empty) {
+    private void showEmptyState(boolean empty, String searchText) {
         View emptyView = getView() == null ? null : getView().findViewById(R.id.emptyLibrary);
-        if (emptyView != null) {
-            emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (emptyView == null) {
+            return;
+        }
+        emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+        if (!empty) {
+            return;
+        }
+        // An empty shelf and an empty search are different things: telling a reader with a
+        // full library that there are "no books" when their word just missed would alarm.
+        final boolean searching = !TxtUtils.isEmpty(searchText);
+        TextView title = emptyView.findViewById(R.id.emptyTitle);
+        TextView hint = emptyView.findViewById(R.id.emptyHint);
+        if (title != null) {
+            title.setText(searching ? "No matches" : "No books yet");
+        }
+        if (hint != null) {
+            hint.setText(searching ? "Try another word."
+                    : "Books in Download, on an SD card or in a synced folder appear here.");
+        }
+        // A miss is not the moment to hand out folders.
+        View addFolder = emptyView.findViewById(R.id.emptyAddFolder);
+        if (addFolder != null) {
+            addFolder.setVisibility(searching ? View.GONE : View.VISIBLE);
         }
     }
 

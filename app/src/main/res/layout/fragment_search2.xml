@@ -300,6 +300,7 @@
                 android:tint="@color/omni_primary" />
 
             <TextView
+                android:id="@+id/emptyTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dip"
@@ -309,6 +310,7 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
+                android:id="@+id/emptyHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dip"
