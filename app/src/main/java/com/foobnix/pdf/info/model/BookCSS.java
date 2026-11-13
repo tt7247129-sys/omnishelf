@@ -43,9 +43,9 @@ import java.util.Locale;
 public class BookCSS {
     /// PATHS
 
-    public static final String LIBRERA_CLOUD_DROPBOX = "Librera.Cloud-Dropbox";
-    public static final String LIBRERA_CLOUD_GOOGLEDRIVE = "Librera.Cloud-GoogleDrive";
-    public static final String LIBRERA_CLOUD_ONEDRIVE = "Librera.Cloud-OneDrive";
+    public static final String LIBRERA_CLOUD_DROPBOX = "OmniShelf.Cloud-Dropbox";
+    public static final String LIBRERA_CLOUD_GOOGLEDRIVE = "OmniShelf.Cloud-GoogleDrive";
+    public static final String LIBRERA_CLOUD_ONEDRIVE = "OmniShelf.Cloud-OneDrive";
     public static final String LINK_COLOR_UNIVERSAL = "#0066cc";
     public static final int TEXT_ALIGN_JUSTIFY = 0;
     public static final int TEXT_ALIGN_LEFT = 1;
@@ -85,7 +85,7 @@ public class BookCSS {
     public String downlodsPath;
 
     ///
-    public String ttsSpeakPath = new File(AppProfile.DOWNLOADS_DIR, "Librera/TTS").getPath();
+    public String ttsSpeakPath = new File(AppProfile.DOWNLOADS_DIR, "OmniShelf/TTS").getPath();
     public String backupPath = new File(AppProfile.DOWNLOADS_DIR, "Librera/Backup").getPath();
 
     public String syncDropboxPath = new File(AppProfile.DOWNLOADS_DIR, "OmniShelf/" + LIBRERA_CLOUD_DROPBOX).getPath();

@@ -98,7 +98,7 @@ public class Clouds {
     }
 
     public static boolean isCloudImage(String path) {
-        return path.contains("Librera.Cloud");
+        return path.contains("OmniShelf.Cloud") || path.contains("Librera.Cloud");
     }
 
     public static void runSync(Activity a) {
