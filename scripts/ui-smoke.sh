@@ -83,18 +83,24 @@ sleep 3
 tap_ratio 50 91          # Folder tab, second from the left in this tab order
 sleep 4
 shot 09-folder-tab
-# The folder tab opens wherever it was last, and on a slow device it may still
-# be loading: wait for its rows, go home through the "0" crumb, into Download by
-# name, then open the first book file.
-wait_text "emulated" || wait_text "Download" || true
-tap_ratio 25 7
-sleep 2
-tap_text "Download" || true
-wait_text ".epub" || wait_text ".pdf" || true
+# The folder tab opens wherever it was last; after a profile reset that is
+# already Download. Only when no book files are visible does the step enter
+# Download by name - tapping its breadcrumb instead would open the path picker.
+if ! wait_text ".epub" 8 && ! wait_text ".pdf" 8; then
+  tap_ratio 25 7
+  sleep 2
+  for _ in 1 2 3; do
+    tap_text "Download" || true
+    sleep 3
+    if wait_text ".epub" 5 || wait_text ".pdf" 5; then
+      break
+    fi
+  done
+fi
 top=""
 for _ in 1 2 3; do
   tap_ratio 50 34
-  if wait_activity "HorizontalViewActivity" 12; then
+  if wait_activity "HorizontalViewActivity" 20; then
     top=$(top_activity)
     break
   fi
