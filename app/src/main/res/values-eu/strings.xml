@@ -245,7 +245,7 @@
    <string name="storage">Biltegia</string>
    <string name="add_all_books_with_permission">Mesedez, utzi aplikazioari Deskargak karpeta arakatzen, liburuak zure liburutegira automatikoki gehitzeko.</string>
    <string name="allow_access_to_see_files">Baimendu fitxategi guztietarako sarbidea karpeta honetako liburuak ikusteko. Hori gabe, bere karpetak soilik erakusten dira.</string>
-   <string name="save_settings_in_librera_folder">Gorde ezarpenak eta irakurketaren aurrerapena OmniShelf karpetan.</string>
+   <string name="save_settings_in_omnishelf_folder">Gorde ezarpenak eta irakurketaren aurrerapena OmniShelf karpetan.</string>
    <string name="regrant_folder_title">Baimendu berriro karpetarako sarbidea</string>
    <string name="regrant_folder_msg">Aplikazioak ezin du jada %1$s irakurri: Androidek karpetetarako sarbidea kentzen du aplikazioa berriro instalatzean. Aukeratu karpeta berriro hurrengo pantailan.</string>
    <string name="remind_msg">Hartu arnasa eta eman atsedena begiei.</string>

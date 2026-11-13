@@ -247,7 +247,7 @@
    <string name="storage">నిల్వ</string>
    <string name="add_all_books_with_permission">మీ డౌన్లోడ్ల ఫోల్డర్ను స్కాన్ చేసి పుస్తకాలను లైబ్రరీకి స్వయంచాలకంగా జోడించడానికి యాప్ను అనుమతించండి.</string>
    <string name="allow_access_to_see_files">ఈ ఫోల్డర్లోని పుస్తకాలను చూడటానికి అన్ని ఫైల్లకు యాక్సెస్ను అనుమతించండి. లేకపోతే ఫోల్డర్లు మాత్రమే కనిపిస్తాయి.</string>
-   <string name="save_settings_in_librera_folder">సెట్టింగ్లు, పఠన పురోగతిని OmniShelf ఫోల్డర్లో ఉంచండి.</string>
+   <string name="save_settings_in_omnishelf_folder">సెట్టింగ్లు, పఠన పురోగతిని OmniShelf ఫోల్డర్లో ఉంచండి.</string>
    <string name="regrant_folder_title">ఫోల్డర్కు మళ్లీ యాక్సెస్ ఇవ్వండి</string>
    <string name="regrant_folder_msg">యాప్ ఇకపై %1$sను చదవలేదు: మీరు అప్పగించిన ఫోల్డర్లను యాప్ మళ్లీ ఇన్స్టాల్ చేసినప్పుడు Android మర్చిపోతుంది. తదుపరి స్క్రీన్లో ఫోల్డర్ను మళ్లీ ఎంచుకోండి.</string>
    <string name="remind_msg">విరామం తీసుకునే సమయం!</string>

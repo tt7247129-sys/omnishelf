@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dip"
-            android:text="@string/save_settings_in_librera_folder"
+            android:text="@string/save_settings_in_omnishelf_folder"
             android:textColor="@color/white" />
 
         <TextView

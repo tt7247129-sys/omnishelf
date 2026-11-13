@@ -245,7 +245,7 @@
    <string name="storage">Archiviatzione</string>
    <string name="add_all_books_with_permission">Pro praghere, permite a s\'aplicatzione de esaminare sa cartella de is Iscarrigamentos pro annànghere sos libros a sa biblioteca tua in manera automàtica.</string>
    <string name="allow_access_to_see_files">Permite s\'atzessu a totu sos archìvios pro bìdere sos libros de custa cartella. Sena, si mustrant isceti sas cartellas suas.</string>
-   <string name="save_settings_in_librera_folder">Sarva sas impostatziones e su progressu de letura in sa cartella OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Sarva sas impostatziones e su progressu de letura in sa cartella OmniShelf.</string>
    <string name="regrant_folder_title">Permite torra s\'atzessu a sa cartella</string>
    <string name="regrant_folder_msg">S\'aplicatzione no podet prus lèghere %1$s: Android bogat s\'atzessu a sas cartellas cando s\'aplicatzione benit torrada a installare. Torra a seberare sa cartella in s\'ischermu imbeniente.</string>
    <string name="remind_msg">Tempus de ti pasare!</string>

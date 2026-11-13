@@ -245,7 +245,7 @@
    <string name="storage">Жад</string>
    <string name="add_all_books_with_permission">Кітаптарды кітапханаңызға автоматты түрде қосу үшін қолданбаға «Жүктеулер» қалтасын қарап шығуға рұқсат беріңіз.</string>
    <string name="allow_access_to_see_files">Осы қалтадағы кітаптарды көру үшін барлық файлдарға қол жеткізуге рұқсат беріңіз. Онсыз тек оның қалталары көрсетіледі.</string>
-   <string name="save_settings_in_librera_folder">Баптаулар мен оқу барысын OmniShelf қалтасында сақтау.</string>
+   <string name="save_settings_in_omnishelf_folder">Баптаулар мен оқу барысын OmniShelf қалтасында сақтау.</string>
    <string name="regrant_folder_title">Қалтаға қолжетімділікке қайта рұқсат беру</string>
    <string name="regrant_folder_msg">Қолданба енді %1$s оқи алмайды: қолданба қайта орнатылғанда Android қалталарға қолжетімділікті жояды. Келесі экранда қалтаны қайта таңдаңыз.</string>
    <string name="remind_msg">Үзіліс жасау уақыты!</string>

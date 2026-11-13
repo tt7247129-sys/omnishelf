@@ -247,7 +247,7 @@
    <string name="storage">သိုလှောင်မှု</string>
    <string name="add_all_books_with_permission">စာအုပ်များကိုစာကြည့်တိုက်သို့အလိုအလျောက်ထည့်ရန်ဒေါင်းလုဒ်ဖိုင်တွဲကိုစစ်ဆေးခွင့်ပြုပါ။</string>
    <string name="allow_access_to_see_files">ဤဖိုင်တွဲရှိစာအုပ်များမြင်ရန်ဖိုင်အားလုံးဝင်ရောက်ခွင့်ပေးပါ။ မရှိပါကဖိုင်တွဲများသာပြပါမည်။</string>
-   <string name="save_settings_in_librera_folder">ဆက်တင်များနှင့်စာဖတ်တိုးတက်မှုကို OmniShelf ဖိုင်တွဲတွင်သိမ်းပါ။</string>
+   <string name="save_settings_in_omnishelf_folder">ဆက်တင်များနှင့်စာဖတ်တိုးတက်မှုကို OmniShelf ဖိုင်တွဲတွင်သိမ်းပါ။</string>
    <string name="regrant_folder_title">ဖိုင်တွဲသို့ဝင်ရောက်ခွင့်ပြန်ပေးပါ</string>
    <string name="regrant_folder_msg">အက်ပ်သည် %1$s ကိုမဖတ်နိုင်တော့ပါ - အက်ပ်ပြန်တပ်ဆင်သောအခါ Android သည်ပေးထားသောဖိုင်တွဲများကိုမေ့သွားပါသည်။ နောက်စခရင်တွင်ဖိုင်တွဲကိုပြန်ရွေးပါ။</string>
    <string name="remind_msg">အနားယူချိန်ရောက်ပြီ။</string>

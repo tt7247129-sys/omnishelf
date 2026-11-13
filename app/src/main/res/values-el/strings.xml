@@ -245,7 +245,7 @@
    <string name="storage">Αποθηκευτικός χώρος</string>
    <string name="add_all_books_with_permission">Επιτρέψτε στην εφαρμογή να σαρώνει τον φάκελο Λήψεις, ώστε να προσθέτει αυτόματα βιβλία στη βιβλιοθήκη σας.</string>
    <string name="allow_access_to_see_files">Επιτρέψτε την πρόσβαση σε όλα τα αρχεία για να δείτε τα βιβλία σε αυτόν τον φάκελο. Χωρίς αυτήν εμφανίζονται μόνο οι φάκελοί του.</string>
-   <string name="save_settings_in_librera_folder">Αποθήκευση ρυθμίσεων και προόδου ανάγνωσης στον φάκελο OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Αποθήκευση ρυθμίσεων και προόδου ανάγνωσης στον φάκελο OmniShelf.</string>
    <string name="regrant_folder_title">Επιτρέψτε ξανά την πρόσβαση στον φάκελο</string>
    <string name="regrant_folder_msg">Η εφαρμογή δεν μπορεί πλέον να διαβάσει το %1$s: το Android καταργεί την πρόσβαση στους φακέλους όταν η εφαρμογή εγκαθίσταται ξανά. Επιλέξτε ξανά τον φάκελο στην επόμενη οθόνη.</string>
    <string name="remind_msg">Ώρα για ένα διάλειμμα!</string>

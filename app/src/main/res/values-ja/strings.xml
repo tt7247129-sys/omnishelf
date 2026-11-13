@@ -245,7 +245,7 @@
    <string name="storage">ストレージ</string>
    <string name="add_all_books_with_permission">本を自動的にライブラリに追加するため、アプリにダウンロードフォルダのスキャンを許可してください。</string>
    <string name="allow_access_to_see_files">このフォルダの本を表示するには、すべてのファイルへのアクセスを許可してください。許可がないとフォルダのみが表示されます。</string>
-   <string name="save_settings_in_librera_folder">設定と読書の進捗を OmniShelf フォルダに保存します。</string>
+   <string name="save_settings_in_omnishelf_folder">設定と読書の進捗を OmniShelf フォルダに保存します。</string>
    <string name="regrant_folder_title">フォルダへのアクセスを再度許可</string>
    <string name="regrant_folder_msg">アプリは %1$s を読み取れなくなりました。アプリを再インストールすると、Android はフォルダへのアクセス権を削除します。次の画面でもう一度フォルダを選択してください。</string>
    <string name="remind_msg">休憩の時間です！</string>

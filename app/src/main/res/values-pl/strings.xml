@@ -245,7 +245,7 @@
    <string name="storage">Pamięć</string>
    <string name="add_all_books_with_permission">Zezwól aplikacji na przeszukiwanie folderu Pobrane, aby książki były automatycznie dodawane do biblioteki.</string>
    <string name="allow_access_to_see_files">Zezwól na dostęp do wszystkich plików, aby zobaczyć książki w tym folderze. Bez tego widoczne są tylko jego foldery.</string>
-   <string name="save_settings_in_librera_folder">Zapisuj ustawienia i postęp czytania w folderze OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Zapisuj ustawienia i postęp czytania w folderze OmniShelf.</string>
    <string name="regrant_folder_title">Ponownie zezwól na dostęp do folderu</string>
    <string name="regrant_folder_msg">Aplikacja nie może już odczytać %1$s: Android usuwa dostęp do folderów po ponownej instalacji aplikacji. Wybierz folder ponownie na następnym ekranie.</string>
    <string name="remind_msg">Czas na przerwę!</string>

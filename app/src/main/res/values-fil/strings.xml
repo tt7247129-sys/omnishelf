@@ -247,7 +247,7 @@
    <string name="storage">Storage</string>
    <string name="add_all_books_with_permission">Mangyaring payagan ang app na i-scan ang iyong Downloads folder para awtomatikong maidagdag ang mga aklat sa iyong library.</string>
    <string name="allow_access_to_see_files">Payagan ang access sa lahat ng file para makita ang mga aklat sa folder na ito. Kung wala ito, mga folder lang nito ang ipapakita.</string>
-   <string name="save_settings_in_librera_folder">Itago ang mga setting at reading progress sa folder na OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Itago ang mga setting at reading progress sa folder na OmniShelf.</string>
    <string name="regrant_folder_title">Payagan muli ang access sa folder</string>
    <string name="regrant_folder_msg">Hindi na mabasa ng app ang %1$s: nakakalimutan ng Android ang mga folder na ibinigay mo kapag na-reinstall ang app. Piliin muli ang folder sa susunod na screen.</string>
    <string name="remind_msg">Oras na para magpahinga!</string>

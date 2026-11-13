@@ -247,7 +247,7 @@
    <string name="storage">भण्डारण</string>
    <string name="add_all_books_with_permission">पुस्तकहरू स्वतः लाइब्रेरीमा थपिन डाउनलोड फोल्डर स्क्यान गर्न एपलाई अनुमति दिनुहोस्।</string>
    <string name="allow_access_to_see_files">यस फोल्डरका पुस्तकहरू हेर्न सबै फाइलहरूमा पहुँच दिनुहोस्। यो नभए भित्रका फोल्डरहरू मात्र देखिन्छन्।</string>
-   <string name="save_settings_in_librera_folder">सेटिङहरू र पढाइको प्रगति OmniShelf फोल्डरमा राख्नुहोस्।</string>
+   <string name="save_settings_in_omnishelf_folder">सेटिङहरू र पढाइको प्रगति OmniShelf फोल्डरमा राख्नुहोस्।</string>
    <string name="regrant_folder_title">फोल्डरमा फेरि पहुँच दिनुहोस्</string>
    <string name="regrant_folder_msg">एपले अब %1$s पढ्न सक्दैन: एप पुनः इन्स्टल गर्दा Android ले तपाईंले दिनुभएका फोल्डरहरू बिर्सन्छ। अर्को स्क्रिनमा फोल्डर फेरि छान्नुहोस्।</string>
    <string name="remind_msg">आराम गर्ने बेला भयो!</string>

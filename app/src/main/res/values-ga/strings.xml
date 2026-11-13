@@ -245,7 +245,7 @@
    <string name="storage">Stóráil</string>
    <string name="add_all_books_with_permission">Lig don aip, le do thoil, d\'fhillteán Íoslódálacha a scanadh chun leabhair a chur le do leabharlann go huathoibríoch.</string>
    <string name="allow_access_to_see_files">Ceadaigh rochtain ar gach comhad chun na leabhair san fhillteán seo a fheiceáil. Gan é, ní thaispeántar ach a chuid fillteán.</string>
-   <string name="save_settings_in_librera_folder">Sábháil socruithe agus dul chun cinn léitheoireachta san fhillteán OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Sábháil socruithe agus dul chun cinn léitheoireachta san fhillteán OmniShelf.</string>
    <string name="regrant_folder_title">Ceadaigh rochtain ar an bhfillteán arís</string>
    <string name="regrant_folder_msg">Ní féidir leis an aip %1$s a léamh a thuilleadh: baineann Android rochtain ar fhillteáin nuair a athshuiteáiltear an aip. Roghnaigh an fillteán arís ar an gcéad scáileán eile.</string>
    <string name="remind_msg">Am chun sos a ghlacadh!</string>

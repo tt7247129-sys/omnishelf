@@ -245,7 +245,7 @@
    <string name="storage">Armazenamento</string>
    <string name="add_all_books_with_permission">Permita que o app examine sua pasta de Downloads para adicionar livros automaticamente à sua biblioteca.</string>
    <string name="allow_access_to_see_files">Permita o acesso a todos os arquivos para ver os livros desta pasta. Sem isso, só as pastas dela são mostradas.</string>
-   <string name="save_settings_in_librera_folder">Salvar as configurações e o progresso de leitura na pasta OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Salvar as configurações e o progresso de leitura na pasta OmniShelf.</string>
    <string name="regrant_folder_title">Permitir novamente o acesso à pasta</string>
    <string name="regrant_folder_msg">O aplicativo não consegue mais ler %1$s: o Android remove o acesso às pastas quando o aplicativo é reinstalado. Escolha a pasta novamente na próxima tela.</string>
    <string name="remind_msg">Por favor, faça uma pausa para que seus olhos podem descansar um pouco.</string>

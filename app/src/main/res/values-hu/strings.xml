@@ -245,7 +245,7 @@
    <string name="storage">Tároló</string>
    <string name="add_all_books_with_permission">Kérjük, engedélyezze, hogy az alkalmazás átvizsgálja a Letöltések mappát, és automatikusan hozzáadja a könyveket a könyvtárához.</string>
    <string name="allow_access_to_see_files">Engedélyezze a hozzáférést az összes fájlhoz, hogy lássa a mappában lévő könyveket. Enélkül csak a mappái látszanak.</string>
-   <string name="save_settings_in_librera_folder">Beállítások és olvasási előrehaladás mentése a OmniShelf mappába.</string>
+   <string name="save_settings_in_omnishelf_folder">Beállítások és olvasási előrehaladás mentése a OmniShelf mappába.</string>
    <string name="regrant_folder_title">Mappa-hozzáférés ismételt engedélyezése</string>
    <string name="regrant_folder_msg">Az alkalmazás már nem tudja olvasni ezt: %1$s. Az Android az alkalmazás újratelepítésekor visszavonja a mappák elérését. A következő képernyőn válassza ki újra a mappát.</string>
    <string name="remind_msg">Ideje szünetet tartani!</string>

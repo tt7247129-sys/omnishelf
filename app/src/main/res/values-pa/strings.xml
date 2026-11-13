@@ -247,7 +247,7 @@
    <string name="storage">ਸਟੋਰੇਜ</string>
    <string name="add_all_books_with_permission">ਆਪਣੀ ਲਾਇਬ੍ਰੇਰੀ ਵਿੱਚ ਕਿਤਾਬਾਂ ਆਪਣੇ ਆਪ ਸ਼ਾਮਲ ਕਰਨ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਐਪ ਨੂੰ ਆਪਣਾ ਡਾਊਨਲੋਡ ਫੋਲਡਰ ਸਕੈਨ ਕਰਨ ਦਿਓ।</string>
    <string name="allow_access_to_see_files">ਇਸ ਫੋਲਡਰ ਦੀਆਂ ਕਿਤਾਬਾਂ ਦੇਖਣ ਲਈ ਸਾਰੀਆਂ ਫਾਈਲਾਂ ਤੱਕ ਪਹੁੰਚ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ। ਬਿਨਾਂ ਇਜਾਜ਼ਤ ਸਿਰਫ਼ ਇਸ ਦੇ ਫੋਲਡਰ ਦਿਖਾਏ ਜਾਂਦੇ ਹਨ।</string>
-   <string name="save_settings_in_librera_folder">ਸੈਟਿੰਗਾਂ ਅਤੇ ਰੀਡਿੰਗ ਪ੍ਰੋਗਰੈਸ OmniShelf ਫੋਲਡਰ ਵਿੱਚ ਰੱਖੋ।</string>
+   <string name="save_settings_in_omnishelf_folder">ਸੈਟਿੰਗਾਂ ਅਤੇ ਰੀਡਿੰਗ ਪ੍ਰੋਗਰੈਸ OmniShelf ਫੋਲਡਰ ਵਿੱਚ ਰੱਖੋ।</string>
    <string name="regrant_folder_title">ਫੋਲਡਰ ਤੱਕ ਪਹੁੰਚ ਦੁਬਾਰਾ ਦਿਓ</string>
    <string name="regrant_folder_msg">ਐਪ ਹੁਣ %1$s ਨਹੀਂ ਪੜ੍ਹ ਸਕਦੀ: ਐਪ ਦੁਬਾਰਾ ਇੰਸਟਾਲ ਹੋਣ ਉੱਤੇ Android ਤੁਹਾਡੇ ਦਿੱਤੇ ਫੋਲਡਰ ਭੁੱਲ ਜਾਂਦਾ ਹੈ। ਅਗਲੀ ਸਕ੍ਰੀਨ ਉੱਤੇ ਫੋਲਡਰ ਦੁਬਾਰਾ ਚੁਣੋ।</string>
    <string name="remind_msg">ਬਰੇਕ ਲੈਣ ਦਾ ਸਮਾਂ ਹੋ ਗਿਆ ਹੈ!</string>

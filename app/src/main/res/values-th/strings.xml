@@ -245,7 +245,7 @@
    <string name="storage">ที่เก็บข้อมูล</string>
    <string name="add_all_books_with_permission">โปรดอนุญาตให้แอปสแกนโฟลเดอร์ดาวน์โหลดของคุณ เพื่อเพิ่มหนังสือลงในคลังของคุณโดยอัตโนมัติ</string>
    <string name="allow_access_to_see_files">อนุญาตให้เข้าถึงไฟล์ทั้งหมดเพื่อดูหนังสือในโฟลเดอร์นี้ หากไม่อนุญาต จะแสดงเฉพาะโฟลเดอร์ย่อย</string>
-   <string name="save_settings_in_librera_folder">บันทึกการตั้งค่าและความคืบหน้าการอ่านไว้ในโฟลเดอร์ OmniShelf</string>
+   <string name="save_settings_in_omnishelf_folder">บันทึกการตั้งค่าและความคืบหน้าการอ่านไว้ในโฟลเดอร์ OmniShelf</string>
    <string name="regrant_folder_title">อนุญาตให้เข้าถึงโฟลเดอร์อีกครั้ง</string>
    <string name="regrant_folder_msg">แอปอ่าน %1$s ไม่ได้อีกต่อไป: Android จะยกเลิกสิทธิ์เข้าถึงโฟลเดอร์เมื่อติดตั้งแอปใหม่ เลือกโฟลเดอร์อีกครั้งในหน้าจอถัดไป</string>
    <string name="remind_msg">กรุณาพักสายตาและพักสักหน่อย</string>

@@ -245,7 +245,7 @@
    <string name="storage">Almacenamiento</string>
    <string name="add_all_books_with_permission">Permite que la aplicación examine tu carpeta de Descargas para añadir libros automáticamente a tu biblioteca, por favor.</string>
    <string name="allow_access_to_see_files">Permite el acceso a todos los archivos para ver los libros de esta carpeta. Sin él solo se muestran sus carpetas.</string>
-   <string name="save_settings_in_librera_folder">Guardar la configuración y el progreso de lectura en la carpeta OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Guardar la configuración y el progreso de lectura en la carpeta OmniShelf.</string>
    <string name="regrant_folder_title">Permitir de nuevo el acceso a la carpeta</string>
    <string name="regrant_folder_msg">La aplicación ya no puede leer %1$s: Android retira el acceso a las carpetas al reinstalar la aplicación. Vuelve a elegir la carpeta en la siguiente pantalla.</string>
    <string name="remind_msg">Por favor tómese un respiro y descanse sus ojos.</string>

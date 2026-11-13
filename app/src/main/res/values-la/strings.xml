@@ -245,7 +245,7 @@
    <string name="storage">Repositorium</string>
    <string name="add_all_books_with_permission">Quaeso, sine applicationem scrutari tabellarium Depromptorum, ut libri in bibliothecam tuam sponte addantur.</string>
    <string name="allow_access_to_see_files">Permitte aditum ad omnia documenta ut libros in hoc scrinio videas. Sine eo sola eius scrinia ostenduntur.</string>
-   <string name="save_settings_in_librera_folder">Optiones et progressum legendi in folliculo OmniShelf serva.</string>
+   <string name="save_settings_in_omnishelf_folder">Optiones et progressum legendi in folliculo OmniShelf serva.</string>
    <string name="regrant_folder_title">Accessum ad folliculum iterum permitte</string>
    <string name="regrant_folder_msg">Applicatio %1$s iam legere non potest: Android accessum ad folliculos removet cum applicatio iterum instituitur. Folliculum iterum in proximo scrinio elige.</string>
    <string name="remind_msg">Persequi otium</string>

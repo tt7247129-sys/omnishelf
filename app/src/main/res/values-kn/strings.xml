@@ -247,7 +247,7 @@
    <string name="storage">ಸಂಗ್ರಹಣೆ</string>
    <string name="add_all_books_with_permission">ಪುಸ್ತಕಗಳನ್ನು ಲೈಬ್ರರಿಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸೇರಿಸಲು ಆಪ್ ನಿಮ್ಮ ಡೌನ್ಲೋಡ್ಗಳ ಫೋಲ್ಡರ್ ಸ್ಕ್ಯಾನ್ ಮಾಡಲು ಅನುಮತಿಸಿ.</string>
    <string name="allow_access_to_see_files">ಈ ಫೋಲ್ಡರ್ನ ಪುಸ್ತಕಗಳನ್ನು ನೋಡಲು ಎಲ್ಲಾ ಫೈಲ್ಗಳಿಗೆ ಪ್ರವೇಶ ಅನುಮತಿಸಿ. ಇಲ್ಲದಿದ್ದರೆ ಅದರ ಫೋಲ್ಡರ್ಗಳು ಮಾತ್ರ ಕಾಣುತ್ತವೆ.</string>
-   <string name="save_settings_in_librera_folder">ಸೆಟ್ಟಿಂಗ್ಗಳು ಮತ್ತು ಓದುವ ಪ್ರಗತಿಯನ್ನು OmniShelf ಫೋಲ್ಡರ್ನಲ್ಲಿ ಇರಿಸಿ.</string>
+   <string name="save_settings_in_omnishelf_folder">ಸೆಟ್ಟಿಂಗ್ಗಳು ಮತ್ತು ಓದುವ ಪ್ರಗತಿಯನ್ನು OmniShelf ಫೋಲ್ಡರ್ನಲ್ಲಿ ಇರಿಸಿ.</string>
    <string name="regrant_folder_title">ಫೋಲ್ಡರ್ಗೆ ಮತ್ತೆ ಪ್ರವೇಶ ಅನುಮತಿಸಿ</string>
    <string name="regrant_folder_msg">ಆಪ್ ಈಗ %1$s ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ: ಆಪ್ ಮರು-ಇನ್ಸ್ಟಾಲ್ ಆದಾಗ ನೀವು ನೀಡಿದ ಫೋಲ್ಡರ್ಗಳನ್ನು Android ಮರೆತುಬಿಡುತ್ತದೆ. ಮುಂದಿನ ಸ್ಕ್ರೀನ್ನಲ್ಲಿ ಫೋಲ್ಡರ್ ಅನ್ನು ಮತ್ತೆ ಆಯ್ಕೆಮಾಡಿ.</string>
    <string name="remind_msg">ವಿರಾಮ ತೆಗೆದುಕೊಳ್ಳುವ ಸಮಯ!</string>

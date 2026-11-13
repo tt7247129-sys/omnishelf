@@ -245,7 +245,7 @@
    <string name="storage">Lagring</string>
    <string name="add_all_books_with_permission">La appen skanne Nedlastinger-mappen din, slik at bøker legges til automatisk i biblioteket ditt.</string>
    <string name="allow_access_to_see_files">Tillat tilgang til alle filer for å se bøkene i denne mappen. Uten det vises bare mappene i den.</string>
-   <string name="save_settings_in_librera_folder">Lagre innstillinger og lesefremdrift i OmniShelf-mappen.</string>
+   <string name="save_settings_in_omnishelf_folder">Lagre innstillinger og lesefremdrift i OmniShelf-mappen.</string>
    <string name="regrant_folder_title">Gi tilgang til mappen igjen</string>
    <string name="regrant_folder_msg">Appen kan ikke lenger lese %1$s: Android fjerner mappetilgangen når appen installeres på nytt. Velg mappen igjen på neste skjerm.</string>
    <string name="remind_msg">Vennligst ta en pause for øynene dine og hvile litt.</string>

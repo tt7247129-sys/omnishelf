@@ -247,7 +247,7 @@
    <string name="storage">Xotira</string>
    <string name="add_all_books_with_permission">Kitoblarni kutubxonaga avtomatik qo\'shish uchun ilovaga Yuklab olishlar papkasini skanerlashga ruxsat bering.</string>
    <string name="allow_access_to_see_files">Bu papkadagi kitoblarni ko\'rish uchun barcha fayllarga ruxsat bering. Aks holda faqat papkalar ko\'rsatiladi.</string>
-   <string name="save_settings_in_librera_folder">Sozlamalar va o\'qish jarayonini OmniShelf papkasida saqlash.</string>
+   <string name="save_settings_in_omnishelf_folder">Sozlamalar va o\'qish jarayonini OmniShelf papkasida saqlash.</string>
    <string name="regrant_folder_title">Papkaga qayta ruxsat berish</string>
    <string name="regrant_folder_msg">Ilova endi %1$s ni o\'qiy olmaydi: ilova qayta o\'rnatilganda Android siz bergan papkalarni unutadi. Keyingi ekranda papkani qayta tanlang.</string>
    <string name="remind_msg">Tanaffus vaqti keldi!</string>

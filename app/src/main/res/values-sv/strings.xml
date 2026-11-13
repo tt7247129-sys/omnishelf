@@ -245,7 +245,7 @@
    <string name="storage">Lagring</string>
    <string name="add_all_books_with_permission">Låt appen söka igenom mappen Hämtade filer så att böcker läggs till automatiskt i ditt bibliotek.</string>
    <string name="allow_access_to_see_files">Tillåt åtkomst till alla filer för att se böckerna i den här mappen. Utan den visas bara dess mappar.</string>
-   <string name="save_settings_in_librera_folder">Spara inställningar och läsframsteg i mappen OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Spara inställningar och läsframsteg i mappen OmniShelf.</string>
    <string name="regrant_folder_title">Tillåt åtkomst till mappen igen</string>
    <string name="regrant_folder_msg">Appen kan inte längre läsa %1$s: Android tar bort mappåtkomsten när appen installeras om. Välj mappen igen på nästa skärm.</string>
    <string name="remind_msg">Ta en paus för dina ögon och vila lite.</string>

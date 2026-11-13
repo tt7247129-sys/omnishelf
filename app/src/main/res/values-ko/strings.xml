@@ -245,7 +245,7 @@
    <string name="storage">저장소</string>
    <string name="add_all_books_with_permission">책을 라이브러리에 자동으로 추가할 수 있도록 앱이 다운로드 폴더를 검색하도록 허용해 주세요.</string>
    <string name="allow_access_to_see_files">이 폴더의 책을 보려면 모든 파일에 대한 액세스를 허용하세요. 허용하지 않으면 폴더만 표시됩니다.</string>
-   <string name="save_settings_in_librera_folder">설정과 읽기 진행 상황을 OmniShelf 폴더에 저장합니다.</string>
+   <string name="save_settings_in_omnishelf_folder">설정과 읽기 진행 상황을 OmniShelf 폴더에 저장합니다.</string>
    <string name="regrant_folder_title">폴더 접근 다시 허용</string>
    <string name="regrant_folder_msg">앱이 더 이상 %1$s을(를) 읽을 수 없습니다. 앱을 다시 설치하면 Android가 폴더 접근 권한을 제거합니다. 다음 화면에서 폴더를 다시 선택하세요.</string>
    <string name="remind_msg">휴식시간입니다.</string>

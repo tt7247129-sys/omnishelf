@@ -247,7 +247,7 @@
    <string name="storage">স্টোরেজ</string>
    <string name="add_all_books_with_permission">লাইব্রেরিতে স্বয়ংক্রিয়ভাবে বই যোগ করতে অনুগ্রহ করে অ্যাপটিকে আপনার ডাউনলোড ফোল্ডার স্ক্যান করতে দিন।</string>
    <string name="allow_access_to_see_files">এই ফোল্ডারের বই দেখতে সব ফাইলে প্রবেশের অনুমতি দিন। এটি ছাড়া শুধু ফোল্ডারগুলো দেখানো হবে।</string>
-   <string name="save_settings_in_librera_folder">OmniShelf ফোল্ডারে সেটিংস ও পড়ার অগ্রগতি রাখুন।</string>
+   <string name="save_settings_in_omnishelf_folder">OmniShelf ফোল্ডারে সেটিংস ও পড়ার অগ্রগতি রাখুন।</string>
    <string name="regrant_folder_title">ফোল্ডারে আবার প্রবেশের অনুমতি দিন</string>
    <string name="regrant_folder_msg">অ্যাপটি আর %1$s পড়তে পারছে না: অ্যাপ পুনরায় ইনস্টল করলে Android-কে দেওয়া ফোল্ডারগুলো ভুলে যায়। পরের স্ক্রিনে আবার ফোল্ডারটি বেছে নিন।</string>
    <string name="remind_msg">বিরতি নেওয়ার সময়!</string>

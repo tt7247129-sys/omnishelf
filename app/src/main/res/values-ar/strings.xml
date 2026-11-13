@@ -245,7 +245,7 @@
    <string name="storage">التخزين</string>
    <string name="add_all_books_with_permission">يُرجى السماح للتطبيق بفحص مجلد التنزيلات لإضافة الكتب إلى مكتبتك تلقائيًا.</string>
    <string name="allow_access_to_see_files">اسمح بالوصول إلى جميع الملفات لرؤية الكتب في هذا المجلد. بدونه تُعرض مجلداته فقط.</string>
-   <string name="save_settings_in_librera_folder">احفظ الإعدادات وتقدّم القراءة في مجلد OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">احفظ الإعدادات وتقدّم القراءة في مجلد OmniShelf.</string>
    <string name="regrant_folder_title">اسمح بالوصول إلى المجلد مرة أخرى</string>
    <string name="regrant_folder_msg">لم يعد بإمكان التطبيق قراءة %1$s: يزيل Android صلاحية الوصول إلى المجلدات عند إعادة تثبيت التطبيق. اختر المجلد مرة أخرى في الشاشة التالية.</string>
    <string name="remind_msg">يرجى أخذ قسط من الراحة لعينيك والراحة قليلا.</string>

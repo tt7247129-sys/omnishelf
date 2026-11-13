@@ -245,7 +245,7 @@
    <string name="storage">Хранилище</string>
    <string name="add_all_books_with_permission">Пожалуйста, разрешите приложению просматривать папку «Загрузки», чтобы автоматически добавлять книги в вашу библиотеку.</string>
    <string name="allow_access_to_see_files">Разрешите доступ ко всем файлам, чтобы видеть книги в этой папке. Без него показываются только её папки.</string>
-   <string name="save_settings_in_librera_folder">Хранить настройки и прогресс чтения в папке OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Хранить настройки и прогресс чтения в папке OmniShelf.</string>
    <string name="regrant_folder_title">Снова разрешить доступ к папке</string>
    <string name="regrant_folder_msg">Приложение больше не может читать %1$s: Android забывает доступ к папкам при переустановке приложения. Выберите папку снова на следующем экране.</string>
    <string name="remind_msg">Пришло время сделать перерыв и дать глазам немного отдохнуть</string>

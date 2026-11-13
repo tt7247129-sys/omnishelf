@@ -247,7 +247,7 @@
    <string name="storage">اسٹوریج</string>
    <string name="add_all_books_with_permission">براہ کرم ایپ کو اپنے ڈاؤن لوڈز فولڈر کو اسکین کرنے دیں تاکہ کتابیں خودکار طور پر لائبریری میں شامل ہو سکیں۔</string>
    <string name="allow_access_to_see_files">اس فولڈر میں موجود کتابیں دیکھنے کے لیے تمام فائلوں تک رسائی دیں۔ اس کے بغیر صرف اس کے فولڈرز دکھائے جاتے ہیں۔</string>
-   <string name="save_settings_in_librera_folder">ترتیبات اور مطالعے کی پیش رفت OmniShelf فولڈر میں رکھیں۔</string>
+   <string name="save_settings_in_omnishelf_folder">ترتیبات اور مطالعے کی پیش رفت OmniShelf فولڈر میں رکھیں۔</string>
    <string name="regrant_folder_title">فولڈر تک دوبارہ رسائی دیں</string>
    <string name="regrant_folder_msg">ایپ اب %1$s کو نہیں پڑھ سکتی: ایپ دوبارہ انسٹال ہونے پر Android آپ کے دیے گئے فولڈرز کی اجازت بھول جاتا ہے۔ اگلی اسکرین پر فولڈر دوبارہ منتخب کریں۔</string>
    <string name="remind_msg">وقفہ لینے کا وقت ہے!</string>

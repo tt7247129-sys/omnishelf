@@ -245,7 +245,7 @@
    <string name="storage">Stocare</string>
    <string name="add_all_books_with_permission">Te rugăm să permiți aplicației să scaneze dosarul Descărcări pentru a adăuga automat cărți în biblioteca ta.</string>
    <string name="allow_access_to_see_files">Permiteți accesul la toate fișierele pentru a vedea cărțile din acest dosar. Fără acesta sunt afișate doar dosarele lui.</string>
-   <string name="save_settings_in_librera_folder">Salvează setările și progresul lecturii în dosarul OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Salvează setările și progresul lecturii în dosarul OmniShelf.</string>
    <string name="regrant_folder_title">Permite din nou accesul la dosar</string>
    <string name="regrant_folder_msg">Aplicația nu mai poate citi %1$s: Android elimină accesul la dosare când aplicația este reinstalată. Alege din nou dosarul pe ecranul următor.</string>
    <string name="remind_msg">Vă rugăm să luați o pauză pentru ochi și să vă odihniți puțin.</string>

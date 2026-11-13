@@ -247,7 +247,7 @@
    <string name="storage">Almacenamento</string>
    <string name="add_all_books_with_permission">Permite que a aplicación examine o teu cartafol de Descargas para engadir libros automaticamente á túa biblioteca.</string>
    <string name="allow_access_to_see_files">Permite o acceso a todos os ficheiros para ver os libros deste cartafol. Sen el só se amosan os seus cartafoles.</string>
-   <string name="save_settings_in_librera_folder">Gardar a configuración e o progreso de lectura no cartafol OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Gardar a configuración e o progreso de lectura no cartafol OmniShelf.</string>
    <string name="regrant_folder_title">Permitir de novo o acceso ao cartafol</string>
    <string name="regrant_folder_msg">A aplicación xa non pode ler %1$s: Android retira o acceso aos cartafoles ao reinstalar a aplicación. Escolle de novo o cartafol na seguinte pantalla.</string>
    <string name="remind_msg">É hora de facer unha pausa!</string>

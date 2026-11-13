@@ -245,7 +245,7 @@
    <string name="storage">Saugykla</string>
    <string name="add_all_books_with_permission">Leiskite programai nuskaityti aplanką „Atsisiuntimai“, kad knygos būtų automatiškai įtrauktos į jūsų biblioteką.</string>
    <string name="allow_access_to_see_files">Leiskite prieigą prie visų failų, kad matytumėte šio aplanko knygas. Be jos rodomi tik jo aplankai.</string>
-   <string name="save_settings_in_librera_folder">Išsaugoti nustatymus ir skaitymo eigą OmniShelf aplanke.</string>
+   <string name="save_settings_in_omnishelf_folder">Išsaugoti nustatymus ir skaitymo eigą OmniShelf aplanke.</string>
    <string name="regrant_folder_title">Vėl leisti prieigą prie aplanko</string>
    <string name="regrant_folder_msg">Programa nebegali skaityti %1$s: iš naujo įdiegus programą, Android pašalina prieigą prie aplankų. Kitame ekrane pasirinkite aplanką dar kartą.</string>
    <string name="remind_msg">Padarykite pertraukėlę ir leiskite pailsėti akims</string>

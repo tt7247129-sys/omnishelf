@@ -247,7 +247,7 @@
    <string name="storage">Storan</string>
    <string name="add_all_books_with_permission">Sila benarkan apl mengimbas folder Muat Turun anda untuk menambah buku ke perpustakaan secara automatik.</string>
    <string name="allow_access_to_see_files">Benarkan akses kepada semua fail untuk melihat buku dalam folder ini. Tanpanya, hanya foldernya dipaparkan.</string>
-   <string name="save_settings_in_librera_folder">Simpan tetapan dan kemajuan bacaan dalam folder OmniShelf.</string>
+   <string name="save_settings_in_omnishelf_folder">Simpan tetapan dan kemajuan bacaan dalam folder OmniShelf.</string>
    <string name="regrant_folder_title">Benarkan akses kepada folder sekali lagi</string>
    <string name="regrant_folder_msg">Apl tidak lagi dapat membaca %1$s: Android melupakan folder yang anda serahkan apabila apl dipasang semula. Pilih folder itu sekali lagi pada skrin seterusnya.</string>
    <string name="remind_msg">Masa untuk berehat!</string>

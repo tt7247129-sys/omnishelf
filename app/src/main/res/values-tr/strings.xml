@@ -245,7 +245,7 @@
    <string name="storage">Depolama</string>
    <string name="add_all_books_with_permission">Kitapların kitaplığınıza otomatik olarak eklenmesi için lütfen uygulamanın İndirilenler klasörünüzü taramasına izin verin.</string>
    <string name="allow_access_to_see_files">Bu klasördeki kitapları görmek için tüm dosyalara erişime izin verin. İzin olmadan yalnızca klasörleri gösterilir.</string>
-   <string name="save_settings_in_librera_folder">Ayarları ve okuma ilerlemesini OmniShelf klasörüne kaydet.</string>
+   <string name="save_settings_in_omnishelf_folder">Ayarları ve okuma ilerlemesini OmniShelf klasörüne kaydet.</string>
    <string name="regrant_folder_title">Klasöre yeniden erişim izni ver</string>
    <string name="regrant_folder_msg">Uygulama artık %1$s klasörünü okuyamıyor: Android, uygulama yeniden yüklendiğinde klasör erişimini kaldırır. Sonraki ekranda klasörü yeniden seçin.</string>
    <string name="remind_msg">Lütfen gözleriniz için biraz ara verin ve dinlenin.</string>

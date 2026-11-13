@@ -247,7 +247,7 @@
     <string name="storage">स्टोरेज</string>
     <string name="add_all_books_with_permission">पुस्तके लायब्ररीमध्ये स्वयंचलित जोडण्यासाठी कृपया ॲपला तुमचे Downloads फोल्डर स्कॅन करण्याची परवानगी द्या.</string>
     <string name="allow_access_to_see_files">या फोल्डरमधील पुस्तके पाहण्यासाठी सर्व फाइल्समध्ये प्रवेश द्या. त्याशिवाय फक्त त्याची फोल्डर्स दिसतील.</string>
-    <string name="save_settings_in_librera_folder">OmniShelf फोल्डरमध्ये सेटिंग्ज आणि वाचन प्रगती ठेवा.</string>
+    <string name="save_settings_in_omnishelf_folder">OmniShelf फोल्डरमध्ये सेटिंग्ज आणि वाचन प्रगती ठेवा.</string>
     <string name="regrant_folder_title">फोल्डरमध्ये पुन्हा प्रवेश द्या</string>
     <string name="regrant_folder_msg">ॲप आता %1$s वाचू शकत नाही: ॲप पुन्हा इन्स्टॉल केल्यावर Android तुम्ही दिलेली फोल्डर्स विसरते. पुढील स्क्रीनवर फोल्डर पुन्हा निवडा.</string>
     <string name="remind_msg">विश्रांती घेण्याची वेळ आली आहे!</string>
