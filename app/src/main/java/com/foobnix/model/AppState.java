@@ -464,7 +464,9 @@ public class AppState {
     public boolean sortByFavoriteReverse = false;
     @IgnoreHashCode public boolean isBrightnessEnable = false;
     @IgnoreHashCode public boolean isAllowMinBrigthness = false;
-    public boolean isShowRateUsOnExit = true;
+    // Off by default: a rating prompt that opens a store listing which does not exist
+    // yet is an annoyance, not an ask. Turn it on once the app is actually published.
+    public boolean isShowRateUsOnExit = false;
     @IgnoreHashCode public boolean isRewindEnable = true;
     // The reader's own clock and battery are already up there; a second pair along the foot of
     // the page is the reader's to ask for rather than something to start with.
