@@ -141,6 +141,10 @@ public class RecentFragment2 extends UIFragment<FileMeta> {
             recentAdapter.getItemsList().addAll(items);
             recentAdapter.notifyDataSetChanged();
         }
+        View empty = getView() == null ? null : getView().findViewById(R.id.recentEmpty);
+        if (empty != null) {
+            empty.setVisibility(items.isEmpty() ? View.VISIBLE : View.GONE);
+        }
         if (AppState.get().isHideReadBook) {
             recentName.setText(getString(R.string.recent) + "  " + (items.size() + count) + "/" + count);
         } else {
