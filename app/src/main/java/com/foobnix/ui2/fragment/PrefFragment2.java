@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -342,6 +343,7 @@ public class PrefFragment2 extends UIFragment {
                                        final Bundle savedInstanceState) {
         inflate = inflater.inflate(R.layout.fragment_preferences, container, false);
         markAppBoxes(inflate);
+        insertSectionHeaders(inflate);
 
         singIn = inflate.findViewById(R.id.signIn);
         syncInfo = inflate.findViewById(R.id.syncInfo);
@@ -3483,6 +3485,50 @@ public class PrefFragment2 extends UIFragment {
     /** The app window's width - what the library grid has to fill - not the whole display's. */
     private int windowWidthDP() {
         return getResources().getConfiguration().screenWidthDp;
+    }
+
+
+    /**
+     * The page is one long list; a header every few rows tells the reader where they are
+     * without changing the layout. Titles reuse strings that exist in every locale.
+     */
+    private void insertSectionHeaders(View root) {
+        final ScrollView scroller = (ScrollView) root.findViewById(R.id.scroll);
+        if (scroller == null || scroller.getChildCount() == 0) {
+            return;
+        }
+        final ViewGroup column = (ViewGroup) scroller.getChildAt(0);
+
+        final int[][] sections = {
+                {R.string.library_settings, R.id.searchPaths},
+                {R.string.display_settings, R.id.tapPositionTop},
+                {R.string.general_settings, R.id.onKeyCode},
+                {R.string.folders, R.id.importButton},
+                {R.string.sync, R.id.sectionSync},
+        };
+
+        for (int[] section : sections) {
+            final View anchor = root.findViewById(section[1]);
+            if (anchor == null) {
+                continue;
+            }
+            // The anchor may sit nested; the header goes before its outermost row.
+            View direct = anchor;
+            while (direct.getParent() != column && direct.getParent() instanceof View) {
+                direct = (View) direct.getParent();
+            }
+            if (direct.getParent() != column) {
+                continue;
+            }
+            final TextView header = new TextView(getContext());
+            header.setText(section[0]);
+            header.setTextSize(13);
+            header.setTypeface(null, Typeface.BOLD);
+            header.setAllCaps(true);
+            header.setTextColor(TintUtil.color);
+            header.setPadding(Dips.dpToPx(16), Dips.dpToPx(14), Dips.dpToPx(16), Dips.dpToPx(6));
+            column.addView(header, column.indexOfChild(direct));
+        }
     }
 
 }
