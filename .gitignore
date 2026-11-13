@@ -40,3 +40,5 @@ google-services.*
 *.jks
 *.keystore
 keystore.properties
+__pycache__/
+out/

@@ -50,6 +50,18 @@ It writes `app/src/main/jniLibs/arm64-v8a/*.so` (21 MB for `libmupdf.so` alone),
 that `assembleProDebug` produces an installable APK. Delete `Builder/mupdf-1.28.5` afterwards;
 the libraries stay.
 
+## APK size (what the four levers bought)
+
+| build | arm64 APK | what |
+|---|---|---|
+| proDebug | 49 MB | baseline |
+| proRelease + R8 + shrinkResources | 36 MB | the store artifact |
+| + MuPDF rebuilt with `-Os` (`Builder/jni/Application.mk`) | 35 MB | same smoke 9/9 |
+
+The libraries are gitignored and rebuilt locally, so the repository stays small.
+`Builder/link_arm64.sh` is the arm64-only, `-Os` script; the original script and
+`Application.mk` keep their upstream flags.
+
 ## Native libraries: what was broken before
 
 `assembleProDebug` produces an APK **without** `libmupdf.so`, `libdjvu.so` and the rest of
