@@ -56,6 +56,21 @@ lt ml nl no pl pt ro ru sc sk sv sw ta th tr uk vi zh-rCN zh-rTW
 3. 每补一个语言,用 `setprop persist.sys.locale <code>` 在模拟器上实测一遍界面
 4. 全部 12 个补完约需 4–6 轮(每轮 2–3 个语言 + 实测)
 
+## 四点五、模拟器环境的坑(供后续参考)
+
+`/tmp/android-sdk` 的 android-33 系统镜像曾整个丢失(`system.img` 被清空),表现为
+`No initial system image for this configuration` 与 `Can't initialize RenderLib`。
+
+修好的组合:**系统 SDK 的 emulator 二进制 + 恢复后的镜像**:
+
+```
+ANDROID_SDK_ROOT=/tmp/android-sdk ANDROID_AVD_HOME=/tmp/avd4 \
+/Users/huangpeng/Library/Android/sdk/emulator/emulator -avd ui33 \
+  -no-window -no-snapshot -no-audio -no-boot-anim -gpu swiftshader_indirect
+```
+
+`/tmp/android-sdk` 自带的 emulator 二进制渲染库已损坏,不要再用它。
+
 ## 五、一个取舍要说明
 
 补齐语言**不会提升现有 42 个语言用户的体验**,只影响新增地区的可用性。
