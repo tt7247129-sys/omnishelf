@@ -45,6 +45,7 @@
 
             <ImageView
                 android:id="@+id/imageMenuArrow"
+                android:contentDescription="@string/cd_application_menu"
                 style="@style/navBGButton"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
@@ -80,6 +81,7 @@
 
             <TextView
                 android:id="@+id/reverseKeysIndicator"
+                android:importantForAccessibility="no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dip"
@@ -89,6 +91,7 @@
 
             <ImageView
                 android:id="@+id/clockIcon"
+                android:importantForAccessibility="no"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginLeft="2dip"
@@ -109,6 +112,7 @@
             <ImageView
 
                 android:id="@+id/batteryIcon"
+                android:importantForAccessibility="no"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="1dip"
@@ -132,6 +136,7 @@
 
             <ImageView
                 android:id="@+id/goToPage1Top"
+                android:contentDescription="@string/go_to_page"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="5dip"
@@ -147,6 +152,7 @@
 
             <ImageView
                 android:id="@+id/textToSpeachTop"
+                android:contentDescription="@string/text_to_speech"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="5dip"
@@ -158,6 +164,7 @@
 
             <ImageView
                 android:id="@+id/lockUnlockTop"
+                android:contentDescription="@string/screen_orientation"
                 android:layout_width="@dimen/title_wh_button"
                 android:layout_height="@dimen/title_wh_button"
                 android:layout_marginLeft="5dip"
