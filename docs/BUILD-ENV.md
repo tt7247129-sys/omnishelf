@@ -148,3 +148,12 @@ Next things to try, in the order that seemed most promising:
 
 Until a device is available, visual verification is impossible: the UI work in
 `docs/UI-PLAN.md` must not be merged without the screenshot matrix it defines.
+
+## Where each setting lives (for adb debugging)
+
+- `AppState` (theme, tab order, most UI) → `/sdcard/OmniShelf/profile.<channel>/device.<model>/app-State.json`
+  (JSON; survives `pm clear`/uninstall).
+- `AppSP` (a few temp/app fields) → `shared_prefs/AppTemp.xml`; int fields serialize as
+  `<int name="appTheme" value="2" />` (0 light, 2 dark-oled, 3 ink), not `<string>`.
+- Reading progress/recent → the profile's other JSON files; book DB → app data (greenDAO).
+- Editing prefs by hand needs the debuggable build (`run-as` refuses release builds).
