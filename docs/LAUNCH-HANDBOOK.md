@@ -4,6 +4,9 @@
 
 ## 一、工程现状(全部在 ui/redesign 分支,已推送)
 
+> 最终验收(2026-11-14):全新安装 release → 冒烟 11/11 → 无崩溃。
+> 交付物:`out/OmniShelf-ui-check.apk`(35MB 验证包)、`out/OmniShelf-app-bundle.aab`(31MB 上架包)。
+
 | 项 | 状态 |
 |---|---|
 | 改名 OmniShelf、包名 cc.omnishelf.reader、图标、品牌色 | ✅ |
