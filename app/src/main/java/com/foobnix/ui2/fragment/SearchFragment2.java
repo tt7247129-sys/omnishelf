@@ -56,6 +56,7 @@ import com.foobnix.android.utils.Views;
 import com.foobnix.dao2.FileMeta;
 import com.foobnix.model.AppProfile;
 import com.foobnix.model.AppState;
+import com.foobnix.model.AppData;
 import com.foobnix.model.Pinned;
 import com.foobnix.pdf.info.Android6;
 import com.foobnix.pdf.info.AppsConfig;
@@ -92,6 +93,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -640,6 +642,7 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     }
 
     @Override public void onResume() {
+        updateContinueCard();
         super.onResume();
         menu2.setVisibility(getActivity().findViewById(R.id.imageMenu1) == null ? View.GONE : View.VISIBLE);
     }
@@ -928,6 +931,7 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
                          .addAll(items);
             searchAdapter.notifyDataSetChanged();
             showEmptyState(items.isEmpty());
+            updateContinueCard();
             handler.postDelayed(new Runnable() {
 
                 @Override public void run() {
@@ -1232,6 +1236,51 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
         if (emptyView != null) {
             emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
         }
+    }
+
+
+    /**
+     * The one book most worth going back to, offered before the list.
+     *
+     * <p>Lives inside the chrome container rather than beside the list: the list is pulled up
+     * under the chrome by a negative margin, so a sibling view would simply be covered.
+     */
+    private void updateContinueCard() {
+        View root = getView();
+        if (root == null) {
+            return;
+        }
+        View card = root.findViewById(R.id.continueCard);
+        if (card == null) {
+            return;
+        }
+        List<FileMeta> recent = AppData.get().getAllRecent(false);
+        if (recent == null || recent.isEmpty()) {
+            card.setVisibility(View.GONE);
+            return;
+        }
+        final FileMeta book = recent.get(0);
+        if (book == null || book.getPath() == null) {
+            card.setVisibility(View.GONE);
+            return;
+        }
+        TextView title = card.findViewById(R.id.continueTitle);
+        TextView progress = card.findViewById(R.id.continueProgress);
+        ImageView cover = card.findViewById(R.id.continueCover);
+
+        title.setText(book.getTitle() == null ? ExtUtils.getFileName(book.getPath()) : book.getTitle());
+
+        // The word for it is already above the title; this line only has to say how far in.
+        Float percent = book.getIsRecentProgress();
+        int pct = percent == null ? 0 : Math.round(percent * 100);
+        progress.setText(pct > 0 ? pct + "%" : "");
+
+        if (cover != null) {
+            IMG.getCoverPageWithEffect(cover.getContext(), book.getPath(), null).into(cover);
+        }
+
+        card.setOnClickListener(v -> ExtUtils.showDocumentWithoutDialog(getActivity(), new File(book.getPath()), null));
+        card.setVisibility(View.VISIBLE);
     }
 
 }

@@ -7,155 +7,221 @@
     android:orientation="vertical">
 
 
+    <!-- Wrapped so the continue card rides with the search bar: everything above the list
+         is measured into the space the list is pushed down by, and lifted over it. -->
     <LinearLayout
-        android:id="@+id/filterLayout"
+        android:id="@+id/libraryChrome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/panel_padding"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="6dip"
-        android:paddingBottom="6dip">
-
-        <ImageView
-            android:visibility="visible"
-            android:contentDescription="@string/cd_application_menu"
-            android:id="@+id/menu2"
-            android:padding="3dip"
-            android:background="@drawable/bg_search_edit"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:layout_marginLeft="@dimen/top_button_margin"
-            android:layout_marginRight="@dimen/top_button_margin"
-            android:layout_width="@dimen/wh_button"
-            android:layout_height="@dimen/wh_button"
-            android:src="@drawable/glyphicons_600_menu" />
-
-
-        <!-- As far from the icons either side as they are from each other. -->
-        <RelativeLayout
-            android:layout_marginLeft="@dimen/top_field_margin"
-            android:layout_marginRight="@dimen/top_field_margin"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/wh_button"
-            android:layout_weight="1"
-            android:focusableInTouchMode="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/filterLine"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="0dip"
-                android:layout_marginLeft="0dip"
-                android:layout_marginTop="0dip"
-                android:layout_marginEnd="0dip"
-                android:layout_marginRight="0dip"
-                android:layout_marginBottom="0dip"
-                android:background="@drawable/bg_search_edit"
-                android:contentDescription="@string/filter"
-                android:ellipsize="end"
-                android:hint="@string/library"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="10dip"
-                android:paddingTop="0dip"
-                android:paddingRight="60dip"
-                android:paddingBottom="0dip"
-                android:singleLine="true"
-                android:textColor="@color/tint_gray"
-                android:textColorHint="@color/tint_gray"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/countBooks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dip"
-                android:gravity="center"
-                android:text="0"
-                android:textColor="@color/tint_gray"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_marginRight="-8dip"
-                android:importantForAccessibility="no"
-                android:id="@+id/myAutoCompleteImage"
-                style="@style/buttonClear"
-                android:layout_width="@dimen/wh_button_small"
-                android:layout_height="@dimen/wh_button_small"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/cleanFilter"
-                android:layout_weight="0"
-                android:src="@drawable/glyphicons_739_check" />
-
-            <ImageView
-                android:id="@+id/cleanFilter"
-                style="@style/buttonClear"
-                android:layout_width="@dimen/wh_button_small"
-                android:layout_height="@dimen/wh_button_small"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/countBooks"
-                android:layout_weight="0"
-                android:contentDescription="@string/cd_clear_search_reasult"
-                android:src="@drawable/glyphicons_599_menu_close" />
-        </RelativeLayout>
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/secondTopPanel"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/wh_button"
-            android:background="@drawable/bg_search_second"
+            android:id="@+id/filterLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/panel_padding"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <!-- The library folders and the library rebuilt from them, as the preferences
-                 panel offers them, without opening the panel. -->
-            <ImageView
-                android:id="@+id/onUpdateLibrary"
-                style="@style/buttonTop"
-                android:layout_width="@dimen/wh_button"
-                android:layout_height="@dimen/wh_button"
-                android:background="@drawable/bg_round_press"
-                android:clickable="true"
-                android:contentDescription="@string/update_library"
-                android:src="@drawable/glyphicons_82_refresh"
-                android:tint="@color/white" />
-
-            <ImageView
-                android:contentDescription="@string/cd_sort_results"
-                android:id="@+id/sortBy"
-                style="@style/buttonTop"
-                android:layout_width="@dimen/wh_button"
-                android:layout_height="@dimen/wh_button"
-                android:background="@drawable/bg_round_press"
-                android:clickable="true"
-                android:src="@drawable/glyphicons_476_sort_attributes"
-                android:tint="@color/white" />
+            android:orientation="horizontal"
+            android:paddingTop="6dip"
+            android:paddingBottom="6dip">
 
             <ImageView
                 android:visibility="visible"
-                android:contentDescription="@string/cd_sort_order"
-                android:id="@+id/sortOrder"
-                android:layout_width="@dimen/wh_button_small"
-                android:layout_height="@dimen/wh_button_small"
-                android:background="@drawable/bg_round_press"
-                android:clickable="true"
-                android:padding="4dip"
-                android:src="@drawable/glyphicons_221_chevron_down"
-                android:tint="@color/white" />
-
-            <ImageView
-                android:contentDescription="@string/cd_view_menu"
-                android:id="@+id/onGridList"
-                style="@style/buttonTop"
+                android:contentDescription="@string/cd_application_menu"
+                android:id="@+id/menu2"
+                android:padding="3dip"
+                android:background="@drawable/bg_search_edit"
+                android:adjustViewBounds="true"
+                android:cropToPadding="true"
+                android:layout_marginLeft="@dimen/top_button_margin"
+                android:layout_marginRight="@dimen/top_button_margin"
                 android:layout_width="@dimen/wh_button"
                 android:layout_height="@dimen/wh_button"
-                android:src="@drawable/my_glyphicons_114_paragraph_justify" />
+                android:src="@drawable/glyphicons_600_menu" />
+
+
+            <!-- As far from the icons either side as they are from each other. -->
+            <RelativeLayout
+                android:layout_marginLeft="@dimen/top_field_margin"
+                android:layout_marginRight="@dimen/top_field_margin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/wh_button"
+                android:layout_weight="1"
+                android:focusableInTouchMode="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/filterLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="0dip"
+                    android:layout_marginLeft="0dip"
+                    android:layout_marginTop="0dip"
+                    android:layout_marginEnd="0dip"
+                    android:layout_marginRight="0dip"
+                    android:layout_marginBottom="0dip"
+                    android:background="@drawable/bg_search_edit"
+                    android:contentDescription="@string/filter"
+                    android:ellipsize="end"
+                    android:hint="@string/library"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="10dip"
+                    android:paddingTop="0dip"
+                    android:paddingRight="60dip"
+                    android:paddingBottom="0dip"
+                    android:singleLine="true"
+                    android:textColor="@color/tint_gray"
+                    android:textColorHint="@color/tint_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/countBooks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="14dip"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/tint_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_marginRight="-8dip"
+                    android:importantForAccessibility="no"
+                    android:id="@+id/myAutoCompleteImage"
+                    style="@style/buttonClear"
+                    android:layout_width="@dimen/wh_button_small"
+                    android:layout_height="@dimen/wh_button_small"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/cleanFilter"
+                    android:layout_weight="0"
+                    android:src="@drawable/glyphicons_739_check" />
+
+                <ImageView
+                    android:id="@+id/cleanFilter"
+                    style="@style/buttonClear"
+                    android:layout_width="@dimen/wh_button_small"
+                    android:layout_height="@dimen/wh_button_small"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/countBooks"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cd_clear_search_reasult"
+                    android:src="@drawable/glyphicons_599_menu_close" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/secondTopPanel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/wh_button"
+                android:background="@drawable/bg_search_second"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- The library folders and the library rebuilt from them, as the preferences
+                     panel offers them, without opening the panel. -->
+                <ImageView
+                    android:id="@+id/onUpdateLibrary"
+                    style="@style/buttonTop"
+                    android:layout_width="@dimen/wh_button"
+                    android:layout_height="@dimen/wh_button"
+                    android:background="@drawable/bg_round_press"
+                    android:clickable="true"
+                    android:contentDescription="@string/update_library"
+                    android:src="@drawable/glyphicons_82_refresh"
+                    android:tint="@color/white" />
+
+                <ImageView
+                    android:contentDescription="@string/cd_sort_results"
+                    android:id="@+id/sortBy"
+                    style="@style/buttonTop"
+                    android:layout_width="@dimen/wh_button"
+                    android:layout_height="@dimen/wh_button"
+                    android:background="@drawable/bg_round_press"
+                    android:clickable="true"
+                    android:src="@drawable/glyphicons_476_sort_attributes"
+                    android:tint="@color/white" />
+
+                <ImageView
+                    android:visibility="visible"
+                    android:contentDescription="@string/cd_sort_order"
+                    android:id="@+id/sortOrder"
+                    android:layout_width="@dimen/wh_button_small"
+                    android:layout_height="@dimen/wh_button_small"
+                    android:background="@drawable/bg_round_press"
+                    android:clickable="true"
+                    android:padding="4dip"
+                    android:src="@drawable/glyphicons_221_chevron_down"
+                    android:tint="@color/white" />
+
+                <ImageView
+                    android:contentDescription="@string/cd_view_menu"
+                    android:id="@+id/onGridList"
+                    style="@style/buttonTop"
+                    android:layout_width="@dimen/wh_button"
+                    android:layout_height="@dimen/wh_button"
+                    android:src="@drawable/my_glyphicons_114_paragraph_justify" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Shown only when something was read before. -->
+        <LinearLayout
+            android:id="@+id/continueCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/panel_padding"
+            android:layout_marginRight="@dimen/panel_padding"
+            android:layout_marginBottom="6dip"
+            android:background="@color/omni_surface"
+            android:orientation="horizontal"
+            android:padding="8dip"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/continueCover"
+                android:layout_width="48dip"
+                android:layout_height="68dip"
+                android:contentDescription="@string/cover"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Continue reading"
+                    android:textColor="@color/omni_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/continueTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/continueProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dip"
+                    android:textColor="@color/tint_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
