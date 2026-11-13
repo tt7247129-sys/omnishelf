@@ -200,7 +200,6 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="Continue reading"
-                    android:textColor="@color/omni_primary"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
