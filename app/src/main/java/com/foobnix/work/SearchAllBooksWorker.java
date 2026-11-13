@@ -4,6 +4,7 @@ import static com.foobnix.pdf.info.AppsConfig.SEARCH_FRAGMENT_WORKER_NAME;
 import static com.foobnix.pdf.info.AppsConfig.WORKER_POLICY;
 
 import android.content.Context;
+import java.util.Iterator;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -170,6 +171,30 @@ public class SearchAllBooksWorker extends MessageWorker {
             itemsMeta.addAll(AppData.get().getAllFavoriteFiles(false));
             itemsMeta.addAll(AppData.get().getAllFavoriteFolders());
 
+
+            // A book whose file was deleted stays in the database, and every scan reads it
+            // back: the shelf keeps offering something that is no longer there. Ask the
+            // filesystem once here and take those rows out for good.
+            final Iterator<FileMeta> it = itemsMeta.iterator();
+            while (it.hasNext()) {
+                if (isStopped()) {
+                    return false;
+                }
+                final FileMeta meta = it.next();
+                final String path = meta == null ? null : meta.getPath();
+                if (path == null) {
+                    continue;
+                }
+                // A book on added storage is a document uri; a File cannot answer for it.
+                if (ExtUtils.isExteralSD(path) || Clouds.isCloud(path)) {
+                    continue;
+                }
+                if (!new File(path).isFile()) {
+                    it.remove();
+                    AppDB.get().delete(meta);
+                    LOG.d("Worker", "drop-missing", path);
+                }
+            }
 
             AppDB.get().saveAll(itemsMeta);
 
