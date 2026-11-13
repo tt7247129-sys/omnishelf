@@ -115,24 +115,8 @@ public class SearchAllBooksWorker extends MessageWorker {
                     }
                 }
             }
-            if(itemsMeta.isEmpty()) {
-                File downloadsDir = AppSP.get().getTempDownloadBooks(getApplicationContext());
-                downloadsDir.mkdirs();
-
-                try {
-                    String[] books = getApplicationContext().getAssets().list("books");
-                    for(String book:books) {
-                        File outFile = new File(downloadsDir, book);
-                        FileOutputStream out = new FileOutputStream(outFile);
-                        IOUtils.copyClose(getApplicationContext().getAssets().open("books/"+book), out);
-                        LOG.d("copyBook", book,outFile );
-                    }
-                }catch (Exception e){
-                    LOG.e(e);
-                }
-
-                SearchCore.search(itemsMeta, downloadsDir, ExtUtils.seachExts);
-            }
+            // An empty shelf stays empty: upstream dropped a bundled sample book into it
+            // here, which both surprised the reader and made the empty state unreachable.
 
             for (FileMeta meta : itemsMeta) {
                 meta.setIsSearchBook(true);
