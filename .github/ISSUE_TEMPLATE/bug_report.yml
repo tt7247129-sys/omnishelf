@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a problem with Librera
+description: Report a problem with OmniShelf
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -9,9 +9,7 @@ body:
       label: Application
       description: Which application are you using?
       options:
-        - Librera
-        - Librera F-Droid
-        - LibreraX
+        - OmniShelf
     validations:
       required: true
 

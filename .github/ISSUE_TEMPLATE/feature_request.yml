@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest a new feature or improvement for Librera
+description: Suggest a new feature or improvement for OmniShelf
 title: "[Feature]: "
 body:
   - type: dropdown
@@ -8,9 +8,7 @@ body:
       label: Application
       description: Which application is this request for?
       options:
-        - Librera
-        - Librera F-Droid
-        - LibreraX
+        - OmniShelf
     validations:
       required: true
 
