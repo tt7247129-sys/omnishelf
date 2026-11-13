@@ -87,6 +87,62 @@ check() {
   fi
 }
 
+# wait_text PATTERN [TIMEOUT_S] — block until a visible node's text contains the pattern.
+wait_text() {
+  local pattern="$1" limit="${2:-15}" i
+  for i in $(seq 1 "$limit"); do
+    adb shell "uiautomator dump /sdcard/qa-wait.xml" >/dev/null 2>&1 || true
+    adb pull /sdcard/qa-wait.xml /tmp/qa-wait.xml >/dev/null 2>&1 || true
+    adb shell rm -f /sdcard/qa-wait.xml >/dev/null 2>&1 || true
+    if python3 - "$pattern" <<'PY'
+import re, sys
+try:
+    s = open("/tmp/qa-wait.xml", encoding="utf-8").read()
+except Exception:
+    sys.exit(1)
+pat = sys.argv[1]
+sys.exit(0 if re.search('text="[^"]*' + re.escape(pat) + '[^"]*"', s, re.I) else 1)
+PY
+    then
+      return 0
+    fi
+    sleep 2
+  done
+  return 1
+}
+
+# tap_text PATTERN — tap the first visible node whose text contains the pattern.
+# Uses uiautomator, so it is slow (2-4s); for one-off navigation, not per-check.
+tap_text() {
+  local pattern="$1" x y
+  adb shell "uiautomator dump /sdcard/qa-tap.xml" >/dev/null 2>&1 || true
+  adb pull /sdcard/qa-tap.xml /tmp/qa-tap.xml >/dev/null 2>&1 || true
+  adb shell rm -f /sdcard/qa-tap.xml >/dev/null 2>&1 || true
+  x=$(python3 - "$pattern" <<'PY'
+import re, sys
+try:
+    s = open("/tmp/qa-tap.xml", encoding="utf-8").read()
+except Exception:
+    sys.exit(1)
+pat = sys.argv[1]
+best = None
+for m in re.finditer(r'<node[^>]*/>', s):
+    t = re.search(r'text="([^"]*)"', m.group(0))
+    b = re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', m.group(0))
+    if t and pat.lower() in t.group(1).lower() and b:
+        x1, y1, x2, y2 = map(int, b.groups())
+        # The same word often sits in the breadcrumb up top and in a list row below;
+        # the row is the thing to tap, so prefer the lowest match.
+        if best is None or y1 > best[1]:
+            best = ((x1 + x2) // 2, (y1 + y2) // 2, y1)
+if best:
+    print(best[0], best[1])
+PY
+)
+  [ -n "$x" ] && { set -- $x; adb shell input tap "$1" "$2"; return 0; }
+  return 1
+}
+
 # wait_activity PATTERN [TIMEOUT_S] — block until the resumed activity matches.
 # The screenshots used to be taken while the app was still starting, which produced
 # convincing black rectangles and a green "0 failures".
@@ -104,6 +160,13 @@ wait_activity() {
 }
 
 top_activity() {
+  # The resumed activity, not the first entry of the stack: the history section
+  # lists records in stack order and its first match can be the oldest one.
+  local line
+  line=$(adb shell dumpsys activity activities 2>/dev/null | grep -m1 "topResumedActivity")
+  if [ -n "$line" ]; then
+    echo "$line" | grep -oE "${PKG}/[A-Za-z0-9_.]+" && return 0
+  fi
   adb shell dumpsys activity activities 2>/dev/null \
     | grep -m1 -oE "${PKG}/[A-Za-z0-9_.]+" || echo "none"
 }

@@ -75,4 +75,39 @@ tap_ratio 50 50; sleep 2
 shot 08-pdf-menu
 adb shell input keyevent 4; sleep 2
 
+step "9. a book opened from the folders tab"
+adb shell am force-stop "$PKG" >/dev/null 2>&1
+adb shell am start -n "$MAIN" >/dev/null 2>&1
+wait_activity "MainTabs2" || true
+sleep 3
+tap_ratio 50 91          # Folder tab, second from the left in this tab order
+sleep 4
+shot 09-folder-tab
+# The folder tab opens wherever it was last, and on a slow device it may still
+# be loading: wait for its rows, go home through the "0" crumb, into Download by
+# name, then open the first book file.
+wait_text "emulated" || wait_text "Download" || true
+tap_ratio 25 7
+sleep 2
+tap_text "Download" || true
+wait_text ".epub" || wait_text ".pdf" || true
+top=""
+for _ in 1 2 3; do
+  tap_ratio 50 34
+  if wait_activity "HorizontalViewActivity" 12; then
+    top=$(top_activity)
+    break
+  fi
+  top=$(top_activity)
+  case "$top" in
+    *OpenerActivity*) break ;;
+  esac
+done
+case "$top" in
+  *HorizontalViewActivity*) CHECKS=$((CHECKS+1)); say "  ✓ opened from the folder tab" ;;
+  *) CHECKS=$((CHECKS+1)); FAILURES=$((FAILURES+1)); say "  ✗ folder tap did not open a book (got $top)" ;;
+esac
+adb shell input keyevent 4; sleep 2
+scan_crash "folder tab"
+
 summary
