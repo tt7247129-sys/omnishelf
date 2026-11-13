@@ -2438,6 +2438,35 @@ public class DragingDialogs {
                     customsLayout.setVisibility(View.GONE);
                 }
 
+                // The everyday choices stay on the panel; the long tail folds behind the
+                // vertical-dots button instead of stacking to half a page.
+                final View[] foldable = {
+                        ((View) ((View) view.findViewById(R.id.readTTS)).getParent()),
+                        view.findViewById(R.id.onAddToBookmark),
+                        view.findViewById(R.id.onShare),
+                        view.findViewById(R.id.onGoogle),
+                        view.findViewById(R.id.onTranslate),
+                        ((View) ((View) view.findViewById(R.id.dictionaryLine)).getParent()),
+                };
+                final View moreToggle = view.findViewById(R.id.moreToggle);
+                if (moreToggle != null) {
+                    final boolean[] expanded = {false};
+                    for (View row : foldable) {
+                        if (row != null && row != moreToggle) {
+                            row.setVisibility(View.GONE);
+                        }
+                    }
+                    moreToggle.setOnClickListener(v -> {
+                        expanded[0] = !expanded[0];
+                        int vis = expanded[0] ? View.VISIBLE : View.GONE;
+                        for (View row : foldable) {
+                            if (row != null && row != moreToggle) {
+                                row.setVisibility(vis);
+                            }
+                        }
+                    });
+                }
+
                 return view;
             }
         }.

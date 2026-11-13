@@ -75,6 +75,16 @@
                     android:src="@drawable/glyphicons_371_plus"
                     android:tint="@color/tint_gray" />
 
+                <!-- One more tap opens the folded rows; the everyday choices stay up front. -->
+                <ImageView
+                    android:id="@+id/moreToggle"
+                    android:layout_width="@dimen/wh_button_small"
+                    android:layout_height="@dimen/wh_button_small"
+                    android:contentDescription="@string/more"
+                    android:padding="5dip"
+                    android:src="@drawable/glyphicons_498_more_vertical"
+                    android:tint="@color/tint_gray" />
+
                 <ImageView
                     android:id="@+id/onRemoveMark"
                     android:contentDescription="@string/clear_all"
