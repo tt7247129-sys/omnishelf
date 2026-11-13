@@ -138,7 +138,7 @@ public class ADS {
         }
         LOG.d("ADS1", "RewardedAd load started...");
 
-        String adUnitId = Apps.getMetaData(LibreraApp.context, "librera.ADMOB_REWARD");
+        String adUnitId = Apps.getMetaData(LibreraApp.context, "omnishelf.ADMOB_REWARD");
         if(adUnitId==null){
             return;
         }
@@ -187,7 +187,7 @@ public class ADS {
                 LOG.e(e);
             }
 
-            String adUnitId = Apps.getMetaData(LibreraApp.context, "librera.ADMOB_FULLSCREEN_ID");
+            String adUnitId = Apps.getMetaData(LibreraApp.context, "omnishelf.ADMOB_FULLSCREEN_ID");
             if(adUnitId==null){
                 return;
             }
@@ -255,7 +255,7 @@ public class ADS {
 
             adView.setAdSize(size);
 
-            String metaData = Apps.getMetaData(a, "librera.ADMOB_BANNER_ID");
+            String metaData = Apps.getMetaData(a, "omnishelf.ADMOB_BANNER_ID");
             if(metaData==null){
                 return;
             }

@@ -91,6 +91,15 @@ Play/pause 控件)。语音跟随系统语言(en-US → English 音色)。
 "出声的听感"是唯一无法在此环境确认的属性,列入真机复核。
 (音频路由偶发抖动:PLAYING 状态与页面播放条在干净启动后可达,足够证明链路。)
 
+## 签名与身份(2026-11-14 终检)
+
+- AAB:`package cc.omnishelf.reader`,versionCode 1(1.0.0),minSdk 24,targetSdk 36
+- APK/AAB 当前用 **Android Debug 证书**签名(本地验证构建)——上架前必须换正式
+  keystore 重签,手册已列
+- 残留总检:剩余 `librera` 均为内部标识符/注释;清单里的 3 个广告 meta-data 键
+  已改名 `omnishelf.*`
+- 站点:33 页,广告代码 0 处
+
 ## 结论
 
 **代码层全部完成并验证;剩余 4 项均为真机/真人/账号依赖,清单在 `docs/LAUNCH-HANDBOOK.md`。**

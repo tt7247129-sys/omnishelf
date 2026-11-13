@@ -59,10 +59,10 @@
             android:value="true" />
 
         <meta-data
-            android:name="librera.ADMOB_BANNER_ID"
+            android:name="omnishelf.ADMOB_BANNER_ID"
             android:value="${admobBannerId}" />
         <meta-data
-            android:name="librera.ADMOB_FULLSCREEN_ID"
+            android:name="omnishelf.ADMOB_FULLSCREEN_ID"
             android:value="${admobFullId}" />
         <meta-data
             android:name="librera.GOOGLE_DRIVE_KEY"
@@ -77,7 +77,7 @@
             android:value="${appWebClientId}" />
 
         <meta-data
-            android:name="librera.ADMOB_REWARD"
+            android:name="omnishelf.ADMOB_REWARD"
             android:value="${admobRewardId}" />
 
 
