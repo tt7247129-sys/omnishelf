@@ -768,12 +768,9 @@ public class MainTabs2 extends AdsFragmentActivity {
             }
         });
 
-        if (UITab.isShowLibrary() || !AppState.get().tapPositionTop) {
-            imageMenu.setVisibility(View.GONE);
-        } else {
-
-            imageMenu.setVisibility(View.VISIBLE);
-        }
+        // Settings live behind this button; hiding it on the library tab meant most readers
+        // never found them at all. It stays, whichever tab is up.
+        imageMenu.setVisibility(View.VISIBLE);
 
         // ((BrigtnessDraw)
         // findViewById(R.id.brigtnessProgressView)).setActivity(this);
