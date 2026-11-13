@@ -39,43 +39,6 @@ public class ViewBinder {
         }
     }
 
-    public static View initRewardButton(AdsFragmentActivity a, int id) {
-        View showRewardVideo = a.findViewById(id);
-
-        try {
-
-            if (a.isRewardActivated() || !a.isRewardLoaded()) {
-                showRewardVideo.setVisibility(View.GONE);
-            } else {
-                showRewardVideo.setVisibility(View.VISIBLE);
-            }
-
-            sizeMarkToMessage(showRewardVideo.findViewById(R.id.showRewardVideoIcon),
-                    showRewardVideo.findViewById(R.id.showRewardVideoText));
-
-            View.OnClickListener onWatch = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    a.showRewardVideo(rewardItem -> {
-
-                        showRewardVideo.setVisibility(View.GONE);
-                    });
-                }
-            };
-
-            // The whole row answers a press, as it did when it was one line of text, and so
-            // does the button that now says what pressing it does.
-            showRewardVideo.setOnClickListener(onWatch);
-            View watch = showRewardVideo.findViewById(R.id.showRewardVideoButton);
-            if (watch != null) {
-                watch.setOnClickListener(onWatch);
-            }
-
-        } catch (Exception e) {
-            LOG.e(e);
-        }
-        return showRewardVideo;
-    }
 
     /**
      * Cuts the video mark to the height of the two lines it stands beside. The message is two

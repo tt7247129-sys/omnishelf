@@ -78,7 +78,6 @@ public class VerticalViewActivity extends AbstractActionActivity<VerticalViewAct
     @Override
     public void onRewardLoaded() {
         super.onRewardLoaded();
-        ViewBinder.hideShowRewardButton(this,findViewById(R.id.showRewardVideo));
     }
 
     /**

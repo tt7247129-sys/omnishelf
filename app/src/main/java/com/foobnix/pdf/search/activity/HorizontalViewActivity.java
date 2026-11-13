@@ -135,7 +135,6 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
     public boolean prev = true;
     VerticalViewPager viewPager;
     SeekBar seekBar;
-    View showRewardVideo;
     TextView toastBrightnessText, floatingBookmarkTextView, maxSeek, currentSeek, pagesCountIndicator,
             flippingIntervalView, pagesTime, pagesTime1, pagesPower, titleTxt, chapterView, modeName, pannelBookTitle;
     View bottomBar, bottomIndicators, onClose, overlay, musicButtonPanel, parentParent;
@@ -346,7 +345,6 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
         anchorX = (ImageView) findViewById(R.id.anchorX);
         anchorY = (ImageView) findViewById(R.id.anchorY);
 
-        showRewardVideo = ViewBinder.initRewardButton(this, R.id.showRewardVideo);
 
         floatingBookmarkTextView = findViewById(R.id.floatingBookmark);
         floatingBookmarkTextView.setOnClickListener(new OnClickListener() {
@@ -2247,7 +2245,6 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
     @Override
     public void onRewardLoaded() {
         super.onRewardLoaded();
-        ViewBinder.hideShowRewardButton(this, showRewardVideo);
     }
 
     public void hideShow() {
@@ -2269,7 +2266,6 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
             //AppState.get().isEditMode = true;
             ttsFixPosition();
         }
-        ViewBinder.hideShowRewardButton(this, showRewardVideo);
 
         updateBannnerTop();
         showPagesHelper();

@@ -198,7 +198,6 @@ public class DocumentWrapperUI {
     };
     AdsFragmentActivity a;
     String bookTitle;
-    View showRewardVideo;
     TextView toastBrightnessText, floatingBookmarkTextView, pagesCountIndicator, currentSeek, maxSeek,
             currentTime, bookName, nextTypeBootom, batteryLevel, lirbiLogo, reverseKeysIndicator, onSaveAnnotation;
     public View.OnClickListener onModeChangeClick = new View.OnClickListener() {
@@ -1279,7 +1278,6 @@ public class DocumentWrapperUI {
         bookmarks.setOnClickListener(onBookmarks);
         bookmarks.setOnLongClickListener(onBookmarksLong);
 
-        showRewardVideo = ViewBinder.initRewardButton(a, R.id.showRewardVideo);
 
         toastBrightnessText = (TextView) a.findViewById(R.id.toastBrightnessText);
         toastBrightnessText.setVisibility(View.GONE);
@@ -1808,7 +1806,6 @@ public class DocumentWrapperUI {
         }
 
         initToolBarPlusMinus();
-        ViewBinder.hideShowRewardButton(a, showRewardVideo);
 
         if (AppState.get().isAutoScroll) {
             autoScroll.setImageResource(R.drawable.glyphicons_174_pause);
