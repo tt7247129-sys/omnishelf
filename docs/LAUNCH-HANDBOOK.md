@@ -25,6 +25,10 @@ JAVA_HOME=/tmp/jdk21b/jdk-21.0.13+9/Contents/Home \
 GRADLE_USER_HOME=/tmp/gradle-home ANDROID_USER_HOME=/tmp/android-home \
 ./gradlew :app:assembleProRelease -x lint --no-configuration-cache
 # 产物:app/build/outputs/apk/pro/release/OmniShelf Pro-1.0.0-mupdf-arm64.apk (35MB)
+
+# Play 上架用 AAB(按设备分发,31MB):
+#   ./gradlew :app:bundleProRelease   -> app/build/outputs/bundle/proRelease/app-pro-release.aab
+# AAB 已验证:package cc.omnishelf.reader, versionCode 1 (1.0.0), minSdk 24, targetSdk 36
 ```
 
 原生库在 `app/src/main/jniLibs/arm64-v8a/`(gitignored,本机已有);丢失时用

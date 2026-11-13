@@ -123,7 +123,9 @@ android {
 
     splits {
         abi {
-            enable = true
+            // A bundle cannot be built while APK splits are enabled; turn them off for
+            // bundle tasks and keep them for assemble, where they make the per-ABI APKs.
+            enable = !gradle.startParameter.taskNames.any { it.toLowerCase().contains("bundle") }
             reset()
             include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
             universalApk = true
