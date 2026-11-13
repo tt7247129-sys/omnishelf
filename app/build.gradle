@@ -96,9 +96,13 @@ android {
             // R8: shrink, optimize and obfuscate the DEX (Google Play requires >= 25% in each category)
             minifyEnabled = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //shrinkResources = false
+            shrinkResources = true
             if (hasReleaseKey) {
                 signingConfig = signingConfigs.release
+            } else {
+                // Local verification builds: the debug key signs them so they can be
+                // installed over the debug build; the store build uses a real key.
+                signingConfig = signingConfigs.debug
             }
             debuggable = false
         }
