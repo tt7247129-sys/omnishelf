@@ -235,6 +235,19 @@
                     android:src="@drawable/dropbox" />
 
                 <ImageView
+                    android:id="@+id/pinBadge"
+                    android:contentDescription="Pinned"
+                    android:layout_width="@dimen/wh_button_small"
+                    android:layout_height="@dimen/wh_button_small"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="0dip"
+                    android:layout_weight="0"
+                    android:padding="2dip"
+                    android:src="@drawable/glyphicons_415_push_pin"
+                    android:tint="@color/omni_primary"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/starIcon"
                 android:importantForAccessibility="no"
                     android:layout_width="@dimen/wh_button_small"
