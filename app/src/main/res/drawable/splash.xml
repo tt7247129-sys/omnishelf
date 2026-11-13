@@ -5,7 +5,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/icon_pdf_pro" />
+            android:src="@mipmap/ic_omnishelf" />
     </item>
 
 </layer-list>
