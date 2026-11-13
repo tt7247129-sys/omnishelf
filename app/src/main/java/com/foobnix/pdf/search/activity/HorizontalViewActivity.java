@@ -88,6 +88,7 @@ import com.foobnix.pdf.info.view.UnderlineImageView;
 import com.foobnix.pdf.info.widget.DraggbleTouchListener;
 import com.foobnix.pdf.info.widget.FileInformationDialog;
 import com.foobnix.pdf.info.widget.ShareDialog;
+import com.foobnix.pdf.info.model.BookCSS;
 import com.foobnix.pdf.info.wrapper.DocumentController;
 import com.foobnix.pdf.info.wrapper.MagicHelper;
 import com.foobnix.pdf.info.wrapper.UITab;
@@ -664,6 +665,8 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
         });
 
         textToSpeach = (ImageView) findViewById(R.id.textToSpeach);
+        findViewById(R.id.fontSizeMinus).setOnClickListener(v -> changeFontSize(-1));
+        findViewById(R.id.fontSizePlus).setOnClickListener(v -> changeFontSize(1));
         textToSpeach.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -1174,6 +1177,8 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
                     dc.syncTtsPlace();
 
                     onCrop.setVisibility(dc.isTextFormat() && !AppSP.get().isCrop ? View.GONE : View.VISIBLE);
+                    findViewById(R.id.fontSizeMinus).setVisibility(dc.isTextFormat() ? View.VISIBLE : View.GONE);
+                    findViewById(R.id.fontSizePlus).setVisibility(dc.isTextFormat() ? View.VISIBLE : View.GONE);
                     onMove.setVisibility(DocumentController.isEinkOrMode(HorizontalViewActivity.this) && !dc.isTextFormat() ? View.VISIBLE : View.GONE);
 
                     onCrop.underline(AppSP.get().isCrop);
@@ -2844,5 +2849,26 @@ public class HorizontalViewActivity extends AdsFragmentActivity {
             dc.onGoToPage(dc.getCurentPage() + 1);
         }
     };
+
+
+    /**
+     * One-tap font size from the reading panel: same values the font dialog steers,
+     * same restart it triggers, none of its plumbing.
+     */
+    private void changeFontSize(int delta) {
+        if (dc == null || !dc.isTextFormat()) {
+            return;
+        }
+        int size = Math.max(10, Math.min(70, BookCSS.get().fontSizeSp + delta));
+        if (size == BookCSS.get().fontSizeSp) {
+            return;
+        }
+        BookCSS.get().setFontSize(false, size);
+        SettingsManager.getBookSettings().updateFromAppState();
+        SharedBooks.save(SettingsManager.getBookSettings());
+        nullAdapter();
+        dc.restartActivity();
+        dc.cleanImageMatrix();
+    }
 
 }
