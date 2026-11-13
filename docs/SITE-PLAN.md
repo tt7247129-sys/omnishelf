@@ -190,3 +190,17 @@ position` → `## What we kept, and what it costs` → `## What this site is for
 1. 域名未切换前站点不可访问——当前唯一阻塞项。
 2. `github.io/omnishelf/privacy/` 是 Play 商店当前填写的地址;域名切换并确认新地址可用之后,再改 Play 设置,不要提前替换 Pages 内容。
 3. 新站 9 篇长文是下限。首次被拒时,补 3–5 篇同规格文章比修改现有文章有效。
+
+
+## 站点复审(2026-11-14,对照 adsense-playbook)
+
+- ✅ `/privacy/`:五项披露齐全(网站 Cookie、第三方广告、按访问记录投放的说明、退出渠道、
+  其他广告网络条款)+ 应用零收集说明,与应用数据安全声明一致
+- ✅ `/authors/`:一人实名化写作,说明为什么用笔名,可核验渠道(仓库账号 + 邮箱)
+- ✅ 文章质量:第一人称、有具体场景与反转,非模板文
+- ✅ 无任何广告代码(`adsbygoogle`/`ca-pub-` 零命中)
+- ✅ `pnpm build`:27 页,3.4s(用系统 Node v22 构建)
+
+**构建环境注意**:DSH 自带的 Node 无法加载 rollup 的原生绑定(macOS Team ID 校验),
+用系统 `/usr/local/bin/node` + `pnpm build` 即可;重装 node_modules 后如再遇到
+`ERR_DLOPEN_FAILED`,先用 `codesign --force --sign -` 重签 `.node` 或换系统 Node。
