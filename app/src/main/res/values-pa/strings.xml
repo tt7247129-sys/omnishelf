@@ -5,6 +5,11 @@
    <string name="library_folders">ਲਾਇਬ੍ਰੇਰੀ ਫੋਲਡਰ</string>
    <string name="folder_no_access">ਪਹੁੰਚ ਨਹੀਂ · ਮੁੜ ਇਜਾਜ਼ਤ ਦੇਣ ਲਈ ਟੈਪ ਕਰੋ</string>
    <string name="add_folder">ਫੋਲਡਰ ਸ਼ਾਮਲ ਕਰੋ</string>
+   <string name="recent_empty_hint">ਤੁਸੀਂ ਹਾਲੇ ਕੁਝ ਨਹੀਂ ਪੜ੍ਹਿਆ। ਕੋਈ ਕਿਤਾਬ ਖੋਲ੍ਹੋ, ਉਹ ਇੱਥੇ ਤੁਹਾਡੀ ਉਡੀਕ ਕਰੇਗੀ।</string>
+   <string name="continue_reading">ਪੜ੍ਹਨਾ ਜਾਰੀ ਰੱਖੋ</string>
+   <string name="empty_no_books">ਹਾਲੇ ਕੋਈ ਕਿਤਾਬ ਨਹੀਂ</string>
+   <string name="empty_hint_books">ਡਾਊਨਲੋਡ, SD ਕਾਰਡ ਜਾਂ ਸਿੰਕ ਕੀਤੇ ਫੋਲਡਰ ਦੀਆਂ ਕਿਤਾਬਾਂ ਇੱਥੇ ਦਿਖਦੀਆਂ ਹਨ।</string>
+   <string name="bookmarks_empty_hint">ਹਾਲੇ ਕੋਈ ਬੁੱਕਮਾਰਕ ਨਹੀਂ। ਪੜ੍ਹਦੇ ਸਮੇਂ ਸ਼ਬਦ ਨੂੰ ਦੇਰ ਤੱਕ ਦਬਾਓ।</string>
    <string name="archives">ਆਰਕਾਈਵਜ਼</string>
    <string name="other">ਹੋਰ</string>
    <string name="you_need_to_update_the_library">ਤਬਦੀਲੀਆਂ ਲਾਗੂ ਕਰਨ ਲਈ ਹੁਣ ਲਾਇਬ੍ਰੇਰੀ ਅੱਪਡੇਟ ਕਰੋ</string>

@@ -3,6 +3,11 @@
    <string name="library_settings">書架設置</string>
    <string name="scan_device_for_new_books">導入書籍</string>
    <string name="add_folder">添加目錄</string>
+   <string name="recent_empty_hint">還沒有讀過任何內容。開啟一本書，它會在這裡等你。</string>
+   <string name="continue_reading">繼續閱讀</string>
+   <string name="empty_no_books">還沒有書籍</string>
+   <string name="empty_hint_books">下載、SD 卡或已同步資料夾中的書籍會顯示在這裡。</string>
+   <string name="bookmarks_empty_hint">還沒有書籤。閱讀時長按詞語即可標記位置。</string>
    <string name="archives">檔案</string>
    <string name="other">其他</string>
    <string name="you_need_to_update_the_library">更新書架？</string>

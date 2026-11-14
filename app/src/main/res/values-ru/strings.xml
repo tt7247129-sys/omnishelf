@@ -3,6 +3,11 @@
    <string name="library_settings">Настройки библиотеки</string>
    <string name="scan_device_for_new_books">Пути поиска книг на устройстве</string>
    <string name="add_folder">Добавить еще путь</string>
+   <string name="recent_empty_hint">Вы ещё ничего не читали. Откройте книгу — она будет ждать вас здесь.</string>
+   <string name="continue_reading">Продолжить чтение</string>
+   <string name="empty_no_books">Книг пока нет</string>
+   <string name="empty_hint_books">Книги из «Загрузок», с SD-карты или из синхронизированной папки появятся здесь.</string>
+   <string name="bookmarks_empty_hint">Закладок пока нет. Нажмите и удерживайте слово во время чтения, чтобы поставить закладку.</string>
    <string name="archives">Архивы</string>
    <string name="other">Другое</string>
    <string name="you_need_to_update_the_library">Для вступления изменений в силу нужно пересканировать библиотеку. Сделать это сейчас?</string>

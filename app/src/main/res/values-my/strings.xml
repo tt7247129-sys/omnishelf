@@ -5,6 +5,11 @@
    <string name="library_folders">စာကြည့်တိုက်ဖိုင်တွဲများ</string>
    <string name="folder_no_access">ဝင်ရောက်ခွင့်မရှိ · ပြန်ခွင့်ပြုရန်နှိပ်ပါ</string>
    <string name="add_folder">ဖိုင်တွဲထည့်ပါ</string>
+   <string name="recent_empty_hint">သင်ဘာမှ မဖတ်ရသေးပါ။ စာအုပ်ဖွင့်လိုက်ပါ၊ ဤနေရာတွင် စောင့်နေပါမည်။</string>
+   <string name="continue_reading">ဆက်လက်ဖတ်ရှုရန်</string>
+   <string name="empty_no_books">စာအုပ်များ မရှိသေးပါ</string>
+   <string name="empty_hint_books">ဒေါင်းလုဒ်များ၊ SD ကတ် သို့မဟုတ် စင့်ခ်လုပ်ထားသော ဖိုလ်ဒါရှိ စာအုပ်များကို ဤနေရာတွင် ပြပါမည်။</string>
+   <string name="bookmarks_empty_hint">စာမှတ်များ မရှိသေးပါ။ ဖတ်နေစဉ် စကားလုံးတစ်လုံးကို ကြာကြာနှိပ်ပြီး နေရာမှတ်ပါ။</string>
    <string name="archives">ဇစ်ဖိုင်များ</string>
    <string name="other">အခြား</string>
    <string name="you_need_to_update_the_library">အပြောင်းအလဲအသုံးပြုရန် စာကြည့်တိုက်ကိုမွမ်းမံပါ</string>

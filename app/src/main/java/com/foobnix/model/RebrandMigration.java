@@ -97,6 +97,9 @@ public class RebrandMigration {
                 return;
             }
             state.tintThemeColor = NEW_TINT;
+            // A language stored by an older install outlives the reinstall, exactly like
+            // the look: the first launch of this build follows the system language again.
+            state.appLang = AppState.MY_SYSTEM_LANG;
             state.tabsOrder9 = AppState.DEFAULTS_TABS_ORDER;
             state.isShowTime = true;
             state.isShowBattery = true;

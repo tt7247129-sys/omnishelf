@@ -3,6 +3,11 @@
    <string name="library_settings">Bibliotheek instellingen</string>
    <string name="scan_device_for_new_books">Scan apparaat voor nieuwe boeken</string>
    <string name="add_folder">Map toevoegen</string>
+   <string name="recent_empty_hint">U hebt nog niets gelezen. Open een boek en het wacht hier op u.</string>
+   <string name="continue_reading">Verder lezen</string>
+   <string name="empty_no_books">Nog geen boeken</string>
+   <string name="empty_hint_books">Boeken in Downloads, op een SD-kaart of in een gesynchroniseerde map verschijnen hier.</string>
+   <string name="bookmarks_empty_hint">Nog geen bladwijzers. Houd tijdens het lezen een woord ingedrukt om een plek te markeren.</string>
    <string name="archives">Archief</string>
    <string name="other">Anders</string>
    <string name="you_need_to_update_the_library">U moet de bibliotheek bijwerken om de wijzigingen toe te passen</string>

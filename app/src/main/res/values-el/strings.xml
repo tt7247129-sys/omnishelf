@@ -3,6 +3,11 @@
    <string name="library_settings">Ρυθμίσεις βιβλιοθήκης</string>
    <string name="scan_device_for_new_books">Φακέλους για σάρωση</string>
    <string name="add_folder">Νέος φάκελος</string>
+   <string name="recent_empty_hint">Δεν έχετε διαβάσει ακόμη τίποτα. Ανοίξτε ένα βιβλίο και θα σας περιμένει εδώ.</string>
+   <string name="continue_reading">Συνέχεια ανάγνωσης</string>
+   <string name="empty_no_books">Δεν υπάρχουν βιβλία ακόμη</string>
+   <string name="empty_hint_books">Τα βιβλία στους Λήψεις, σε κάρτα SD ή σε συγχρονισμένο φάκελο εμφανίζονται εδώ.</string>
+   <string name="bookmarks_empty_hint">Δεν υπάρχουν σελιδοδείκτες ακόμη. Πατήστε παρατεταμένα μια λέξη κατά την ανάγνωση για να σημειώσετε ένα σημείο.</string>
    <string name="archives">Αρχεία</string>
    <string name="other">Άλλα</string>
    <string name="you_need_to_update_the_library">Τώρα ενημερώστε τη βιβλιοθήκη για να εφαρμόσετε αλλαγές</string>

@@ -3,6 +3,11 @@
    <string name="library_settings">تنظیمات کتابخانه</string>
    <string name="scan_device_for_new_books">دستگاه اسکن برای کتاب های جدید</string>
    <string name="add_folder">اضافه کردن پوشه</string>
+   <string name="recent_empty_hint">هنوز چیزی نخوانده‌اید. کتابی باز کنید تا اینجا منتظر شما بماند.</string>
+   <string name="continue_reading">ادامه خواندن</string>
+   <string name="empty_no_books">هنوز کتابی نیست</string>
+   <string name="empty_hint_books">کتاب‌های پوشه دانلود، کارت SD یا پوشه همگام‌شده اینجا ظاهر می‌شوند.</string>
+   <string name="bookmarks_empty_hint">هنوز نشانکی نیست. هنگام خواندن روی کلمه‌ای نگه دارید تا جایی را علامت بزنید.</string>
    <string name="archives">بایگانی</string>
    <string name="other">دیگر</string>
    <string name="you_need_to_update_the_library">شما باید کتابخانه را به روز کنید</string>

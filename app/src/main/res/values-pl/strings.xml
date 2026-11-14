@@ -3,6 +3,11 @@
    <string name="library_settings">Ustawienia biblioteki</string>
    <string name="scan_device_for_new_books">Katalogi do skanowania</string>
    <string name="add_folder">Dodaj katalog</string>
+   <string name="recent_empty_hint">Nie przeczytano jeszcze nic. Otwórz książkę, a będzie tu czekać.</string>
+   <string name="continue_reading">Kontynuuj czytanie</string>
+   <string name="empty_no_books">Brak książek</string>
+   <string name="empty_hint_books">Książki z folderu Pobrane, karty SD lub zsynchronizowanego folderu pojawiają się tutaj.</string>
+   <string name="bookmarks_empty_hint">Brak zakładek. Przytrzymaj słowo podczas czytania, aby oznaczyć miejsce.</string>
    <string name="archives">Archiwa</string>
    <string name="other">Inne</string>
    <string name="you_need_to_update_the_library">Należy zaktualizować bibliotekę</string>

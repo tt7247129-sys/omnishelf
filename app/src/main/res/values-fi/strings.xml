@@ -3,6 +3,11 @@
    <string name="library_settings">Kirjaston asetukset</string>
    <string name="scan_device_for_new_books">Sijainnit, joista kirjoja haetaan</string>
    <string name="add_folder">Uusi kansio</string>
+   <string name="recent_empty_hint">Et ole vielä lukenut mitään. Avaa kirja, niin se odottaa sinua täällä.</string>
+   <string name="continue_reading">Jatka lukemista</string>
+   <string name="empty_no_books">Ei vielä kirjoja</string>
+   <string name="empty_hint_books">Lataukset-kansion, SD-kortin tai synkronoidun kansion kirjat näkyvät täällä.</string>
+   <string name="bookmarks_empty_hint">Ei vielä kirjanmerkkejä. Paina sanaa pitkään lukiessasi merkitäksesi kohdan.</string>
    <string name="archives">Pakatut tiedostot</string>
    <string name="other">Muut</string>
    <string name="you_need_to_update_the_library">Päivitä kirjasto ottaaksesi muutokset käyttöön</string>

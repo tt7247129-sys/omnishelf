@@ -3,6 +3,11 @@
    <string name="library_settings">Pengaturan perpustakaan</string>
    <string name="scan_device_for_new_books">Pindai perangkat untuk buku baru</string>
    <string name="add_folder">Tambah Folder</string>
+   <string name="recent_empty_hint">Anda belum membaca apa pun. Buka buku dan buku itu akan menunggu di sini.</string>
+   <string name="continue_reading">Lanjutkan membaca</string>
+   <string name="empty_no_books">Belum ada buku</string>
+   <string name="empty_hint_books">Buku di Unduhan, kartu SD, atau folder tersinkron akan muncul di sini.</string>
+   <string name="bookmarks_empty_hint">Belum ada penanda. Tekan lama sebuah kata saat membaca untuk menandai tempat.</string>
    <string name="archives">Arsip</string>
    <string name="other">Lain</string>
    <string name="you_need_to_update_the_library">Anda perlu memperbarui perpustakaan</string>

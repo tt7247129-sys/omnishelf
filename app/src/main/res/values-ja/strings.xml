@@ -3,6 +3,11 @@
    <string name="library_settings">ライブラリ設定</string>
    <string name="scan_device_for_new_books">端末内の新しい書籍をスキャン</string>
    <string name="add_folder">フォルダを追加</string>
+   <string name="recent_empty_hint">まだ何も読んでいません。本を開くと、ここに表示されます。</string>
+   <string name="continue_reading">読書を続ける</string>
+   <string name="empty_no_books">まだ本がありません</string>
+   <string name="empty_hint_books">ダウンロード、SDカード、同期フォルダの本がここに表示されます。</string>
+   <string name="bookmarks_empty_hint">まだブックマークがありません。読書中に単語を長押しすると位置を記録できます。</string>
    <string name="archives">アーカイブ</string>
    <string name="other">その他</string>
    <string name="you_need_to_update_the_library">ライブラリを更新する必要があります</string>

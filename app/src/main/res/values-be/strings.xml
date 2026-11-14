@@ -3,6 +3,11 @@
    <string name="library_settings">Налады бібліятэкі</string>
    <string name="scan_device_for_new_books">Тэчкі для сканавання</string>
    <string name="add_folder">Новая тэчка</string>
+   <string name="recent_empty_hint">Вы яшчэ нічога не чыталі. Адкрыйце кнігу — яна з\'явіцца тут.</string>
+   <string name="continue_reading">Працягнуць чытанне</string>
+   <string name="empty_no_books">Кніг пакуль няма</string>
+   <string name="empty_hint_books">Кнігі з папкі Загрузкі, на SD-карце або ў сінхранізаванай папцы з\'явяцца тут.</string>
+   <string name="bookmarks_empty_hint">Закладак пакуль няма. Доўга націсніце слова падчас чытання, каб паставіць закладку.</string>
    <string name="archives">Архівы</string>
    <string name="other">Іншае</string>
    <string name="you_need_to_update_the_library">Зараз абнавіце бібліятэку, каб прымяніць змены</string>

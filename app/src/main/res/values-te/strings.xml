@@ -5,6 +5,11 @@
    <string name="library_folders">లైబ్రరీ ఫోల్డర్లు</string>
    <string name="folder_no_access">యాక్సెస్ లేదు · మళ్లీ అనుమతించడానికి నొక్కండి</string>
    <string name="add_folder">ఫోల్డర్ను జోడించు</string>
+   <string name="recent_empty_hint">మీరు ఇంకా ఏమీ చదవలేదు. పుస్తకం తెరవండి, అది ఇక్కడ మీ కోసం వేచి ఉంటుంది.</string>
+   <string name="continue_reading">చదవడం కొనసాగించండి</string>
+   <string name="empty_no_books">ఇంకా పుస్తకాలు లేవు</string>
+   <string name="empty_hint_books">డౌన్‌లోడ్‌లు, SD కార్డ్ లేదా సింక్ చేసిన ఫోల్డర్‌లోని పుస్తకాలు ఇక్కడ కనిపిస్తాయి.</string>
+   <string name="bookmarks_empty_hint">ఇంకా బుక్‌మార్క్‌లు లేవు. చదివేటప్పుడు పదాన్ని ఎక్కువసేపు నొక్కండి.</string>
    <string name="archives">ఆర్కైవ్లు</string>
    <string name="other">ఇతర</string>
    <string name="you_need_to_update_the_library">మార్పులు వర్తింపజేయడానికి ఇప్పుడు లైబ్రరీని అప్డేట్ చేయండి</string>

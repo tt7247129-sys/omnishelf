@@ -3,6 +3,11 @@
    <string name="library_settings">Nastavení knihovny</string>
    <string name="scan_device_for_new_books">Skenovat složky</string>
    <string name="add_folder">Přidat složku</string>
+   <string name="recent_empty_hint">Zatím jste nic nepřečetli. Otevřete knihu a bude na vás čekat tady.</string>
+   <string name="continue_reading">Pokračovat ve čtení</string>
+   <string name="empty_no_books">Zatím žádné knihy</string>
+   <string name="empty_hint_books">Knihy ze složky Stažené, z SD karty nebo ze synchronizované složky se zobrazí tady.</string>
+   <string name="bookmarks_empty_hint">Zatím žádné záložky. Podržením slova při čtení označíte místo.</string>
    <string name="archives">Archiv</string>
    <string name="other">Ostatní</string>
    <string name="you_need_to_update_the_library">Aktualizovat knihovnu a aplikovat změny</string>

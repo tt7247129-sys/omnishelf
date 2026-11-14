@@ -3,6 +3,11 @@
    <string name="library_settings">การตั้งค่าไลบรารี</string>
    <string name="scan_device_for_new_books">สแกนอุปกรณ์สำหรับหนังสือใหม่</string>
    <string name="add_folder">เพิ่มโฟลเดอร์ใหม่</string>
+   <string name="recent_empty_hint">คุณยังไม่ได้อ่านอะไรเลย เปิดหนังสือแล้วมันจะรอคุณอยู่ที่นี่</string>
+   <string name="continue_reading">อ่านต่อ</string>
+   <string name="empty_no_books">ยังไม่มีหนังสือ</string>
+   <string name="empty_hint_books">หนังสือในดาวน์โหลด การ์ด SD หรือโฟลเดอร์ที่ซิงค์จะแสดงที่นี่</string>
+   <string name="bookmarks_empty_hint">ยังไม่มีบุ๊กมาร์ก กดค้างที่คำขณะอ่านเพื่อทำเครื่องหมายตำแหน่ง</string>
    <string name="archives">คลังข้อมูล</string>
    <string name="other">อื่น ๆ</string>
    <string name="you_need_to_update_the_library">คุณจำเป็นต้องอัปเดตไลบรารี</string>

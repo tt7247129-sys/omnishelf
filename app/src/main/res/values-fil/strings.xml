@@ -5,6 +5,11 @@
    <string name="library_folders">Mga Folder ng Library</string>
    <string name="folder_no_access">Walang access · i-tap para payagan muli</string>
    <string name="add_folder">Magdagdag ng folder</string>
+   <string name="recent_empty_hint">Wala ka pang nabasa. Magbukas ng libro at maghihintay ito rito.</string>
+   <string name="continue_reading">Magpatuloy sa pagbasa</string>
+   <string name="empty_no_books">Wala pang aklat</string>
+   <string name="empty_hint_books">Lalabas dito ang mga aklat sa Downloads, sa SD card, o sa naka-sync na folder.</string>
+   <string name="bookmarks_empty_hint">Wala pang bookmark. Pindutin nang matagal ang isang salita habang nagbabasa para markahan ang isang lugar.</string>
    <string name="archives">Mga Archive</string>
    <string name="other">Iba pa</string>
    <string name="you_need_to_update_the_library">I-update na ang Library para mailapat ang mga pagbabago</string>

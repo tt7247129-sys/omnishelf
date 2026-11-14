@@ -3,6 +3,11 @@
    <string name="library_settings">Cài đặt thư viện</string>
    <string name="scan_device_for_new_books">Quét thiết bị cho cuốn sách mới</string>
    <string name="add_folder">Thêm thư mục</string>
+   <string name="recent_empty_hint">Bạn chưa đọc gì. Mở một cuốn sách và nó sẽ chờ bạn ở đây.</string>
+   <string name="continue_reading">Tiếp tục đọc</string>
+   <string name="empty_no_books">Chưa có sách</string>
+   <string name="empty_hint_books">Sách trong Tải xuống, thẻ SD hoặc thư mục đồng bộ sẽ xuất hiện ở đây.</string>
+   <string name="bookmarks_empty_hint">Chưa có dấu trang. Nhấn giữ một từ khi đọc để đánh dấu vị trí.</string>
    <string name="archives">Lưu trữ</string>
    <string name="other">Khác</string>
    <string name="you_need_to_update_the_library">Bạn cần cập nhật thư viện</string>

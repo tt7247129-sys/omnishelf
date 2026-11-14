@@ -5,6 +5,11 @@
     <string name="library_folders">लायब्ररी फोल्डर्स</string>
     <string name="folder_no_access">प्रवेश नाही · पुन्हा परवानगी देण्यासाठी टॅप करा</string>
     <string name="add_folder">फोल्डर जोडा</string>
+   <string name="recent_empty_hint">तुम्ही अजून काहीही वाचले नाही. एखादे पुस्तक उघडा, ते तुमची येथे वाट पाहील.</string>
+   <string name="continue_reading">वाचन सुरू ठेवा</string>
+   <string name="empty_no_books">अजून पुस्तके नाहीत</string>
+   <string name="empty_hint_books">डाउनलोड्स, SD कार्ड किंवा सिंक केलेल्या फोल्डरमधील पुस्तके येथे दिसतात.</string>
+   <string name="bookmarks_empty_hint">अजून वाचमार्क नाहीत. वाचताना शब्दावर दीर्घ दाब द्या.</string>
     <string name="archives">संग्रह</string>
     <string name="other">इतर</string>
     <string name="you_need_to_update_the_library">बदल लागू करण्यासाठी आता लायब्ररी अपडेट करा</string>

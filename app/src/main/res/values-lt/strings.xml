@@ -3,6 +3,11 @@
    <string name="library_settings">Bibliotekos nustatymai</string>
    <string name="scan_device_for_new_books">Ieškoti naujų knygų įrenginyje</string>
    <string name="add_folder">Pridėti aplanką</string>
+   <string name="recent_empty_hint">Dar nieko neskaitėte. Atidarykite knygą – ji lauks jūsų čia.</string>
+   <string name="continue_reading">Tęsti skaitymą</string>
+   <string name="empty_no_books">Knygų dar nėra</string>
+   <string name="empty_hint_books">Knygos iš „Atsisiuntimai“, SD kortelės arba sinchronizuoto aplanko rodomos čia.</string>
+   <string name="bookmarks_empty_hint">Žymų dar nėra. Skaitydami ilgai spauskite žodį, kad pažymėtumėte vietą.</string>
    <string name="archives">Archyvai</string>
    <string name="other">Kita</string>
    <string name="you_need_to_update_the_library">Jums reikia atnaujinti biblioteką</string>

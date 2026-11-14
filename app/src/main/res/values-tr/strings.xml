@@ -3,6 +3,11 @@
    <string name="library_settings">Kütüphane Ayarları</string>
    <string name="scan_device_for_new_books">Cihazda Kitapları Tara</string>
    <string name="add_folder">Klasör ekle</string>
+   <string name="recent_empty_hint">Henüz hiçbir şey okumadınız. Bir kitap açın, sizi burada bekleyecek.</string>
+   <string name="continue_reading">Okumaya devam et</string>
+   <string name="empty_no_books">Henüz kitap yok</string>
+   <string name="empty_hint_books">İndirilenler, SD kart veya eşitlenmiş klasördeki kitaplar burada görünür.</string>
+   <string name="bookmarks_empty_hint">Henüz yer imi yok. Okurken bir kelimeyi basılı tutarak yer işaretleyin.</string>
    <string name="archives">Arşiv</string>
    <string name="other">Diğer</string>
    <string name="you_need_to_update_the_library">Kütüphaneyi güncellemeniz gerekiyor</string>

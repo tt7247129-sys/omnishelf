@@ -5,6 +5,11 @@
    <string name="library_folders">لائبریری کے فولڈرز</string>
    <string name="folder_no_access">رسائی نہیں · دوبارہ اجازت دینے کے لیے تھپتھپائیں</string>
    <string name="add_folder">فولڈر شامل کریں</string>
+   <string name="recent_empty_hint">آپ نے ابھی کچھ نہیں پڑھا۔ کوئی کتاب کھولیں، وہ یہاں آپ کا انتظار کرے گی۔</string>
+   <string name="continue_reading">پڑھنا جاری رکھیں</string>
+   <string name="empty_no_books">ابھی کوئی کتاب نہیں</string>
+   <string name="empty_hint_books">ڈاؤن لوڈز، SD کارڈ یا سنک شدہ فولڈر کی کتابیں یہاں دکھائی دیں گی۔</string>
+   <string name="bookmarks_empty_hint">ابھی کوئی بُک مارک نہیں۔ پڑھتے وقت کسی لفظ کو دیر تک دبائیں۔</string>
    <string name="archives">آرکائیوز</string>
    <string name="other">دیگر</string>
    <string name="you_need_to_update_the_library">تبدیلیاں لاگو کرنے کے لیے اب لائبریری اپڈیٹ کریں</string>

@@ -3,6 +3,11 @@
    <string name="library_settings">Nastavenia knižnice</string>
    <string name="scan_device_for_new_books">Priečinky na skenovanie</string>
    <string name="add_folder">Pridať priečinok</string>
+   <string name="recent_empty_hint">Zatiaľ ste nič neprečítali. Otvorte knihu a bude na vás čakať tu.</string>
+   <string name="continue_reading">Pokračovať v čítaní</string>
+   <string name="empty_no_books">Zatiaľ žiadne knihy</string>
+   <string name="empty_hint_books">Knihy zo priečinka Stiahnuté, z SD karty alebo zo synchronizovaného priečinka sa zobrazia tu.</string>
+   <string name="bookmarks_empty_hint">Zatiaľ žiadne záložky. Podržaním slova počas čítania označíte miesto.</string>
    <string name="archives">Archív</string>
    <string name="other">Ostatné</string>
    <string name="you_need_to_update_the_library">Aktualizovať knižnicu na uplatnenie zmien</string>

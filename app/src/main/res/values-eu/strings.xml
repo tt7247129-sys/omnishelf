@@ -3,6 +3,11 @@
    <string name="library_settings">Liburutegiko hobespenak</string>
    <string name="scan_device_for_new_books">Bilatu liburu berriak gailuan</string>
    <string name="add_folder">Gehitu karpeta</string>
+   <string name="recent_empty_hint">Oraindik ez duzu ezer irakurri. Ireki liburu bat eta hemen itxarongo dizu.</string>
+   <string name="continue_reading">Jarraitu irakurtzen</string>
+   <string name="empty_no_books">Oraindik ez dago libururik</string>
+   <string name="empty_hint_books">Deskargak karpetako, SD txarteleko edo sinkronizatutako karpetako liburuak hemen agertzen dira.</string>
+   <string name="bookmarks_empty_hint">Oraindik ez dago laster-markarik. Eutsi hitz bati irakurtzen ari zaren bitartean lekua markatzeko.</string>
    <string name="archives">Fitxategia</string>
    <string name="other">Beste bat</string>
    <string name="you_need_to_update_the_library">Liburutegia eguneratu behar duzu</string>

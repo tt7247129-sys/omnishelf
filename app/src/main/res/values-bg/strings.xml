@@ -3,6 +3,11 @@
    <string name="library_settings">Настройки на библиотеката</string>
    <string name="scan_device_for_new_books">Папки за сканиране</string>
    <string name="add_folder">Нова папка</string>
+   <string name="recent_empty_hint">Все още не сте чели нищо. Отворете книга и тя ще ви очаква тук.</string>
+   <string name="continue_reading">Продължи четенето</string>
+   <string name="empty_no_books">Все още няма книги</string>
+   <string name="empty_hint_books">Книгите вDownloads, на SD карта или в синхронизирана папка се показват тук.</string>
+   <string name="bookmarks_empty_hint">Все още няма отметки. Задръжте дума по време на четене, за да отбележите място.</string>
    <string name="archives">Архиви</string>
    <string name="other">Друг</string>
    <string name="you_need_to_update_the_library">Сега актуализирайте библиотеката, за да приложите промени</string>

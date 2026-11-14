@@ -3,6 +3,11 @@
    <string name="library_settings">라이브러리 설정</string>
    <string name="scan_device_for_new_books">장치에서 새책 찾기</string>
    <string name="add_folder">폴더 추가</string>
+   <string name="recent_empty_hint">아직 읽은 책이 없습니다. 책을 열면 여기에서 기다립니다.</string>
+   <string name="continue_reading">계속 읽기</string>
+   <string name="empty_no_books">아직 책이 없습니다</string>
+   <string name="empty_hint_books">다운로드, SD 카드 또는 동기화된 폴더의 책이 여기에 표시됩니다.</string>
+   <string name="bookmarks_empty_hint">아직 책갈피가 없습니다. 읽는 동안 단어를 길게 눌러 위치를 표시하세요.</string>
    <string name="archives">기록 보관소</string>
    <string name="other">기타</string>
    <string name="you_need_to_update_the_library">라이브러리를 업데이트해야합니다.</string>

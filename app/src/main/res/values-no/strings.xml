@@ -3,6 +3,11 @@
    <string name="library_settings">Bibliotekinnstillinger</string>
    <string name="scan_device_for_new_books">Skann enheten for nye bøker</string>
    <string name="add_folder">Legg til mappe</string>
+   <string name="recent_empty_hint">Du har ikke lest noe ennå. Åpne en bok, så venter den her på deg.</string>
+   <string name="continue_reading">Fortsett å lese</string>
+   <string name="empty_no_books">Ingen bøker ennå</string>
+   <string name="empty_hint_books">Bøker i Nedlastinger, på et SD-kort eller i en synkronisert mappe vises her.</string>
+   <string name="bookmarks_empty_hint">Ingen bokmerker ennå. Hold et ord inne mens du leser for å merke et sted.</string>
    <string name="archives">Arkiv</string>
    <string name="other">Annen</string>
    <string name="you_need_to_update_the_library">Du må oppdatere biblioteket</string>

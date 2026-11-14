@@ -5,6 +5,11 @@
    <string name="library_folders">Kutubxona papkalari</string>
    <string name="folder_no_access">Ruxsat yo\'q · qayta ruxsat berish uchun bosing</string>
    <string name="add_folder">Papka qo\'shish</string>
+   <string name="recent_empty_hint">Siz hali hech narsa o\'qimadingiz. Kitobni oching — u shu yerda kutadi.</string>
+   <string name="continue_reading">O\'qishni davom ettirish</string>
+   <string name="empty_no_books">Hali kitoblar yo\'q</string>
+   <string name="empty_hint_books">Yuklab olinganlar, SD karta yoki sinxronlangan papkadagi kitoblar shu yerda ko\'rinadi.</string>
+   <string name="bookmarks_empty_hint">Hali xatcho\'plar yo\'q. O\'qiyotganda so\'zni uzoq bosib joyni belgilang.</string>
    <string name="archives">Arxivlar</string>
    <string name="other">Boshqa</string>
    <string name="you_need_to_update_the_library">O\'zgarishlarni qo\'llash uchun kutubxonani yangilang</string>

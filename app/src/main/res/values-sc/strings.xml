@@ -3,6 +3,11 @@
    <string name="library_settings">Impostatziones de sa biblioteca</string>
    <string name="scan_device_for_new_books">Cartellas de iscansire</string>
    <string name="add_folder">Annanghe una cartella</string>
+   <string name="recent_empty_hint">No as ancora lèghidu nudda. Aperis unu libru e t\'at a isetare inoghe.</string>
+   <string name="continue_reading">Sighi a lèghiri</string>
+   <string name="empty_no_books">Ancora non b\'at libros</string>
+   <string name="empty_hint_books">Is libros in Iscarrigamentos, in una targeta SD o in una cartella sincronizada cumparint inoghe.</string>
+   <string name="bookmarks_empty_hint">Ancora non b\'at segnalibros. Tene incarcadu una paràula mentras leghes pro marcai unu logu.</string>
    <string name="archives">Archìvios</string>
    <string name="other">Àteru</string>
    <string name="you_need_to_update_the_library">Como atualiza sa Biblioteca pro aplicare sas modìficas</string>

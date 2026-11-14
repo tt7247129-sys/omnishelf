@@ -5,6 +5,11 @@
    <string name="library_folders">Library Folders</string>
    <string name="folder_no_access">No access · tap to allow again</string>
    <string name="add_folder">Add folder</string>
+   <string name="recent_empty_hint">Nothing read yet. Open a book and it will be waiting here.</string>
+   <string name="continue_reading">Continue reading</string>
+   <string name="empty_no_books">No books yet</string>
+   <string name="empty_hint_books">Books in Download, on an SD card or in a synced folder appear here.</string>
+   <string name="bookmarks_empty_hint">No bookmarks yet. Long-press a word while reading to mark a place.</string>
    <string name="archives">Archives</string>
    <string name="other">Other</string>
    <string name="you_need_to_update_the_library">Now update Library to apply changes</string>

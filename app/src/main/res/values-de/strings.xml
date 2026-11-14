@@ -3,6 +3,11 @@
    <string name="library_settings">Auswahl angezeigter Dokumententypen</string>
    <string name="scan_device_for_new_books">Zu durchsuchende Ordner:</string>
    <string name="add_folder">Ordner hinzufügen</string>
+   <string name="recent_empty_hint">Sie haben noch nichts gelesen. Öffnen Sie ein Buch – es wartet dann hier auf Sie.</string>
+   <string name="continue_reading">Weiterlesen</string>
+   <string name="empty_no_books">Noch keine Bücher</string>
+   <string name="empty_hint_books">Bücher in „Downloads“, auf einer SD-Karte oder in einem synchronisierten Ordner erscheinen hier.</string>
+   <string name="bookmarks_empty_hint">Noch keine Lesezeichen. Halten Sie beim Lesen ein Wort gedrückt, um eine Stelle zu markieren.</string>
    <string name="archives">Archive</string>
    <string name="other">Andere</string>
    <string name="you_need_to_update_the_library">Bibliothek aktualsieren um Änderungen vorzunehmen.</string>

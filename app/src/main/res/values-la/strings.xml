@@ -3,6 +3,11 @@
    <string name="library_settings">Proprietas librarium</string>
    <string name="scan_device_for_new_books">Circumspectare per novos libros</string>
    <string name="add_folder">Subdere coopercula</string>
+   <string name="recent_empty_hint">Nihil adhuc legisti. Librum aperi et hic te exspectabit.</string>
+   <string name="continue_reading">Perge legere</string>
+   <string name="empty_no_books">Nondum libri</string>
+   <string name="empty_hint_books">Libri in Downloads, in scheda SD vel in plica synchrodata hic apparent.</string>
+   <string name="bookmarks_empty_hint">Nondum signa. Verbum in legendo diu premere ut locum notes.</string>
    <string name="archives">Archivi</string>
    <string name="other">Cetera</string>
    <string name="you_need_to_update_the_library">You need to update the library</string>

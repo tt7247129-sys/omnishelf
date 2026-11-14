@@ -28,6 +28,16 @@ public class MyContextWrapper {
 
         AppProfile.init(context);
 
+        // The language is resolved before the activity is created, so the one-time reset
+        // that RebrandMigration performs runs too late for the first window. Until that
+        // flag is written, follow the system language here as well.
+        boolean firstRunOfThisBuild = !context.getApplicationContext()
+                                              .getSharedPreferences("omnishelf_migrate", Context.MODE_PRIVATE)
+                                              .getBoolean("ui_defaults_v2", false);
+        if (firstRunOfThisBuild) {
+            AppState.get().appLang = AppState.MY_SYSTEM_LANG;
+        }
+
         if (AppState.MY_SYSTEM_LANG.equals(AppState.get().appLang) && BookCSS.get().appFontScale == 1.0f) {
             LOG.d("ContextWrapper skip");
             return new ContextWrapper(context);

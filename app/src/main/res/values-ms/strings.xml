@@ -5,6 +5,11 @@
    <string name="library_folders">Folder Perpustakaan</string>
    <string name="folder_no_access">Tiada akses · ketik untuk benarkan semula</string>
    <string name="add_folder">Tambah folder</string>
+   <string name="recent_empty_hint">Anda belum membaca apa-apa. Buka buku dan ia akan menunggu di sini.</string>
+   <string name="continue_reading">Teruskan membaca</string>
+   <string name="empty_no_books">Belum ada buku</string>
+   <string name="empty_hint_books">Buku dalam Muat Turun, kad SD atau folder yang disegerakkan muncul di sini.</string>
+   <string name="bookmarks_empty_hint">Belum ada penanda buku. Tekan lama perkataan semasa membaca untuk menandakan tempat.</string>
    <string name="archives">Arkib</string>
    <string name="other">Lain-lain</string>
    <string name="you_need_to_update_the_library">Kemas kini Perpustakaan sekarang untuk gunakan perubahan</string>

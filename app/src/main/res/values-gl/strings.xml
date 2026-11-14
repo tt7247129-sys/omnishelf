@@ -5,6 +5,11 @@
    <string name="library_folders">Cartafoles da biblioteca</string>
    <string name="folder_no_access">Sen acceso · toca para permitilo de novo</string>
    <string name="add_folder">Engadir cartafol</string>
+   <string name="recent_empty_hint">Aínda non leu nada. Abra un libro e agardarao aquí.</string>
+   <string name="continue_reading">Seguir lendo</string>
+   <string name="empty_no_books">Aínda non hai libros</string>
+   <string name="empty_hint_books">Os libros de Descargas, dunha tarxeta SD ou dun cartafol sincronizado aparecen aquí.</string>
+   <string name="bookmarks_empty_hint">Aínda non hai marcadores. Manteña premida unha palabra mentres le para marcar un punto.</string>
    <string name="archives">Arquivos</string>
    <string name="other">Outros</string>
    <string name="you_need_to_update_the_library">Actualiza agora a biblioteca para aplicar os trocos</string>

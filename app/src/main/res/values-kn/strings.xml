@@ -5,6 +5,11 @@
    <string name="library_folders">ಲೈಬ್ರರಿ ಫೋಲ್ಡರ್ಗಳು</string>
    <string name="folder_no_access">ಪ್ರವೇಶವಿಲ್ಲ · ಮತ್ತೆ ಅನುಮತಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
    <string name="add_folder">ಫೋಲ್ಡರ್ ಸೇರಿಸಿ</string>
+   <string name="recent_empty_hint">ನೀವು ಇನ್ನೂ ಏನನ್ನೂ ಓದಿಲ್ಲ. ಪುಸ್ತಕ ತೆರೆಯಿರಿ, ಅದು ಇಲ್ಲಿ ಕಾಯುತ್ತದೆ.</string>
+   <string name="continue_reading">ಓದುವುದನ್ನು ಮುಂದುವರಿಸಿ</string>
+   <string name="empty_no_books">ಇನ್ನೂ ಪುಸ್ತಕಗಳಿಲ್ಲ</string>
+   <string name="empty_hint_books">ಡೌನ್‌ಲೋಡ್‌ಗಳು, SD ಕಾರ್ಡ್ ಅಥವಾ ಸಿಂಕ್ ಮಾಡಿದ ಫೋಲ್ಡರ್‌ನಲ್ಲಿನ ಪುಸ್ತಕಗಳು ಇಲ್ಲಿ ಕಾಣುತ್ತವೆ.</string>
+   <string name="bookmarks_empty_hint">ಇನ್ನೂ ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳಿಲ್ಲ. ಓದುವಾಗ ಪದವನ್ನು ದೀರ್ಘವಾಗಿ ಒತ್ತಿ ಸ್ಥಳವನ್ನು ಗುರುತಿಸಿ.</string>
    <string name="archives">ಆರ್ಕೈವ್ಗಳು</string>
    <string name="other">ಇತರೆ</string>
    <string name="you_need_to_update_the_library">ಬದಲಾವಣೆಗಳನ್ನು ಅನ್ವಯಿಸಲು ಈಗ ಲೈಬ್ರರಿ ನವೀಕರಿಸಿ</string>

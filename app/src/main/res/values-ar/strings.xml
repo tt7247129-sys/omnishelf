@@ -3,6 +3,11 @@
    <string name="library_settings">إعدادات المكتبة</string>
    <string name="scan_device_for_new_books">فحص وجود كتب جديدة في الجهاز</string>
    <string name="add_folder">أضف المجلد</string>
+   <string name="recent_empty_hint">لم تقرأ شيئًا بعد. افتح كتابًا وسيظهر هنا.</string>
+   <string name="continue_reading">متابعة القراءة</string>
+   <string name="empty_no_books">لا توجد كتب بعد</string>
+   <string name="empty_hint_books">تظهر هنا الكتب الموجودة في التنزيل أو على بطاقة SD أو في مجلد متزامن.</string>
+   <string name="bookmarks_empty_hint">لا توجد علامات بعد. اضغط مطولًا على كلمة أثناء القراءة لوضع علامة.</string>
    <string name="archives">أرشيف</string>
    <string name="other">آخر</string>
    <string name="you_need_to_update_the_library">تحتاج إلى تحديث المكتبة</string>

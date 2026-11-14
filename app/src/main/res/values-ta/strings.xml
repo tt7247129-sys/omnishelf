@@ -3,6 +3,11 @@
    <string name="library_settings">நூலக அமைப்புகள்</string>
    <string name="scan_device_for_new_books">கோப்புறைகள் ஸ்கேன் செய்ய</string>
    <string name="add_folder">புதிய அடைவை</string>
+   <string name="recent_empty_hint">நீங்கள் இன்னும் எதையும் படிக்கவில்லை. ஒரு புத்தகத்தைத் திறக்கவும், அது இங்கே காத்திருக்கும்.</string>
+   <string name="continue_reading">படிப்பைத் தொடரவும்</string>
+   <string name="empty_no_books">இன்னும் புத்தகங்கள் இல்லை</string>
+   <string name="empty_hint_books">பதிவிறக்கங்கள், SD கார்டு அல்லது ஒத்திசைக்கப்பட்ட கோப்புறையில் உள்ள புத்தகங்கள் இங்கே தோன்றும்.</string>
+   <string name="bookmarks_empty_hint">இன்னும் புக்மார்க்குகள் இல்லை. படிக்கும்போது ஒரு சொல்லை நீண்ட நேரம் அழுத்தவும்.</string>
    <string name="archives">காப்பகங்கள்</string>
    <string name="other">மற்றவை</string>
    <string name="you_need_to_update_the_library">மாற்றங்களைப் பயன்படுத்த நூலகத்தைப் புதுப்பிக்கவும்</string>

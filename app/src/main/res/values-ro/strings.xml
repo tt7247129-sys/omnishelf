@@ -3,6 +3,11 @@
    <string name="library_settings">Setările bibliotecii</string>
    <string name="scan_device_for_new_books">Dispozitiv de scanare pentru cărți noi</string>
    <string name="add_folder">Adaugă folder</string>
+   <string name="recent_empty_hint">Nu ați citit încă nimic. Deschideți o carte și vă va aștepta aici.</string>
+   <string name="continue_reading">Continuați lectura</string>
+   <string name="empty_no_books">Încă nu există cărți</string>
+   <string name="empty_hint_books">Cărțile din Descărcări, de pe un card SD sau dintr-un folder sincronizat apar aici.</string>
+   <string name="bookmarks_empty_hint">Încă nu există semne de carte. Țineți apăsat un cuvânt în timp ce citiți pentru a marca un loc.</string>
    <string name="archives">Arhive</string>
    <string name="other">Alte</string>
    <string name="you_need_to_update_the_library">Trebuie să actualizați biblioteca</string>

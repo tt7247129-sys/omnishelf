@@ -3,6 +3,11 @@
    <string name="library_settings">पुस्तकालय सेटिंग</string>
    <string name="scan_device_for_new_books">नई पुस्तकों के लिए स्कैन डिवाइस</string>
    <string name="add_folder">फ़ोल्डर जोड़ें</string>
+   <string name="recent_empty_hint">आपने अभी तक कुछ नहीं पढ़ा। कोई किताब खोलें, वह यहाँ आपकी प्रतीक्षा करेगी।</string>
+   <string name="continue_reading">पढ़ना जारी रखें</string>
+   <string name="empty_no_books">अभी कोई किताब नहीं</string>
+   <string name="empty_hint_books">डाउनलोड, SD कार्ड या सिंक किए गए फ़ोल्डर की किताबें यहाँ दिखेंगी।</string>
+   <string name="bookmarks_empty_hint">अभी कोई बुकमार्क नहीं। पढ़ते समय किसी शब्द को देर तक दबाकर जगह चिह्नित करें।</string>
    <string name="archives">अभिलेखागार</string>
    <string name="other">अन्य</string>
    <string name="you_need_to_update_the_library">आपको पुस्तकालय को अपडेट करना होगा</string>

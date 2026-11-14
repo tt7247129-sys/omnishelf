@@ -3,6 +3,11 @@
    <string name="library_settings">Bibliotekets inställningar</string>
    <string name="scan_device_for_new_books">Scan anordning för nya böcker</string>
    <string name="add_folder">Lägg till mapp</string>
+   <string name="recent_empty_hint">Du har inte läst något än. Öppna en bok så väntar den här.</string>
+   <string name="continue_reading">Fortsätt läsa</string>
+   <string name="empty_no_books">Inga böcker än</string>
+   <string name="empty_hint_books">Böcker i Hämtningar, på ett SD-kort eller i en synkad mapp visas här.</string>
+   <string name="bookmarks_empty_hint">Inga bokmärken än. Håll kvar på ett ord när du läser för att markera en plats.</string>
    <string name="archives">Arkiv</string>
    <string name="other">Andra</string>
    <string name="you_need_to_update_the_library">Du måste uppdatera biblioteket</string>

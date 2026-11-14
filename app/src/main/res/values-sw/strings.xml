@@ -3,6 +3,11 @@
    <string name="library_settings">Mazingira Library</string>
    <string name="scan_device_for_new_books">Scan kifaa kwa vitabu vipya</string>
    <string name="add_folder">Ongeza folda</string>
+   <string name="recent_empty_hint">Bado hujasoma chochote. Fungua kitabu na kitakusubiri hapa.</string>
+   <string name="continue_reading">Endelea kusoma</string>
+   <string name="empty_no_books">Bado hakuna vitabu</string>
+   <string name="empty_hint_books">Vitabu katika Vipakuliwa, kwenye kadi ya SD au folda iliyosawazishwa vinaonekana hapa.</string>
+   <string name="bookmarks_empty_hint">Bado hakuna alamisho. Bonyeza kwa muda mrefu neno unaposoma ili kuweka alama.</string>
    <string name="archives">Nyaraka</string>
    <string name="other">Nyingine</string>
    <string name="you_need_to_update_the_library">Unahitaji kusasisha maktaba</string>

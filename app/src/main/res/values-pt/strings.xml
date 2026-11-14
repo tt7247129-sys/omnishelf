@@ -3,6 +3,11 @@
    <string name="library_settings">Configurações da biblioteca</string>
    <string name="scan_device_for_new_books">Buscar novos livros no aparelho</string>
    <string name="add_folder">Adicionar pasta</string>
+   <string name="recent_empty_hint">Você ainda não leu nada. Abra um livro e ele vai esperar aqui.</string>
+   <string name="continue_reading">Continuar lendo</string>
+   <string name="empty_no_books">Ainda não há livros</string>
+   <string name="empty_hint_books">Livros em Downloads, em um cartão SD ou em uma pasta sincronizada aparecem aqui.</string>
+   <string name="bookmarks_empty_hint">Ainda não há marcadores. Toque e segure uma palavra durante a leitura para marcar um lugar.</string>
    <string name="archives">Compactados</string>
    <string name="other">De outros</string>
    <string name="you_need_to_update_the_library">Você quer atualizar a biblioteca?</string>

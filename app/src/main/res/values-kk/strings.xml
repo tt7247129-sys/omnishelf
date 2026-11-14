@@ -3,6 +3,11 @@
    <string name="library_settings">Кітапхана параметрлері</string>
    <string name="scan_device_for_new_books">Қарап шығатын қалталар</string>
    <string name="add_folder">Қалтаны қосыңыз</string>
+   <string name="recent_empty_hint">Сіз әлі ештеңе оқыған жоқсыз. Кітап ашыңыз — ол осында күтетін болады.</string>
+   <string name="continue_reading">Оқуды жалғастыру</string>
+   <string name="empty_no_books">Әзірге кітап жоқ</string>
+   <string name="empty_hint_books">Жүктеулер, SD карта немесе синхрондалған қалтадағы кітаптар осында көрінеді.</string>
+   <string name="bookmarks_empty_hint">Әзірге бетбелгі жоқ. Оқып жатқанда сөзді ұзақ басып, орынды белгілеңіз.</string>
    <string name="archives">Мұрағат</string>
    <string name="other">Басқа</string>
    <string name="you_need_to_update_the_library">Енді өзгертулерді қолдану үшін Кітапхананы жаңартыңыз</string>

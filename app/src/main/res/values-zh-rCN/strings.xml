@@ -3,6 +3,11 @@
    <string name="library_settings">书库设置</string>
    <string name="scan_device_for_new_books">包含的文件夹</string>
    <string name="add_folder">添加文件夹</string>
+   <string name="recent_empty_hint">还没有读过内容。打开一本书，它会在这里等你。</string>
+   <string name="continue_reading">继续阅读</string>
+   <string name="empty_no_books">还没有书籍</string>
+   <string name="empty_hint_books">下载、SD 卡或已同步文件夹中的书籍会显示在这里。</string>
+   <string name="bookmarks_empty_hint">还没有书签。阅读时长按词语即可标记位置。</string>
    <string name="archives">压缩包</string>
    <string name="other">其它</string>
    <string name="you_need_to_update_the_library">更新书库以应用更改</string>
