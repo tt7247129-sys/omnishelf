@@ -43,3 +43,8 @@ keystore.properties
 __pycache__/
 out/
 app/src/main/jniLibs/
+delivery/*.zip
+delivery/*.apk
+delivery/*.aab
+delivery/*.jks
+delivery/*.idsig
