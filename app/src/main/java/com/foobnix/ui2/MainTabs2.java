@@ -669,6 +669,7 @@ public class MainTabs2 extends AdsFragmentActivity {
         Clouds.get().init(this);
         RebrandMigration.apply(this);
         RebrandMigration.applyLook(this);
+        RebrandMigration.applyColour(this);
 
         //import settings
 

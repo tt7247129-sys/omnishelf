@@ -31,7 +31,9 @@ public class RebrandMigration {
      * survive reinstalls, so without this a reader keeps the look of the build before.
      */
     private static final String KEY_UI = "ui_defaults_v2";
+    private static final String KEY_COLOUR = "ui_colour_v3";
     private static final int NEW_TINT = Color.parseColor("#4A5D4E");
+    private static final int CINNABAR = Color.parseColor("#8E2B21");
 
     /** What the app shipped with before the redesign. */
     private static final String OLD_TINT = "#3949AB";
@@ -112,6 +114,35 @@ public class RebrandMigration {
             IO.writeObjSync(AppProfile.syncState, state);
             flags.edit().putBoolean(KEY_UI, true).apply();
             LOG.d("RebrandMigration", "look applied");
+        } catch (Throwable e) {
+            LOG.e(e);
+        }
+    }
+
+
+    /** The palette changed once more; installs that already look right still carry the old hue. */
+    public static void applyColour(Context context) {
+        if (context == null) {
+            return;
+        }
+        try {
+            SharedPreferences flags = context.getApplicationContext()
+                                            .getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+            if (flags.getBoolean(KEY_COLOUR, false)) {
+                return;
+            }
+            AppState state = AppState.get();
+            if (state == null) {
+                return;
+            }
+            state.tintThemeColor = CINNABAR;
+            TintUtil.color = CINNABAR;
+            if (AppProfile.syncState == null) {
+                return;
+            }
+            IO.writeObjSync(AppProfile.syncState, state);
+            flags.edit().putBoolean(KEY_COLOUR, true).apply();
+            LOG.d("RebrandMigration", "colour applied");
         } catch (Throwable e) {
             LOG.e(e);
         }

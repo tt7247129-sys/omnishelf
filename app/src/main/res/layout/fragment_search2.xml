@@ -230,7 +230,7 @@
                     android:layout_height="3dip"
                     android:layout_marginTop="5dip"
                     android:max="100"
-                    android:progressTint="@color/omni_primary"
+                    android:progressTint="@color/omni_accent"
                     android:progressBackgroundTint="@color/tint_gray"
                     android:visibility="gone" />
             </LinearLayout>

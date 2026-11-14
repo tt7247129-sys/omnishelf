@@ -156,7 +156,13 @@ public class SlidingTabLayout extends HorizontalScrollView {
      */
     /** The tint the floating chrome is painted in: the colour, with the page kept showing. */
     public static int floatingTint(int color) {
-        return setColorAlpha(color, AppsConfig.APP_TRANSPARENCY);
+        // Opaque, not translucent: a bar painted over the page washed its own icons out to
+        // about 1.3:1, which is a bar you cannot read. The dark themes get their own red.
+        if (AppState.get().appTheme == AppState.THEME_DARK_OLED
+                || AppState.get().appTheme == AppState.THEME_INK) {
+            return 0xFF4A1410;
+        }
+        return color | 0xFF000000;
     }
 
     public void setTabsBackground(int color) {

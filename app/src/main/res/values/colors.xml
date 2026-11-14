@@ -60,10 +60,11 @@
 
     <!-- OmniShelf semantic tokens. One accent, used for the app bar, links and
          selected states; nothing else introduces a second hue. -->
-    <color name="omni_primary">#4A5D4E</color>
-    <color name="omni_primary_dark">#3C4C40</color>
-    <color name="omni_accent">#4A5D4E</color>
-    <color name="omni_surface">#F7F5F0</color>
-    <color name="omni_on_surface">#2B2B28</color>
+    <color name="omni_primary">#8E2B21</color>
+    <color name="omni_primary_dark">#6E1F17</color>
+    <color name="omni_accent">#C83A2A</color>
+    <color name="omni_bar_night">#4A1410</color>
+    <color name="omni_surface">#FFFDF8</color>
+    <color name="omni_on_surface">#2A1B18</color>
 </resources>
 
