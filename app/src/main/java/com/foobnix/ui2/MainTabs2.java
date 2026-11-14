@@ -269,6 +269,7 @@ public class MainTabs2 extends AdsFragmentActivity {
             AppSP.get().save();
             AppProfile.init(this);
             RebrandMigration.apply(this);
+            RebrandMigration.applyLook(this);
             onStoragePermissionGranted();
             SearchAllBooksWorker.run(this);
         }
@@ -667,6 +668,7 @@ public class MainTabs2 extends AdsFragmentActivity {
 
         Clouds.get().init(this);
         RebrandMigration.apply(this);
+        RebrandMigration.applyLook(this);
 
         //import settings
 
@@ -884,14 +886,16 @@ public class MainTabs2 extends AdsFragmentActivity {
             // lifted clear of the header the page's own tab draws beneath it.
             imageMenuParent.setElevation(Dips.DP_8);
             imageMenuParent.setOutlineProvider(null);
-            imageMenuParent.post(() -> {
-                WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(imageMenuParent);
-                int top = DocumentController.keptClearOf(MainTabs2.this, insets).top;
-                imageMenuParent.setPadding(imageMenuParent.getPaddingLeft(), top,
-                                           imageMenuParent.getPaddingRight(),
-                                           imageMenuParent.getPaddingBottom());
-            });
         }
+        // Whatever holds the strip, it must clear the status bar: a menu button drawn
+        // under it is a menu button the system swallows every touch of.
+        imageMenuParent.post(() -> {
+            WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(imageMenuParent);
+            int top = DocumentController.keptClearOf(MainTabs2.this, insets).top;
+            imageMenuParent.setPadding(imageMenuParent.getPaddingLeft(), top,
+                                       imageMenuParent.getPaddingRight(),
+                                       imageMenuParent.getPaddingBottom());
+        });
 
         indicator.setOnDoubleClickAction(index -> {
             try {

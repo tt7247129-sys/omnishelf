@@ -133,9 +133,11 @@
                 </LinearLayout>
 
 
+                <!-- A drawer sized by its content collapses: the settings fragment inside
+                     is match_parent, so wrap_content measured it to nothing. -->
                 <FrameLayout
                     android:id="@+id/left_drawer"
-                    android:layout_width="wrap_content"
+                    android:layout_width="320dip"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
                     android:background="#ffffff" />

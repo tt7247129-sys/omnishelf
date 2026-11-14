@@ -37,6 +37,25 @@ tap_ratio() {
   adb shell input tap $(( w * $1 / 100 )) $(( h * $2 / 100 ))
 }
 
+# screen_density — the device's dpi; header controls are laid out in dp, so their
+# pixel position does not follow the screen height and ratios miss them.
+screen_density() {
+  adb shell wm density | awk -F': ' '{print $2}' | tail -1 | tr -d '\r'
+}
+
+# tap_dp X_DP Y_DP — tap at a density-independent position.
+tap_dp() {
+  local d; d=$(screen_density)
+  adb shell input tap $(( $1 * d / 160 )) $(( $2 * d / 160 ))
+}
+
+# long_press_dp X_DP Y_DP [MS] — a press that stays put.
+long_press_dp() {
+  local d x y; d=$(screen_density)
+  x=$(( $1 * d / 160 )); y=$(( $2 * d / 160 ))
+  adb shell input swipe "$x" "$y" "$x" "$y" "${3:-1200}"
+}
+
 swipe_ratio() {
   local size w h
   size=$(screen_size)
@@ -58,13 +77,21 @@ clear_log() { adb logcat -c >/dev/null 2>&1; }
 # scan_crash NAME — fail the run if the app logged a fatal error or an ANR.
 scan_crash() {
   local label="$1" hits
-  # Only this process counts: the emulator kills system components constantly and
-  # those lines used to be reported as our crashes.
-  # A wedged emulator shows "Process system isn't responding", which never names our
-  # package - and the run then reported zero failures over a screenshot of that dialog.
-  hits=$(adb logcat -d 2>/dev/null \
-    | grep -E "FATAL EXCEPTION|ANR in |Force finishing activity ${PKG}|isn't responding" -A2 \
-    | grep -E "${PKG}|FATAL EXCEPTION|ANR in|isn't responding" || true)
+  # A FATAL EXCEPTION only counts when its own block names our process: the
+  # accessibility tool that takes the dumps crashes routinely with "UiAutomation
+  # already registered", and that used to be reported as our crash.
+  hits=$(adb logcat -d 2>/dev/null | python3 -c '
+import sys
+pkg = sys.argv[1]
+lines = sys.stdin.read().splitlines()
+out = []
+for i, l in enumerate(lines):
+    if "FATAL EXCEPTION" in l and any(pkg in b for b in lines[i:i + 6]):
+        out.extend(lines[i:i + 6])
+    elif ("ANR in " + pkg) in l or ("Force finishing activity " + pkg) in l:
+        out.extend(lines[i:i + 4])
+print("\n".join(out))
+' "$PKG" || true)
   CHECKS=$((CHECKS + 1))
   if [ -n "$hits" ]; then
     FAILURES=$((FAILURES + 1))
@@ -99,7 +126,8 @@ try:
 except Exception:
     sys.exit(1)
 pat = sys.argv[1]
-sys.exit(0 if re.search('text="[^"]*' + re.escape(pat) + '[^"]*"', s, re.I) else 1)
+# Text and descriptions both count: a tab is a described icon with no text.
+sys.exit(0 if re.search('(?:text|content-desc)="[^"]*' + re.escape(pat) + '[^"]*"', s, re.I) else 1)
 PY
     then
       return 0
