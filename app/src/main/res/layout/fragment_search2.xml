@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/panel_padding"
+            android:background="@color/omni_primary"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="6dip"

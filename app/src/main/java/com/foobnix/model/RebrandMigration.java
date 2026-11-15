@@ -148,4 +148,42 @@ public class RebrandMigration {
         }
     }
 
+
+    /**
+     * The palette has one source: the resource colour. A profile written by an older build
+     * can still carry a hue that is no longer in the palette, and every bar painted from
+     * that value then comes out in the old colour while the rest of the app is in the new
+     * one. Runs on every start and repairs it, so the app cannot drift back.
+     */
+    public static void enforcePalette(Context context) {
+        if (context == null) {
+            return;
+        }
+        try {
+            AppState state = AppState.get();
+            if (state == null) {
+                return;
+            }
+            boolean known = false;
+            for (String c : AppState.STYLE_COLORS) {
+                try {
+                    if (Color.parseColor(c) == state.tintThemeColor) {
+                        known = true;
+                        break;
+                    }
+                } catch (Throwable ignored) {
+                }
+            }
+            if (!known) {
+                state.tintThemeColor = CINNABAR;
+            }
+            TintUtil.color = state.tintThemeColor;
+            if (!known && AppProfile.syncState != null) {
+                IO.writeObjSync(AppProfile.syncState, state);
+            }
+        } catch (Throwable e) {
+            LOG.e(e);
+        }
+    }
+
 }

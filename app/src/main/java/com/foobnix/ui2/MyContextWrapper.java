@@ -27,6 +27,7 @@ public class MyContextWrapper {
     public static ContextWrapper wrap(Context context) {
 
         AppProfile.init(context);
+        com.foobnix.model.RebrandMigration.enforcePalette(context);
 
         // The language is resolved before the activity is created, so the one-time reset
         // that RebrandMigration performs runs too late for the first window. Until that

@@ -670,6 +670,7 @@ public class MainTabs2 extends AdsFragmentActivity {
         RebrandMigration.apply(this);
         RebrandMigration.applyLook(this);
         RebrandMigration.applyColour(this);
+        RebrandMigration.enforcePalette(this);
 
         //import settings
 
@@ -702,6 +703,16 @@ public class MainTabs2 extends AdsFragmentActivity {
         imageMenu = findViewById(R.id.imageMenu1);
         imageMenuParent = findViewById(R.id.imageParent1);
         imageMenuParent.setBackgroundColor(SlidingTabLayout.floatingTint(TintUtil.color));
+        // The pager starts below the strip: every page draws its own header with its own
+        // icons, and the strip used to sit on top of them, which is why the library's
+        // buttons looked painted over.
+        imageMenuParent.post(() -> {
+            ViewGroup.LayoutParams lp = pager.getLayoutParams();
+            if (lp instanceof ViewGroup.MarginLayoutParams) {
+                ((ViewGroup.MarginLayoutParams) lp).topMargin = imageMenuParent.getHeight();
+                pager.setLayoutParams(lp);
+            }
+        });
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(TintUtil.color);
