@@ -1165,6 +1165,21 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
             // Long press on the cover pins the book to the top of the shelf. It lives here
             // rather than in the overflow menu because that menu dispatches by counting
             // positions in a chain of ifs, and a new item there could shift "delete".
+            // A view that only has a long-click listener swallows plain taps: the cover had
+            // the pin gesture and nothing else, so tapping a cover opened nothing at all.
+            image.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    List<FileMeta> items = getItemsList();
+                    if (pos < 0 || pos >= items.size()) {
+                        return;
+                    }
+                    FileMeta book = items.get(pos);
+                    if (book != null && onItemClickListener != null) {
+                        onItemClickListener.onResultRecive(book);
+                    }
+                }
+            });
             image.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override public boolean onLongClick(View v) {
                     int pos = getAdapterPosition();
