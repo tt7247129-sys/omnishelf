@@ -1004,11 +1004,24 @@ public class FileMetaAdapter extends AppRecycleAdapter<FileMeta, RecyclerView.Vi
             }
 
         });
+        // The whole card opens the book: the root of a grid tile had no listener of its own,
+        // so a tap on the title or on the blank part of the card did nothing at all.
+        holder.itemView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null && fileMeta != null) {
+                    onItemClickListener.onResultRecive(fileMeta);
+                }
+            }
+        });
         holder.parent.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                onItemClickListener.onResultRecive(fileMeta);
+                if (onItemClickListener != null && fileMeta != null) {
+                    onItemClickListener.onResultRecive(fileMeta);
+                }
             }
         });
         holder.parent.setOnLongClickListener(new OnLongClickListener() {
