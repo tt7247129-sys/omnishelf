@@ -198,6 +198,17 @@ public class MainTabs2 extends AdsFragmentActivity {
     private SlidingTabLayout indicator;
     private DrawerLayout drawerLayout;
 
+    /** Opens the preferences panel - the settings a page's gear icon leads to. */
+    public void openSettingsPanel() {
+        if (drawerLayout == null) {
+            return;
+        }
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            return;
+        }
+        drawerLayout.openDrawer(GravityCompat.START, true);
+    }
+
     public static boolean isPullToRefreshEnable(Context a, View swipeRefreshLayout) {
         if (a == null || swipeRefreshLayout == null) {
             return false;
@@ -703,16 +714,9 @@ public class MainTabs2 extends AdsFragmentActivity {
         imageMenu = findViewById(R.id.imageMenu1);
         imageMenuParent = findViewById(R.id.imageParent1);
         imageMenuParent.setBackgroundColor(SlidingTabLayout.floatingTint(TintUtil.color));
-        // The pager starts below the strip: every page draws its own header with its own
-        // icons, and the strip used to sit on top of them, which is why the library's
-        // buttons looked painted over.
-        imageMenuParent.post(() -> {
-            ViewGroup.LayoutParams lp = pager.getLayoutParams();
-            if (lp instanceof ViewGroup.MarginLayoutParams) {
-                ((ViewGroup.MarginLayoutParams) lp).topMargin = imageMenuParent.getHeight();
-                pager.setLayoutParams(lp);
-            }
-        });
+        // One bar per screen: the page's own header is the top bar now, and the strip that
+        // used to stand above it - with a second hamburger in it - is gone.
+        imageMenuParent.setVisibility(View.GONE);
 
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(TintUtil.color);
@@ -785,6 +789,7 @@ public class MainTabs2 extends AdsFragmentActivity {
         // Settings live behind this button; hiding it on the library tab meant most readers
         // never found them at all. It stays, whichever tab is up.
         imageMenu.setVisibility(View.VISIBLE);
+        imageMenuParent.setVisibility(View.GONE);
 
         // ((BrigtnessDraw)
         // findViewById(R.id.brigtnessProgressView)).setActivity(this);

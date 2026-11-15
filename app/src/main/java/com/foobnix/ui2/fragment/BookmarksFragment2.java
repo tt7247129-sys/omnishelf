@@ -59,6 +59,16 @@ public class BookmarksFragment2 extends UIFragment<AppBookmark> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bookmarks2, container, false);
+        {
+            View gear = view.findViewById(R.id.settingsGear);
+            if (gear != null) {
+                gear.setOnClickListener(v -> {
+                    if (getActivity() instanceof com.foobnix.ui2.MainTabs2) {
+                        ((com.foobnix.ui2.MainTabs2) getActivity()).openSettingsPanel();
+                    }
+                });
+            }
+        }
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
 
         topPanel = view.findViewById(R.id.topPanel);

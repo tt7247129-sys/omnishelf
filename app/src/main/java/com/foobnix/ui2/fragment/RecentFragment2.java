@@ -94,6 +94,17 @@ public class RecentFragment2 extends UIFragment<FileMeta> {
         recentName = view.findViewById(R.id.recentName);
 
         onListGrid = (ImageView) view.findViewById(R.id.onListGrid);
+        {
+            View gear = view.findViewById(R.id.settingsGear);
+            if (gear != null) {
+                gear.setOnClickListener(v -> {
+                    if (getActivity() instanceof com.foobnix.ui2.MainTabs2) {
+                        ((com.foobnix.ui2.MainTabs2) getActivity()).openSettingsPanel();
+                    }
+                });
+            }
+        }
+
         onListGrid.setOnClickListener(new OnClickListener() {
 
             @Override

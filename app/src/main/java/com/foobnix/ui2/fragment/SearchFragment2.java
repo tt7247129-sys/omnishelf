@@ -398,6 +398,16 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search2, container, false);
+        {
+            View gear = view.findViewById(R.id.settingsGear);
+            if (gear != null) {
+                gear.setOnClickListener(v -> {
+                    if (getActivity() instanceof com.foobnix.ui2.MainTabs2) {
+                        ((com.foobnix.ui2.MainTabs2) getActivity()).openSettingsPanel();
+                    }
+                });
+            }
+        }
 
 //        String greet = (String) (Object) new Greeting().greet();
 //        Toast.makeText(getActivity(), greet,Toast.LENGTH_LONG).show();
@@ -655,7 +665,8 @@ public class SearchFragment2 extends UIFragment<FileMeta> {
     @Override public void onResume() {
         updateContinueCard();
         super.onResume();
-        menu2.setVisibility(getActivity().findViewById(R.id.imageMenu1) == null ? View.GONE : View.VISIBLE);
+        // The bar carries one settings/menu entry now: the gear at its end.
+        menu2.setVisibility(View.GONE);
     }
 
     @Override public void onStop() {
