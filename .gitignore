@@ -48,3 +48,11 @@ delivery/*.apk
 delivery/*.aab
 delivery/*.jks
 delivery/*.idsig
+
+# large marketing deliverables stay on disk, not in git
+.avd/
+.emu/
+.tmp/
+delivery/store-listing/screenshots/
+delivery/store-listing/raw/
+delivery/*.zip

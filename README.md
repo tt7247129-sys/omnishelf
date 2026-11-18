@@ -1,11 +1,18 @@
 # OmniShelf
 
-A free ebook and document reader for Android. No ads, no in-app purchases,
-no subscriptions, no trackers — every feature is unlocked from the first launch.
+**A free, open-source ebook reader for Android. No ads. No tracking. Everything unlocked.**
 
-**Status:** pre-release. Not yet on Google Play.
+[![License: AGPL v3](https://img.shields.io/badge/license-AGPL--v3-8E2B21.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Android%207.0%2B-3DDC84.svg)](#requirements)
+[![Languages](https://img.shields.io/badge/languages-54-2E7D5B.svg)](#languages)
+[![No ads](https://img.shields.io/badge/ads-none-8E2B21.svg)](#what-it-does-not-do)
+
+<img src="docs/store/hero-library.png" width="240" alt="Library"> <img src="docs/store/hero-panel.png" width="240" alt="Reading with the panel open"> <img src="docs/store/hero-night.png" width="240" alt="Night theme">
+
+**Download:** [Google Play](https://play.google.com/store/apps/details?id=cc.omnishelf.reader) · [APK from Releases](https://github.com/tt7247129-sys/omnishelf/releases) · [Website](https://omnishelf.cc)
 
 ---
+
 
 ## What it reads
 
@@ -22,6 +29,11 @@ JSON, ZIP.
 - Highlights, notes and bookmarks
 - OPDS catalogs
 - Library shelves, tags and search
+
+## Languages
+
+The interface is translated into **54 languages** and follows the system language,
+including complete Simplified and Traditional Chinese translations.
 
 ## What it does not do
 
