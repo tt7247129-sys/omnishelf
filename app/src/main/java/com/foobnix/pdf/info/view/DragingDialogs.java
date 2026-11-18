@@ -2102,10 +2102,10 @@ public class DragingDialogs {
                             try {
                                 String quote = editText.getText().toString().trim();
                                 if (quote.length() == 0) {
-                                    quote = controller.getSelectedText();
-                                }
-                                if (quote == null || quote.trim().length() == 0) {
                                     quote = AppState.get().selectedText;
+                                }
+                                if (quote == null) {
+                                    quote = "";
                                 }
                                 FileMeta cardMeta = controller.getBookFileMeta();
                                 String cardTitle = cardMeta != null ? cardMeta.getTitle() : "";
