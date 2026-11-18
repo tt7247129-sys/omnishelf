@@ -2495,6 +2495,7 @@ public class DragingDialogs {
                         ((View) ((View) view.findViewById(R.id.readTTS)).getParent()),
                         view.findViewById(R.id.onAddToBookmark),
                         view.findViewById(R.id.onShare),
+                        view.findViewById(R.id.onShareQuoteCard),
                         view.findViewById(R.id.onGoogle),
                         view.findViewById(R.id.onTranslate),
                         ((View) ((View) view.findViewById(R.id.dictionaryLine)).getParent()),
