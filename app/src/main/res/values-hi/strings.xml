@@ -8,6 +8,7 @@
    <string name="empty_no_books">अभी कोई किताब नहीं</string>
    <string name="empty_hint_books">डाउनलोड, SD कार्ड या सिंक किए गए फ़ोल्डर की किताबें यहाँ दिखेंगी।</string>
    <string name="bookmarks_empty_hint">अभी कोई बुकमार्क नहीं। पढ़ते समय किसी शब्द को देर तक दबाकर जगह चिह्नित करें।</string>
+   <string name="share_quote_card">उद्धरण कार्ड साझा करें</string>
    <string name="archives">अभिलेखागार</string>
    <string name="other">अन्य</string>
    <string name="you_need_to_update_the_library">आपको पुस्तकालय को अपडेट करना होगा</string>

@@ -8,6 +8,7 @@
    <string name="empty_no_books">還沒有書籍</string>
    <string name="empty_hint_books">下載、SD 卡或已同步資料夾中的書籍會顯示在這裡。</string>
    <string name="bookmarks_empty_hint">還沒有書籤。閱讀時長按詞語即可標記位置。</string>
+   <string name="share_quote_card">分享書摘卡</string>
    <string name="archives">檔案</string>
    <string name="other">其他</string>
    <string name="you_need_to_update_the_library">更新書架？</string>

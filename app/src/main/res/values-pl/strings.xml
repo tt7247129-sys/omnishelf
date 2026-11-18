@@ -8,6 +8,7 @@
    <string name="empty_no_books">Brak książek</string>
    <string name="empty_hint_books">Książki z folderu Pobrane, karty SD lub zsynchronizowanego folderu pojawiają się tutaj.</string>
    <string name="bookmarks_empty_hint">Brak zakładek. Przytrzymaj słowo podczas czytania, aby oznaczyć miejsce.</string>
+   <string name="share_quote_card">Udostępnij cytat</string>
    <string name="archives">Archiwa</string>
    <string name="other">Inne</string>
    <string name="you_need_to_update_the_library">Należy zaktualizować bibliotekę</string>

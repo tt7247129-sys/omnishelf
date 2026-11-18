@@ -10,6 +10,7 @@
    <string name="empty_no_books">Aínda non hai libros</string>
    <string name="empty_hint_books">Os libros de Descargas, dunha tarxeta SD ou dun cartafol sincronizado aparecen aquí.</string>
    <string name="bookmarks_empty_hint">Aínda non hai marcadores. Manteña premida unha palabra mentres le para marcar un punto.</string>
+   <string name="share_quote_card">Compartir a cita</string>
    <string name="archives">Arquivos</string>
    <string name="other">Outros</string>
    <string name="you_need_to_update_the_library">Actualiza agora a biblioteca para aplicar os trocos</string>

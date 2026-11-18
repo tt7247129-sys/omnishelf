@@ -10,6 +10,7 @@
    <string name="empty_no_books">এখনও কোনো বই নেই</string>
    <string name="empty_hint_books">ডাউনলোড, SD কার্ড বা সিঙ্ক করা ফোল্ডারে থাকা বই এখানে দেখা যাবে।</string>
    <string name="bookmarks_empty_hint">এখনও কোনো বুকমার্ক নেই। পড়ার সময় একটি শব্দে দীর্ঘক্ষণ চাপ দিয়ে চিহ্নিত করুন।</string>
+   <string name="share_quote_card">উদ্ধৃতি কার্ড শেয়ার করুন</string>
    <string name="archives">আর্কাইভ</string>
    <string name="other">অন্যান্য</string>
    <string name="you_need_to_update_the_library">পরিবর্তন প্রয়োগ করতে এখন লাইব্রেরি আপডেট করুন</string>

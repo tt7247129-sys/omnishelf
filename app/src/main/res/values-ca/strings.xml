@@ -8,6 +8,7 @@
    <string name="empty_no_books">Encara no hi ha llibres</string>
    <string name="empty_hint_books">Els llibres de Baixades, d\'una targeta SD o d\'una carpeta sincronitzada apareixen aquí.</string>
    <string name="bookmarks_empty_hint">Encara no hi ha marcadors. Mantén premuda una paraula mentre llegeixes per marcar un lloc.</string>
+   <string name="share_quote_card">Comparteix la citació</string>
    <string name="archives">Arxius</string>
    <string name="other">Altres</string>
    <string name="you_need_to_update_the_library">Actualitzeu la biblioteca per aplicar els canvis</string>

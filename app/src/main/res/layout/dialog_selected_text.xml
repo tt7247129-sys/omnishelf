@@ -234,6 +234,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="@android:drawable/list_selector_background"
+            android:id="@+id/onShareQuoteCard"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/wh_button_small"
+                android:layout_height="@dimen/wh_button_small"
+                android:contentDescription="@string/share_quote_card"
+                android:src="@drawable/glyphicons_578_share"
+                android:tint="@color/tint_gray" />
+
+            <TextView
+                style="@style/textLink"
+                android:layout_width="match_parent"
+                android:layout_height="35dip"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dip"
+                android:singleLine="true"
+                android:text="@string/share_quote_card"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:drawable/list_selector_background"
             android:id="@+id/onCopy"
             android:gravity="center_vertical"

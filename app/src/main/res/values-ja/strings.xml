@@ -8,6 +8,7 @@
    <string name="empty_no_books">まだ本がありません</string>
    <string name="empty_hint_books">ダウンロード、SDカード、同期フォルダの本がここに表示されます。</string>
    <string name="bookmarks_empty_hint">まだブックマークがありません。読書中に単語を長押しすると位置を記録できます。</string>
+   <string name="share_quote_card">引用カードを共有</string>
    <string name="archives">アーカイブ</string>
    <string name="other">その他</string>
    <string name="you_need_to_update_the_library">ライブラリを更新する必要があります</string>

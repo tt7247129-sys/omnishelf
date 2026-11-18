@@ -8,6 +8,7 @@
    <string name="empty_no_books">Ainda não há livros</string>
    <string name="empty_hint_books">Livros em Downloads, em um cartão SD ou em uma pasta sincronizada aparecem aqui.</string>
    <string name="bookmarks_empty_hint">Ainda não há marcadores. Toque e segure uma palavra durante a leitura para marcar um lugar.</string>
+   <string name="share_quote_card">Compartilhar citação</string>
    <string name="archives">Compactados</string>
    <string name="other">De outros</string>
    <string name="you_need_to_update_the_library">Você quer atualizar a biblioteca?</string>

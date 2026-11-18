@@ -8,6 +8,7 @@
    <string name="empty_no_books">لا توجد كتب بعد</string>
    <string name="empty_hint_books">تظهر هنا الكتب الموجودة في التنزيل أو على بطاقة SD أو في مجلد متزامن.</string>
    <string name="bookmarks_empty_hint">لا توجد علامات بعد. اضغط مطولًا على كلمة أثناء القراءة لوضع علامة.</string>
+   <string name="share_quote_card">مشاركة بطاقة اقتباس</string>
    <string name="archives">أرشيف</string>
    <string name="other">آخر</string>
    <string name="you_need_to_update_the_library">تحتاج إلى تحديث المكتبة</string>

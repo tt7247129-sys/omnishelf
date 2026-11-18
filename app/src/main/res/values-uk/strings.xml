@@ -8,6 +8,7 @@
    <string name="empty_no_books">Книг поки немає</string>
    <string name="empty_hint_books">Книги із «Завантажень», з SD-картки або із синхронізованої теки з\'являться тут.</string>
    <string name="bookmarks_empty_hint">Закладок поки немає. Натисніть і утримуйте слово під час читання, щоб поставити закладку.</string>
+   <string name="share_quote_card">Поділитися цитатою</string>
    <string name="archives">Архіви</string>
    <string name="other">Інше</string>
    <string name="you_need_to_update_the_library">Вам потрібно оновити бібліотеку</string>

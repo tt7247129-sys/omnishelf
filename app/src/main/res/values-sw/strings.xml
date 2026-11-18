@@ -8,6 +8,7 @@
    <string name="empty_no_books">Bado hakuna vitabu</string>
    <string name="empty_hint_books">Vitabu katika Vipakuliwa, kwenye kadi ya SD au folda iliyosawazishwa vinaonekana hapa.</string>
    <string name="bookmarks_empty_hint">Bado hakuna alamisho. Bonyeza kwa muda mrefu neno unaposoma ili kuweka alama.</string>
+   <string name="share_quote_card">Shiriki kadi ya nukuu</string>
    <string name="archives">Nyaraka</string>
    <string name="other">Nyingine</string>
    <string name="you_need_to_update_the_library">Unahitaji kusasisha maktaba</string>

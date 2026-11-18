@@ -8,6 +8,7 @@
    <string name="empty_no_books">Nondum libri</string>
    <string name="empty_hint_books">Libri in Downloads, in scheda SD vel in plica synchrodata hic apparent.</string>
    <string name="bookmarks_empty_hint">Nondum signa. Verbum in legendo diu premere ut locum notes.</string>
+   <string name="share_quote_card">Partiri cardam sententiae</string>
    <string name="archives">Archivi</string>
    <string name="other">Cetera</string>
    <string name="you_need_to_update_the_library">You need to update the library</string>

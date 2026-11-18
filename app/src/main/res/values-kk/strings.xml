@@ -8,6 +8,7 @@
    <string name="empty_no_books">Әзірге кітап жоқ</string>
    <string name="empty_hint_books">Жүктеулер, SD карта немесе синхрондалған қалтадағы кітаптар осында көрінеді.</string>
    <string name="bookmarks_empty_hint">Әзірге бетбелгі жоқ. Оқып жатқанда сөзді ұзақ басып, орынды белгілеңіз.</string>
+   <string name="share_quote_card">Дәйексөз картасымен бөлісу</string>
    <string name="archives">Мұрағат</string>
    <string name="other">Басқа</string>
    <string name="you_need_to_update_the_library">Енді өзгертулерді қолдану үшін Кітапхананы жаңартыңыз</string>

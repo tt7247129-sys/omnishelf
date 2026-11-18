@@ -8,6 +8,7 @@
    <string name="empty_no_books">Все още няма книги</string>
    <string name="empty_hint_books">Книгите вDownloads, на SD карта или в синхронизирана папка се показват тук.</string>
    <string name="bookmarks_empty_hint">Все още няма отметки. Задръжте дума по време на четене, за да отбележите място.</string>
+   <string name="share_quote_card">Сподели карта с цитат</string>
    <string name="archives">Архиви</string>
    <string name="other">Друг</string>
    <string name="you_need_to_update_the_library">Сега актуализирайте библиотеката, за да приложите промени</string>

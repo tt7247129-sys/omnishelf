@@ -10,6 +10,7 @@
    <string name="empty_no_books">अझै किताब छैन</string>
    <string name="empty_hint_books">डाउनलोड, SD कार्ड वा सिंक गरिएको फोल्डरका किताबहरू यहाँ देखिनेछन्।</string>
    <string name="bookmarks_empty_hint">अझै बुकमार्क छैन। पढ्दा शब्दमा लामो समय थिच्नुहोस्।</string>
+   <string name="share_quote_card">उद्धरण कार्ड साझा गर्नुहोस्</string>
    <string name="archives">अभिलेखहरू</string>
    <string name="other">अन्य</string>
    <string name="you_need_to_update_the_library">परिवर्तनहरू लागू गर्न अब लाइब्रेरी अपडेट गर्नुहोस्</string>

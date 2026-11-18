@@ -8,6 +8,7 @@
    <string name="empty_no_books">Knygų dar nėra</string>
    <string name="empty_hint_books">Knygos iš „Atsisiuntimai“, SD kortelės arba sinchronizuoto aplanko rodomos čia.</string>
    <string name="bookmarks_empty_hint">Žymų dar nėra. Skaitydami ilgai spauskite žodį, kad pažymėtumėte vietą.</string>
+   <string name="share_quote_card">Bendrinti citatos kortelę</string>
    <string name="archives">Archyvai</string>
    <string name="other">Kita</string>
    <string name="you_need_to_update_the_library">Jums reikia atnaujinti biblioteką</string>

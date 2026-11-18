@@ -8,6 +8,7 @@
    <string name="empty_no_books">هنوز کتابی نیست</string>
    <string name="empty_hint_books">کتاب‌های پوشه دانلود، کارت SD یا پوشه همگام‌شده اینجا ظاهر می‌شوند.</string>
    <string name="bookmarks_empty_hint">هنوز نشانکی نیست. هنگام خواندن روی کلمه‌ای نگه دارید تا جایی را علامت بزنید.</string>
+   <string name="share_quote_card">اشتراک‌گذاری کارت نقل‌قول</string>
    <string name="archives">بایگانی</string>
    <string name="other">دیگر</string>
    <string name="you_need_to_update_the_library">شما باید کتابخانه را به روز کنید</string>

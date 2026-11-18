@@ -10,6 +10,7 @@
    <string name="empty_no_books">No books yet</string>
    <string name="empty_hint_books">Books in Download, on an SD card or in a synced folder appear here.</string>
    <string name="bookmarks_empty_hint">No bookmarks yet. Long-press a word while reading to mark a place.</string>
+   <string name="share_quote_card">Share quote card</string>
    <string name="archives">Archives</string>
    <string name="other">Other</string>
    <string name="you_need_to_update_the_library">Now update Library to apply changes</string>

@@ -10,6 +10,7 @@
    <string name="empty_no_books">ఇంకా పుస్తకాలు లేవు</string>
    <string name="empty_hint_books">డౌన్‌లోడ్‌లు, SD కార్డ్ లేదా సింక్ చేసిన ఫోల్డర్‌లోని పుస్తకాలు ఇక్కడ కనిపిస్తాయి.</string>
    <string name="bookmarks_empty_hint">ఇంకా బుక్‌మార్క్‌లు లేవు. చదివేటప్పుడు పదాన్ని ఎక్కువసేపు నొక్కండి.</string>
+   <string name="share_quote_card">కోట్ కార్డ్‌ను షేర్ చేయండి</string>
    <string name="archives">ఆర్కైవ్లు</string>
    <string name="other">ఇతర</string>
    <string name="you_need_to_update_the_library">మార్పులు వర్తింపజేయడానికి ఇప్పుడు లైబ్రరీని అప్డేట్ చేయండి</string>

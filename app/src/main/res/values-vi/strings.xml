@@ -8,6 +8,7 @@
    <string name="empty_no_books">Chưa có sách</string>
    <string name="empty_hint_books">Sách trong Tải xuống, thẻ SD hoặc thư mục đồng bộ sẽ xuất hiện ở đây.</string>
    <string name="bookmarks_empty_hint">Chưa có dấu trang. Nhấn giữ một từ khi đọc để đánh dấu vị trí.</string>
+   <string name="share_quote_card">Chia sẻ thẻ trích dẫn</string>
    <string name="archives">Lưu trữ</string>
    <string name="other">Khác</string>
    <string name="you_need_to_update_the_library">Bạn cần cập nhật thư viện</string>

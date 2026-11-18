@@ -8,6 +8,7 @@
    <string name="empty_no_books">Δεν υπάρχουν βιβλία ακόμη</string>
    <string name="empty_hint_books">Τα βιβλία στους Λήψεις, σε κάρτα SD ή σε συγχρονισμένο φάκελο εμφανίζονται εδώ.</string>
    <string name="bookmarks_empty_hint">Δεν υπάρχουν σελιδοδείκτες ακόμη. Πατήστε παρατεταμένα μια λέξη κατά την ανάγνωση για να σημειώσετε ένα σημείο.</string>
+   <string name="share_quote_card">Κοινοποίηση κάρτας αποσπάσματος</string>
    <string name="archives">Αρχεία</string>
    <string name="other">Άλλα</string>
    <string name="you_need_to_update_the_library">Τώρα ενημερώστε τη βιβλιοθήκη για να εφαρμόσετε αλλαγές</string>

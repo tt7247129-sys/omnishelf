@@ -8,6 +8,7 @@
    <string name="empty_no_books">Ingen bøker ennå</string>
    <string name="empty_hint_books">Bøker i Nedlastinger, på et SD-kort eller i en synkronisert mappe vises her.</string>
    <string name="bookmarks_empty_hint">Ingen bokmerker ennå. Hold et ord inne mens du leser for å merke et sted.</string>
+   <string name="share_quote_card">Del sitatkort</string>
    <string name="archives">Arkiv</string>
    <string name="other">Annen</string>
    <string name="you_need_to_update_the_library">Du må oppdatere biblioteket</string>

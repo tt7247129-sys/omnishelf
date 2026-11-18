@@ -8,6 +8,7 @@
    <string name="empty_no_books">Ei vielä kirjoja</string>
    <string name="empty_hint_books">Lataukset-kansion, SD-kortin tai synkronoidun kansion kirjat näkyvät täällä.</string>
    <string name="bookmarks_empty_hint">Ei vielä kirjanmerkkejä. Paina sanaa pitkään lukiessasi merkitäksesi kohdan.</string>
+   <string name="share_quote_card">Jaa sitaattikortti</string>
    <string name="archives">Pakatut tiedostot</string>
    <string name="other">Muut</string>
    <string name="you_need_to_update_the_library">Päivitä kirjasto ottaaksesi muutokset käyttöön</string>

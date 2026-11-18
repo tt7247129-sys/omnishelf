@@ -10,6 +10,7 @@
    <string name="empty_no_books">Belum ada buku</string>
    <string name="empty_hint_books">Buku dalam Muat Turun, kad SD atau folder yang disegerakkan muncul di sini.</string>
    <string name="bookmarks_empty_hint">Belum ada penanda buku. Tekan lama perkataan semasa membaca untuk menandakan tempat.</string>
+   <string name="share_quote_card">Kongsi kad petikan</string>
    <string name="archives">Arkib</string>
    <string name="other">Lain-lain</string>
    <string name="you_need_to_update_the_library">Kemas kini Perpustakaan sekarang untuk gunakan perubahan</string>

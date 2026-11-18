@@ -8,6 +8,7 @@
    <string name="empty_no_books">Книг пока нет</string>
    <string name="empty_hint_books">Книги из «Загрузок», с SD-карты или из синхронизированной папки появятся здесь.</string>
    <string name="bookmarks_empty_hint">Закладок пока нет. Нажмите и удерживайте слово во время чтения, чтобы поставить закладку.</string>
+   <string name="share_quote_card">Поделиться цитатой</string>
    <string name="archives">Архивы</string>
    <string name="other">Другое</string>
    <string name="you_need_to_update_the_library">Для вступления изменений в силу нужно пересканировать библиотеку. Сделать это сейчас?</string>

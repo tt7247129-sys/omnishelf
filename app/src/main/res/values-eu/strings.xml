@@ -8,6 +8,7 @@
    <string name="empty_no_books">Oraindik ez dago libururik</string>
    <string name="empty_hint_books">Deskargak karpetako, SD txarteleko edo sinkronizatutako karpetako liburuak hemen agertzen dira.</string>
    <string name="bookmarks_empty_hint">Oraindik ez dago laster-markarik. Eutsi hitz bati irakurtzen ari zaren bitartean lekua markatzeko.</string>
+   <string name="share_quote_card">Partekatu aipamena</string>
    <string name="archives">Fitxategia</string>
    <string name="other">Beste bat</string>
    <string name="you_need_to_update_the_library">Liburutegia eguneratu behar duzu</string>
