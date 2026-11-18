@@ -467,6 +467,14 @@ public class AppState {
     // Off by default: a rating prompt that opens a store listing which does not exist
     // yet is an annoyance, not an ask. Turn it on once the app is actually published.
     public boolean isShowRateUsOnExit = false;
+    /**
+     * Where the reader first heard about the app, answered once at first launch. It never
+     * leaves the device on its own: the answer is offered back to the developer only if the
+     * reader chooses to send it. That keeps the no-tracking promise while still telling us
+     * which channel works.
+     */
+    public String contactSource = "";
+    public boolean isAskedContactSource = false;
     @IgnoreHashCode public boolean isRewindEnable = true;
     // The reader's own clock and battery are already up there; a second pair along the foot of
     // the page is the reader's to ask for rather than something to start with.

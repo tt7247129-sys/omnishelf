@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -197,6 +198,55 @@ public class MainTabs2 extends AdsFragmentActivity {
     boolean once = true;
     private SlidingTabLayout indicator;
     private DrawerLayout drawerLayout;
+
+
+    /**
+     * Asks where the reader found the app, once. Stored locally; the offer to send it to the
+     * developer is explicit and optional, so the app still collects nothing on its own.
+     */
+    private void askContactSourceOnce() {
+        try {
+            if (AppState.get().isAskedContactSource) {
+                return;
+            }
+            AppState.get().isAskedContactSource = true;
+            final String[] channels = {"Google Play search", "YouTube", "Reddit",
+                    "Xiaohongshu / Zhihu", "A friend told me", "GitHub / F-Droid",
+                    "Blog or article", "Somewhere else"};
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+                new AlertDialog.Builder(this)
+                        .setTitle("Where did you hear about OmniShelf?")
+                        .setItems(channels, (d, which) -> {
+                            AppState.get().contactSource = channels[which];
+                            if (AppProfile.syncState != null) {
+                                com.foobnix.android.utils.IO.writeObjSync(AppProfile.syncState, AppState.get());
+                            }
+                            new AlertDialog.Builder(this)
+                                    .setMessage("Thanks. Would you like to send this answer to the "
+                                            + "developer? Nothing is sent unless you press Send.")
+                                    .setPositiveButton("Send", (dd, w) -> {
+                                        try {
+                                            Intent mail = new Intent(Intent.ACTION_SENDTO,
+                                                    android.net.Uri.parse("mailto:hello@omnishelf.cc"));
+                                            mail.putExtra(Intent.EXTRA_SUBJECT, "How I found OmniShelf");
+                                            mail.putExtra(Intent.EXTRA_TEXT, "Channel: " + AppState.get().contactSource);
+                                            startActivity(mail);
+                                        } catch (Throwable ignored) {
+                                        }
+                                    })
+                                    .setNegativeButton("Not now", null)
+                                    .show();
+                        })
+                        .setNegativeButton("Skip", null)
+                        .show();
+            }, 1600);
+        } catch (Throwable e) {
+            LOG.e(e);
+        }
+    }
 
     /** Opens the preferences panel - the settings a page's gear icon leads to. */
     public void openSettingsPanel() {
@@ -710,6 +760,10 @@ public class MainTabs2 extends AdsFragmentActivity {
         // it, at the head or at the foot, and carries the status bar itself.
         DocumentController.applyEdgeToEdge(this, true,
                                            SlidingTabLayout.floatingTint(TintUtil.color));
+
+        // One question, once, so we know which channel actually works. The answer is kept
+        // on the device; the reader can choose to send it, and nothing is sent otherwise.
+        askContactSourceOnce();
 
         imageMenu = findViewById(R.id.imageMenu1);
         imageMenuParent = findViewById(R.id.imageParent1);

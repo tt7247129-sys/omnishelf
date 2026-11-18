@@ -35,7 +35,27 @@ for (const note of await getCollection('articles')) {
 cards.sort((a, b) => (a.date < b.date ? 1 : -1));
 ---
 
-<Page entry={entry}>
+<Page entry={entry} jsonLd={{
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'OmniShelf',
+  applicationCategory: 'BookApplication',
+  operatingSystem: 'Android 7.0+',
+  url: 'https://omnishelf.cc',
+  downloadUrl: 'https://play.google.com/store/apps/details?id=cc.omnishelf.reader',
+  installUrl: 'https://github.com/tt7247129-sys/omnishelf/releases',
+  softwareVersion: '1.1.0',
+  license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  featureList: [
+    '34 ebook and document formats including PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ and CBR',
+    'Offline text-to-speech with the device voice',
+    'Highlights, notes and bookmarks',
+    'OPDS catalogues',
+    '54 interface languages',
+    'No advertising, analytics or tracking code',
+  ],
+}}>
   <hr />
 
   <section class="prose">
