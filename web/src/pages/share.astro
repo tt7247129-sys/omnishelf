@@ -1,0 +1,8 @@
+---
+import { getEntry } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+const entry = await getEntry('pages', 'share');
+---
+
+<Page entry={entry} />

@@ -1,0 +1,40 @@
+Categories:
+  - Reading
+License: AGPL-3.0-or-later
+AuthorName: OmniShelf
+AuthorEmail: hello@omnishelf.cc
+WebSite: https://omnishelf.cc
+SourceCode: https://github.com/tt7247129-sys/omnishelf
+IssueTracker: https://github.com/tt7247129-sys/omnishelf/issues
+Changelog: https://github.com/tt7247129-sys/omnishelf/releases
+
+AutoName: OmniShelf
+Description: |-
+  A free ebook and document reader: 34 file types, offline text-to-speech,
+  highlights and notes, OPDS catalogues, 54 interface languages.
+
+  No advertising, no analytics, no crash reporting, no account and no
+  telemetry code of any kind. Books and reading progress stay on the device.
+
+  This is an independent fork of Librera Reader.
+
+RepoType: git
+Repo: https://github.com/tt7247129-sys/omnishelf.git
+
+Builds:
+  - versionName: 1.1.0
+    versionCode: 2
+    commit: 07ec3f2
+    subdir: app
+    gradle:
+      - pro
+    # MuPDF is built from source by Builder/link_arm64.sh; a from-scratch F-Droid
+    # build needs the NDK step added to this recipe.
+    prebuild: echo "mupdf native libraries must be built from source"
+    scandelete:
+      - app/src/main/jniLibs
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.1.0
+CurrentVersionCode: 2

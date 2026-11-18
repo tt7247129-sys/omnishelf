@@ -1,44 +1,27 @@
-Librera Reader is a highly customizable and feature-rich application
-for reading e-books in PDF, EPUB, MOBI, DjVu, FB2, TXT, RTF, AZW, AZW3, HTML, CBZ, CBR, DOC, DOCX, formats.
+OmniShelf reads your books. No ads, no in-app purchases, no subscriptions, no trackers, and nothing locked behind an upgrade.
 
-With its intuitive, yet powerful, interface, Librera makes ebook reading a veritable pleasure. 
-It even features a unique auto-scrolling, hands-free Musician's mode, with controllable speed.
+WHAT IT OPENS
+34 file types: PDF, XPS, EPUB, MOBI, AZW3, AZW4, FB2, PDB, PRC, DJVU, the comic archives CBZ and CBR, DOCX (Android 8+), DOC, ODT, RTF, Markdown, TXT, HTML, XHTML, MHT, JSON and ZIP.
 
-F-Droid version is based on the latest MuPDF and support Android 4.1+.
+READING
+- Day, night, sepia and fully custom themes
+- Fine control of font, margins, line spacing and alignment
+- Single page, two page and scrolling modes
+- Text-to-speech using your device's built-in voice, works offline
+- Highlights, notes and bookmarks with quick navigation
+- Continue reading: a card on the shelf takes you back to the last page
 
-The only difference between Librera FD (F-Droid) and Librera PRO
-is the absence of Google Play services and Google Drive book synchronization in Librera FD.
+LIBRARY
+- Five shelves: recent, library, folders, favourites, bookmarks
+- Grid, compact, list and cover layouts; sort by date, title, author, size
+- Instant search; pin a book to the top; long-press a cover to pin
+- OPDS catalogues for public and self-hosted libraries
 
-# Just a few Librera main features:
+PRIVACY
+No account. No sign-in. No analytics. No advertising ID. Books and progress stay on the device - we run no servers.
 
-* Easy document discovery by configurable criteria:
-* Auto-Scan (user-specified folders)	
-* Browse folders (using an in-app file explorer) 
-* Recent (featuring a reading-progress indicator)
-* Support for bookmarks, annotations, and EPUB3 tables of contents
-* Configurable Day and Night modes
-* Configurable link color (hence, footnotes and endnotes color)
-* Support for many popular offline dictionaries
-* Vertical-scroll lock
-* Auto- and manual centering of documents
-* Custom ad-hoc CSS coding
-* Single-page view of two-page documents
-* Musician's mode with configurable scroll speed
-* Customizable TTS reading and built-in media player
-* Page-wise TTS recording to MP3 or WAV
-* Multi-word text search
-* Support for archived (.zip) documents
-* Support for RTL languages (Thai, Hebrew, Arabic, etc.)
-* Import and export of settings, auto-backup of current session
-* Leading initials in FB2 documents
-* RSVP reading (à la Spritz)
-* Movable bookmarks, w/ a floating indicator
-* And a whole bunch of other features for you to check out.
+LANGUAGES
+54 languages, following the system language, including complete Simplified and Traditional Chinese.
 
-You can read books in your web browser with the Librera Book Reader
-https://librera.mobi/online-book-reader/
-
-The best way to fully appreciate Librera Reader, however,
-is to use our restriction-free Librera PRO version from Google Play.
-
-If you enjoy Librera, please consider making a donation: https://www.patreon.com/librera
+FREE SOFTWARE
+AGPLv3. Source code: https://github.com/tt7247129-sys/omnishelf
