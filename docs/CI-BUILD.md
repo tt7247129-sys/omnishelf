@@ -1,5 +1,9 @@
 # 云端构建(无需本地 Android 环境)
 
+> 现行流水线沿用 master 上验证过的那一份(它会**从源码编译 MuPDF 的 4 个 ABI**,
+> 首次约 40 分钟,之后走缓存)。之前的失败原因是用了已下线的
+> `android-actions/setup-android`——它去装 `tools` 包时会直接报错,所以构建在 40 秒内就挂了。
+
 本机没有 JDK 17-21、没有 Gradle 缓存、也连不上 Maven 仓库,所以构建搬到了 GitHub Actions。
 公开仓库的 Actions 不计费。
 
