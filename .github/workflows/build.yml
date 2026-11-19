@@ -46,7 +46,8 @@ jobs:
             exit 1
           fi
           yes | "$SDKM" --licenses > /dev/null 2>&1 || true
-          for pkg in "platform-tools" "platforms;android-37" "build-tools;36.0.0"; do
+          for pkg in "platform-tools" "platforms;android-37" "platforms;android-37.0" \
+                     "build-tools;36.0.0" "build-tools;37.0.0"; do
             echo "-> $pkg"
             "$SDKM" --install "$pkg" || echo "  (skipped: $pkg)"
           done
@@ -62,10 +63,15 @@ jobs:
           done
           ls -lh app/src/main/jniLibs/arm64-v8a/
 
-      - name: Build debug APK
+      - name: Gradle version probe
         run: |
           set -uo pipefail
           chmod +x gradlew
+          ./gradlew --version
+
+      - name: Build debug APK
+        run: |
+          set -uo pipefail
           ./gradlew --no-daemon :app:assembleProDebug -x lint --no-configuration-cache --stacktrace
 
       - name: Check the APK can actually open a book
