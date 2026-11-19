@@ -42,6 +42,13 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :app:assembleProDebug -x lint --no-configuration-cache --stacktrace
 
+      - name: Check the native library made it into the APK
+        run: |
+          APK=$(find app/build/outputs/apk/pro/debug -name '*arm64*.apk' | head -1)
+          echo "APK: $APK"
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/(libmupdf|libdjvu|libmobi)\.so' \
+            || { echo "::error::native libraries missing from the APK"; exit 1; }
+
       - name: List outputs
         if: always()
         run: find app/build/outputs -name '*.apk' -printf '%p %s bytes\n' || true
@@ -51,5 +58,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: omnishelf-debug-apk
-          path: app/build/outputs/apk/pro/debug/*.apk
+          path: app/build/outputs/apk/pro/debug/*arm64*.apk
           if-no-files-found: warn

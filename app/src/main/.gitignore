@@ -1,1 +1,5 @@
-/jniLibs
+# Native libraries: the arm64 build is kept in the repository so CI can produce an APK
+# that actually opens books; the other ABIs are built on the release machine.
+/jniLibs/*
+!/jniLibs/arm64-v8a/
+!/jniLibs/arm64-v8a/*.so

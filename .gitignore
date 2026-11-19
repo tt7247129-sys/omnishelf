@@ -42,7 +42,11 @@ google-services.*
 keystore.properties
 __pycache__/
 out/
-app/src/main/jniLibs/
+# MuPDF and its friends are large; keep the arm64 build, which is what phones use, and
+# leave the other ABIs to the release machine that builds them.
+app/src/main/jniLibs/*
+!app/src/main/jniLibs/arm64-v8a/
+!app/src/main/jniLibs/arm64-v8a/*.so
 delivery/*.zip
 delivery/*.apk
 delivery/*.aab
