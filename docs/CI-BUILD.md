@@ -17,9 +17,12 @@
 
 **怎么下载 APK**:该次运行页面底部 → **Artifacts** → `omnishelf-debug-apk`
 
-> 注意:仓库里不含 MuPDF 原生库(`app/src/main/jniLibs` 被 gitignore,约 150MB),
-> 所以云端打出的 APK 可以安装、可以打开界面,**但打开书会失败**。
-> 要出可用的包,需要在有 NDK 的机器上先跑 `Builder/link_arm64.sh`(约 50 分钟)。
+> **原生库已随仓库提供**:`app/src/main/jniLibs/arm64-v8a/`(23MB,含 `libmupdf.so`)已提交,
+> 所以云端打出的 arm64 APK **可以正常打开书**。CI 里有一道检查,APK 里少了
+> `libmupdf.so` / `libdjvu.so` / `libmobi.so` 就直接报错,不会悄悄出一个只能看界面的包。
+>
+> 其他 ABI(arm、x86、x86_64)的原生库不在仓库里,由发布机用
+> `Builder/link_arm64.sh` 构建;因此云端产物只有 arm64。
 
 ## 二、签名上架包(手动触发)
 
