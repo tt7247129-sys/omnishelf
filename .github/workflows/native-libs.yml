@@ -1,0 +1,67 @@
+# Optional: rebuilds MuPDF from source for all four ABIs. Slow (about 40 minutes on the
+# first run, then the cache makes it minutes) and it is not part of the main build,
+# because a failure here used to take the whole pipeline down with it.
+#
+# Use it when the native libraries need refreshing; the result is committed back to
+# app/src/main/jniLibs by hand from the artifact.
+name: native-libs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  MUPDF_VERSION: "1.28.5"
+
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Android SDK and NDK
+        run: |
+          set -uo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKM=$(ls -d "$SDK"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -1)
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          PKG=$("$SDKM" --list 2>/dev/null | grep -oE 'ndk;[0-9.]+' | sort -uV | tail -1)
+          "$SDKM" --install "$PKG" "platforms;android-37" "build-tools;36.0.0"
+          echo "NDK_DIR=$SDK/$(echo "$PKG" | tr ';' '/')" >> "$GITHUB_ENV"
+
+      - name: Cache the MuPDF checkout and its output
+        id: native
+        uses: actions/cache@v4
+        with:
+          path: Builder/mupdf-${{ env.MUPDF_VERSION }}
+          key: mupdf-${{ env.MUPDF_VERSION }}-${{ hashFiles('Builder/jni/**') }}
+
+      - name: Build all ABIs
+        run: |
+          set -uo pipefail
+          mkdir -p "Builder/mupdf-${{ env.MUPDF_VERSION }}"
+          bash "Builder/link_to_mupdf_${MUPDF_VERSION}.sh"
+
+      - name: Check all four ABIs
+        run: |
+          set -uo pipefail
+          for abi in armeabi-v7a arm64-v8a x86 x86_64; do
+            test -f "app/src/main/jniLibs/$abi/libmupdf.so" \
+              || { echo "::error::missing $abi/libmupdf.so"; exit 1; }
+          done
+          du -sh app/src/main/jniLibs/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jniLibs-all-abis
+          path: app/src/main/jniLibs
+          retention-days: 14

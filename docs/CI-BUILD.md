@@ -1,8 +1,12 @@
 # 云端构建(无需本地 Android 环境)
 
-> 现行流水线沿用 master 上验证过的那一份(它会**从源码编译 MuPDF 的 4 个 ABI**,
-> 首次约 40 分钟,之后走缓存)。之前的失败原因是用了已下线的
-> `android-actions/setup-android`——它去装 `tools` 包时会直接报错,所以构建在 40 秒内就挂了。
+> 主流水线**不编译 MuPDF**:arm64 原生库已提交在 `app/src/main/jniLibs/arm64-v8a/`,
+> CI 只需要 JDK + Android SDK,约 5-8 分钟出可安装的 APK。
+> 需要刷新原生库时,手动跑 `native-libs` 工作流(约 40 分钟,结果作为 artifact 下载)。
+>
+> 两次失败的原因分别记录如下:
+> 1. 40-60 秒失败:`android-actions/setup-android` 会去装已下线的 `tools` 包。
+> 2. 14 分钟失败:从源码编译 MuPDF(`git clone --recursive` + 4 个 ABI)在 runner 上不稳定。
 
 本机没有 JDK 17-21、没有 Gradle 缓存、也连不上 Maven 仓库,所以构建搬到了 GitHub Actions。
 公开仓库的 Actions 不计费。

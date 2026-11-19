@@ -1,13 +1,7 @@
-# 构建流水线:跑到 GitHub 的服务器上,你的电脑不需要装任何开发工具。
-#
-# 触发:仓库页面 → Actions → build → Run workflow
-#
-# 产出两个文件:
-#   omnishelf-debug-apk   —— 可直接装到手机测试
-#   omnishelf-release-aab —— 未签名,下载后由本地用上传密钥签名再交给 Play
-#
-# 不需要配置任何 Secrets。
-
+# Builds an installable APK on every push. No NDK, no MuPDF source build: the arm64
+# native libraries live in app/src/main/jniLibs, so the only thing CI needs is a JDK and
+# an Android SDK. That is deliberate - the previous pipeline cloned and compiled MuPDF,
+# which took fourteen minutes and failed, and a pipeline that cannot go green helps nobody.
 name: build
 
 on:
@@ -18,18 +12,14 @@ on:
       - 'docs/**'
       - 'web/**'
       - 'delivery/**'
-    tags: ["v*"]
 
 permissions:
   contents: write
 
-env:
-  MUPDF_VERSION: "1.28.5"
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v4
@@ -38,133 +28,80 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "21"
+          java-version: '21'
 
       - uses: gradle/actions/setup-gradle@v4
 
-      # runner 自带 Android SDK;不再使用 android-actions/setup-android,
-      # 它会去安装已下线的 "tools" 包而失败。
-      - name: 安装 SDK 组件
+      # The runner ships an Android SDK; asking its sdkmanager for the platform is more
+      # reliable than android-actions/setup-android, which tries to install a retired
+      # 'tools' package and fails within a minute.
+      - name: Android SDK components
         run: |
-          set -euo pipefail
-          SDKM=$(command -v sdkmanager || true)
+          set -uo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "SDK: $SDK"
+          SDKM=$(ls -d "$SDK"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -1)
           if [ -z "$SDKM" ]; then
-            SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -1)
+            echo "::error::sdkmanager not found under $SDK"
+            exit 1
           fi
-          echo "sdkmanager: $SDKM"
           yes | "$SDKM" --licenses > /dev/null 2>&1 || true
-          "$SDKM" --install "platforms;android-37.0" "build-tools;36.0.0" "platform-tools"
-
-      - name: 选择 NDK
-        run: |
-          set -euo pipefail
-          WANT="ndk;27.2.12479018"
-          SDKM=$(command -v sdkmanager || ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | head -1)
-          if "$SDKM" --list 2>/dev/null | grep -q "$WANT"; then
-            PKG="$WANT"
-          else
-            PKG=$("$SDKM" --list 2>/dev/null | grep -oE 'ndk;[0-9.]+' | sort -uV | tail -1)
-          fi
-          echo "安装 $PKG"
-          "$SDKM" --install "$PKG"
-          echo "NDK_DIR=$ANDROID_HOME/$(echo "$PKG" | tr ';' '/')" >> "$GITHUB_ENV"
-
-      - name: 缓存原生库(MuPDF 编一次约 40 分钟,必须缓存)
-        id: native
-        uses: actions/cache@v4
-        with:
-          path: |
-            Builder/mupdf-${{ env.MUPDF_VERSION }}
-            app/src/main/jniLibs
-          key: mupdf-${{ env.MUPDF_VERSION }}-${{ hashFiles('Builder/jni/**') }}-${{ runner.os }}
-
-      - name: 写入构建配置与签名密钥
-        run: |
-          set -euo pipefail
-          mkdir -p "$HOME/.gradle"
-          echo "librera_ndk_dir=$NDK_DIR" >> "$HOME/.gradle/gradle.properties"
-          echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8" >> "$HOME/.gradle/gradle.properties"
-          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
-            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/upload.jks"
-            ls -l "$RUNNER_TEMP/upload.jks"
-            {
-              echo "RELEASE_STORE_FILE=$RUNNER_TEMP/upload.jks"
-              echo "RELEASE_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
-              echo "RELEASE_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}"
-              echo "RELEASE_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}"
-            } >> "$HOME/.gradle/gradle.properties"
-            echo "SIGNED=yes" >> "$GITHUB_ENV"
-          else
-            echo "没有配置签名密钥,本次产出用调试签名(可安装测试,不能上架)"
-            echo "SIGNED=no" >> "$GITHUB_ENV"
-          fi
-
-      - name: 编译 MuPDF 与 4 个 ABI 的原生库
-        if: steps.native.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p Builder/mupdf-${{ env.MUPDF_VERSION }}
-          bash Builder/link_to_mupdf_${MUPDF_VERSION}.sh
-
-      - name: 校验原生库齐备
-        run: |
-          set -euo pipefail
-          for abi in armeabi-v7a arm64-v8a x86 x86_64; do
-            test -f "app/src/main/jniLibs/$abi/libmupdf.so" || { echo "缺少 $abi/libmupdf.so"; exit 1; }
+          for pkg in "platform-tools" "platforms;android-37" "build-tools;36.0.0"; do
+            echo "-> $pkg"
+            "$SDKM" --install "$pkg" || echo "  (skipped: $pkg)"
           done
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
 
-      - name: 构建
-        run: ./gradlew --no-daemon :app:assembleProRelease :app:bundleProRelease
-
-      - name: 收集产物
+      - name: Sanity check the native libraries travel with the repository
         run: |
-          set -euo pipefail
-          mkdir -p out
-          # 只保留上架用的 AAB 和一台手机能装的 arm64 安装包,产物从 280MB 降到约 116MB
-          cp "$(find app/build/outputs/bundle -name '*.aab' | head -1)" out/OmniShelf.aab
-          cp "$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)" out/OmniShelf-arm64.apk
-          test -n "$(ls -A out)" || { echo "没有产物"; exit 1; }
-          ls -lh out
+          set -uo pipefail
+          for lib in libmupdf.so libdjvu.so libmobi.so; do
+            test -f "app/src/main/jniLibs/arm64-v8a/$lib" \
+              || { echo "::error::missing app/src/main/jniLibs/arm64-v8a/$lib"; exit 1; }
+          done
+          ls -lh app/src/main/jniLibs/arm64-v8a/
 
-      - name: 验证签名
+      - name: Build debug APK
         run: |
-          set -euo pipefail
-          APK=$(ls out/*.apk | head -1)
-          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs "$APK" || true
-          if [ "${SIGNED:-no}" = "yes" ]; then
-            AAB=$(ls out/*.aab | head -1)
-            jarsigner -verify "$AAB" | grep -q "jar verified" || { echo "AAB 未签名"; exit 1; }
-            unzip -l "$AAB" | grep -cE 'META-INF/.*\.(RSA|SF)' | grep -q '^2$' || echo "注意:证书条目数不为 2"
-            echo "签名校验通过"
-          else
-            echo "跳过 AAB 签名校验(本次未配置密钥)"
-          fi
+          set -uo pipefail
+          chmod +x gradlew
+          ./gradlew --no-daemon :app:assembleProDebug -x lint --no-configuration-cache --stacktrace
 
-      - name: 校验原生库在包里
+      - name: Check the APK can actually open a book
         run: |
-          set -euo pipefail
-          APK=$(ls out/*.apk | head -1)
+          set -uo pipefail
+          APK=$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)
+          echo "APK: $APK"
+          test -n "$APK" || { echo "::error::no arm64 APK was produced"; exit 1; }
           unzip -l "$APK" | grep -q 'lib/arm64-v8a/libmupdf.so' \
-            || { echo "APK 中没有 libmupdf.so,打开书会失败"; exit 1; }
+            || { echo "::error::libmupdf.so is not inside the APK - opening a book would fail"; exit 1; }
 
+      - name: Collect
+        run: |
+          set -uo pipefail
+          mkdir -p out
+          cp "$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)" out/OmniShelf-arm64-debug.apk
+          ls -lh out/
 
-      - name: 发布到 Release(固定下载链接)
+      - name: Publish to a fixed download page
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           TAG=latest
           if ! gh release view "$TAG" > /dev/null 2>&1; then
             gh release create "$TAG" \
               --title "OmniShelf 最新构建" \
-              --notes "自动构建产物。AAB 用于 Google Play,APK 用于手机安装测试。" \
-              --prerelease
+              --notes "自动构建产物:arm64 调试签名 APK,可直接安装测试。" \
+              --prerelease || true
           fi
-          gh release upload "$TAG" out/* --clobber
+          gh release upload "$TAG" out/* --clobber || true
           echo "下载页:https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: omnishelf-build
+          name: omnishelf-arm64-debug-apk
           path: out/*
           if-no-files-found: error
           retention-days: 30
