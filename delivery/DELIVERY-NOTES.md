@@ -133,6 +133,20 @@
     **验证**:AAB 内只有 1 个证书链,SHA1 = `5B:64:C1:A4:30:C2:B2:57:16:8F:98:30:C3:C9:FB:67:96:BE:BA:6C`,
     与 Play 要求完全一致;versionCode 2 / versionName 1.1.0。
 
+## 三·五、随时可下载的安装包(云端自动构建)
+
+每次推送到仓库,GitHub Actions 会自动编译并刷新这个固定地址:
+
+```
+https://github.com/tt7247129-sys/omnishelf/releases/tag/latest
+```
+
+里面有两个文件:
+- `OmniShelf-arm64.apk` —— 手机直接安装(arm64 机型)
+- `OmniShelf.aab` —— 已签名则可用于 Play,未配置密钥时为调试签名
+
+首次构建会从源码编译 MuPDF(约 40 分钟),之后命中缓存约 5 分钟。
+
 ## 四、上传与测试流程
 
 1. Play Console → 创建应用 → 包名 cc.omnishelf.reader
