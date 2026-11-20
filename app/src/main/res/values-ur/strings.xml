@@ -11,6 +11,17 @@
    <string name="empty_hint_books">ڈاؤن لوڈز، SD کارڈ یا سنک شدہ فولڈر کی کتابیں یہاں دکھائی دیں گی۔</string>
    <string name="bookmarks_empty_hint">ابھی کوئی بُک مارک نہیں۔ پڑھتے وقت کسی لفظ کو دیر تک دبائیں۔</string>
    <string name="share_quote_card">اقتباس کارڈ شیئر کریں</string>
+   <string name="contact_source_title">آپ نے OmniShelf کے بارے میں کہاں سے سنا؟</string>
+   <string name="contact_source_friend">کسی دوست نے بتایا</string>
+   <string name="contact_source_blog">بلاگ یا مضمون</string>
+   <string name="contact_source_other">کہیں اور</string>
+   <string name="contact_source_thanks">شکریہ۔ یہ جواب ڈویلپر کو بھیجیں؟ بھیجیں دبائے بغیر کچھ نہیں بھیجا جاتا۔</string>
+   <string name="contact_source_send">بھیجیں</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">آرکائیوز</string>
    <string name="other">دیگر</string>
    <string name="you_need_to_update_the_library">تبدیلیاں لاگو کرنے کے لیے اب لائبریری اپڈیٹ کریں</string>

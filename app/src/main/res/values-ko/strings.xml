@@ -9,6 +9,17 @@
    <string name="empty_hint_books">다운로드, SD 카드 또는 동기화된 폴더의 책이 여기에 표시됩니다.</string>
    <string name="bookmarks_empty_hint">아직 책갈피가 없습니다. 읽는 동안 단어를 길게 눌러 위치를 표시하세요.</string>
    <string name="share_quote_card">인용 카드 공유</string>
+   <string name="contact_source_title">OmniShelf를 어디에서 알게 되셨나요?</string>
+   <string name="contact_source_friend">친구가 알려 줌</string>
+   <string name="contact_source_blog">블로그 또는 기사</string>
+   <string name="contact_source_other">다른 곳</string>
+   <string name="contact_source_thanks">감사합니다. 이 답변을 개발자에게 보낼까요? 보내기를 누르지 않으면 아무것도 전송되지 않습니다.</string>
+   <string name="contact_source_send">보내기</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">기록 보관소</string>
    <string name="other">기타</string>
    <string name="you_need_to_update_the_library">라이브러리를 업데이트해야합니다.</string>

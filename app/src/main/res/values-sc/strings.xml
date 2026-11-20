@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Is libros in Iscarrigamentos, in una targeta SD o in una cartella sincronizada cumparint inoghe.</string>
    <string name="bookmarks_empty_hint">Ancora non b\'at segnalibros. Tene incarcadu una paràula mentras leghes pro marcai unu logu.</string>
    <string name="share_quote_card">Partzi sa cardu de sa tzita</string>
+   <string name="contact_source_title">Dae ses bidu de OmniShelf?</string>
+   <string name="contact_source_friend">M\'at contadu unu amigu</string>
+   <string name="contact_source_blog">Blog o artìculu</string>
+   <string name="contact_source_other">In otru logu</string>
+   <string name="contact_source_thanks">Gràtzias. Boles imbiare custa risposta a su isvilupadore? Nudda s\'imbitat si non primis Imbia.</string>
+   <string name="contact_source_send">Imbia</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archìvios</string>
    <string name="other">Àteru</string>
    <string name="you_need_to_update_the_library">Como atualiza sa Biblioteca pro aplicare sas modìficas</string>

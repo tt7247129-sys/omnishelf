@@ -11,6 +11,17 @@
    <string name="empty_hint_books">Os libros de Descargas, dunha tarxeta SD ou dun cartafol sincronizado aparecen aquí.</string>
    <string name="bookmarks_empty_hint">Aínda non hai marcadores. Manteña premida unha palabra mentres le para marcar un punto.</string>
    <string name="share_quote_card">Compartir a cita</string>
+   <string name="contact_source_title">Onde oíches falar de OmniShelf?</string>
+   <string name="contact_source_friend">Díxomo un amigo</string>
+   <string name="contact_source_blog">Blog ou artigo</string>
+   <string name="contact_source_other">Noutro sitio</string>
+   <string name="contact_source_thanks">Grazas. Enviar esta resposta ao desenvolvedor? Non se envía nada a non ser que premas Enviar.</string>
+   <string name="contact_source_send">Enviar</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Arquivos</string>
    <string name="other">Outros</string>
    <string name="you_need_to_update_the_library">Actualiza agora a biblioteca para aplicar os trocos</string>

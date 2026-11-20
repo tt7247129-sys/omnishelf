@@ -11,6 +11,17 @@
    <string name="empty_hint_books">Books in Download, on an SD card or in a synced folder appear here.</string>
    <string name="bookmarks_empty_hint">No bookmarks yet. Long-press a word while reading to mark a place.</string>
    <string name="share_quote_card">Share quote card</string>
+   <string name="contact_source_title">Where did you hear about OmniShelf?</string>
+   <string name="contact_source_friend">A friend told me</string>
+   <string name="contact_source_blog">Blog or article</string>
+   <string name="contact_source_other">Somewhere else</string>
+   <string name="contact_source_thanks">Thanks. Send this answer to the developer? Nothing is sent unless you press Send.</string>
+   <string name="contact_source_send">Send</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archives</string>
    <string name="other">Other</string>
    <string name="you_need_to_update_the_library">Now update Library to apply changes</string>

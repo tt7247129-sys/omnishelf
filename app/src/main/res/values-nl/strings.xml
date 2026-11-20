@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Boeken in Downloads, op een SD-kaart of in een gesynchroniseerde map verschijnen hier.</string>
    <string name="bookmarks_empty_hint">Nog geen bladwijzers. Houd tijdens het lezen een woord ingedrukt om een plek te markeren.</string>
    <string name="share_quote_card">Citaat delen</string>
+   <string name="contact_source_title">Waar heb je van OmniShelf gehoord?</string>
+   <string name="contact_source_friend">Een vriend vertelde het me</string>
+   <string name="contact_source_blog">Blog of artikel</string>
+   <string name="contact_source_other">Ergens anders</string>
+   <string name="contact_source_thanks">Bedankt. Dit antwoord naar de ontwikkelaar sturen? Er wordt niets verzonden tenzij je op Verzenden drukt.</string>
+   <string name="contact_source_send">Verzenden</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archief</string>
    <string name="other">Anders</string>
    <string name="you_need_to_update_the_library">U moet de bibliotheek bijwerken om de wijzigingen toe te passen</string>

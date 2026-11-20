@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Książki z folderu Pobrane, karty SD lub zsynchronizowanego folderu pojawiają się tutaj.</string>
    <string name="bookmarks_empty_hint">Brak zakładek. Przytrzymaj słowo podczas czytania, aby oznaczyć miejsce.</string>
    <string name="share_quote_card">Udostępnij cytat</string>
+   <string name="contact_source_title">Skąd dowiedziałeś się o OmniShelf?</string>
+   <string name="contact_source_friend">Powiedział mi znajomy</string>
+   <string name="contact_source_blog">Blog lub artykuł</string>
+   <string name="contact_source_other">Gdzie indziej</string>
+   <string name="contact_source_thanks">Dziękuję. Wysłać tę odpowiedź do twórcy? Nic nie zostanie wysłane, dopóki nie naciśniesz Wyślij.</string>
+   <string name="contact_source_send">Wyślij</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archiwa</string>
    <string name="other">Inne</string>
    <string name="you_need_to_update_the_library">Należy zaktualizować bibliotekę</string>

@@ -9,6 +9,17 @@
    <string name="empty_hint_books">ספרים בתיקיית ההורדות, בכרטיס SD או בתיקייה מסונכרנת יופיעו כאן.</string>
    <string name="bookmarks_empty_hint">עוד אין סימניות. לחיצה ארוכה על מילה בזמן קריאה תסמן מקום.</string>
    <string name="share_quote_card">שיתוף כרטיס ציטוט</string>
+   <string name="contact_source_title">איך שמעת על OmniShelf?</string>
+   <string name="contact_source_friend">חבר סיפר לי</string>
+   <string name="contact_source_blog">בלוג או מאמר</string>
+   <string name="contact_source_other">במקום אחר</string>
+   <string name="contact_source_thanks">תודה. לשלוח את התשובה למפתח? שום דבר לא נשלח אלא אם תלחץ שליחה.</string>
+   <string name="contact_source_send">שליחה</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">אַרְכִיוֹן</string>
    <string name="other">אחר</string>
    <string name="you_need_to_update_the_library">עליך לעדכן את הספריה</string>

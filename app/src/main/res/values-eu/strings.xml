@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Deskargak karpetako, SD txarteleko edo sinkronizatutako karpetako liburuak hemen agertzen dira.</string>
    <string name="bookmarks_empty_hint">Oraindik ez dago laster-markarik. Eutsi hitz bati irakurtzen ari zaren bitartean lekua markatzeko.</string>
    <string name="share_quote_card">Partekatu aipamena</string>
+   <string name="contact_source_title">Non entzun zenuen OmniShelf-en berri?</string>
+   <string name="contact_source_friend">Lagun batek esan dit</string>
+   <string name="contact_source_blog">Bloga edo artikulua</string>
+   <string name="contact_source_other">Beste leku batean</string>
+   <string name="contact_source_thanks">Eskerrik asko. Erantzun hau garatzaileari bidali? Ez da ezer bidaltzen Bidali sakatzen ez baduzu.</string>
+   <string name="contact_source_send">Bidali</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Fitxategia</string>
    <string name="other">Beste bat</string>
    <string name="you_need_to_update_the_library">Liburutegia eguneratu behar duzu</string>

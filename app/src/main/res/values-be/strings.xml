@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Кнігі з папкі Загрузкі, на SD-карце або ў сінхранізаванай папцы з\'явяцца тут.</string>
    <string name="bookmarks_empty_hint">Закладак пакуль няма. Доўга націсніце слова падчас чытання, каб паставіць закладку.</string>
    <string name="share_quote_card">Падзяліцца карткай цытаты</string>
+   <string name="contact_source_title">Дзе вы даведаліся пра OmniShelf?</string>
+   <string name="contact_source_friend">Сябар параіў</string>
+   <string name="contact_source_blog">Блог або артыкул</string>
+   <string name="contact_source_other">Дзесьці яшчэ</string>
+   <string name="contact_source_thanks">Дзякуй. Даслаць гэты адказ распрацоўшчыку? Нічога не дасылаецца, пакуль вы не націснеце «Даслаць».</string>
+   <string name="contact_source_send">Даслаць</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Архівы</string>
    <string name="other">Іншае</string>
    <string name="you_need_to_update_the_library">Зараз абнавіце бібліятэку, каб прымяніць змены</string>

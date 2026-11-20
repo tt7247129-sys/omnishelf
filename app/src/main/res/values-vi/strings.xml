@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Sách trong Tải xuống, thẻ SD hoặc thư mục đồng bộ sẽ xuất hiện ở đây.</string>
    <string name="bookmarks_empty_hint">Chưa có dấu trang. Nhấn giữ một từ khi đọc để đánh dấu vị trí.</string>
    <string name="share_quote_card">Chia sẻ thẻ trích dẫn</string>
+   <string name="contact_source_title">Bạn biết đến OmniShelf từ đâu?</string>
+   <string name="contact_source_friend">Một người bạn giới thiệu</string>
+   <string name="contact_source_blog">Blog hoặc bài viết</string>
+   <string name="contact_source_other">Nơi khác</string>
+   <string name="contact_source_thanks">Cảm ơn. Gửi câu trả lời này cho nhà phát triển? Không có gì được gửi trừ khi bạn nhấn Gửi.</string>
+   <string name="contact_source_send">Gửi</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Lưu trữ</string>
    <string name="other">Khác</string>
    <string name="you_need_to_update_the_library">Bạn cần cập nhật thư viện</string>

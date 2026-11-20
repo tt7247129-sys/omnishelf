@@ -9,6 +9,17 @@
    <string name="empty_hint_books">A Letöltések mappából, SD-kártyáról vagy szinkronizált mappából származó könyvek itt jelennek meg.</string>
    <string name="bookmarks_empty_hint">Még nincsenek könyvjelzők. Olvasás közben tartsa nyomva egy szót egy hely megjelöléséhez.</string>
    <string name="share_quote_card">Idézetkártya megosztása</string>
+   <string name="contact_source_title">Honnan hallottál az OmniShelfról?</string>
+   <string name="contact_source_friend">Egy barátom mondta</string>
+   <string name="contact_source_blog">Blog vagy cikk</string>
+   <string name="contact_source_other">Máshonnan</string>
+   <string name="contact_source_thanks">Köszönöm. Elküldöd ezt a választ a fejlesztőnek? Semmi nem kerül elküldésre, ha nem nyomod meg a Küldés gombot.</string>
+   <string name="contact_source_send">Küldés</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archívumok</string>
    <string name="other">Egyéb</string>
    <string name="you_need_to_update_the_library">Most frissítse a könyvtárat a változtatások alkalmazásához</string>

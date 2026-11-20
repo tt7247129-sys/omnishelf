@@ -9,6 +9,17 @@
    <string name="empty_hint_books">பதிவிறக்கங்கள், SD கார்டு அல்லது ஒத்திசைக்கப்பட்ட கோப்புறையில் உள்ள புத்தகங்கள் இங்கே தோன்றும்.</string>
    <string name="bookmarks_empty_hint">இன்னும் புக்மார்க்குகள் இல்லை. படிக்கும்போது ஒரு சொல்லை நீண்ட நேரம் அழுத்தவும்.</string>
    <string name="share_quote_card">மேற்கோள் அட்டையைப் பகிர்</string>
+   <string name="contact_source_title">OmniShelf பற்றி நீங்கள் எங்கு அறிந்தீர்கள்?</string>
+   <string name="contact_source_friend">நண்பர் சொன்னார்</string>
+   <string name="contact_source_blog">வலைப்பூ அல்லது கட்டுரை</string>
+   <string name="contact_source_other">வேறு எங்கோ</string>
+   <string name="contact_source_thanks">நன்றி. இந்த பதிலை உருவாக்குநருக்கு அனுப்பவா? அனுப்பு அழுத்தாமல் எதுவும் அனுப்பப்படாது.</string>
+   <string name="contact_source_send">அனுப்பு</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">காப்பகங்கள்</string>
    <string name="other">மற்றவை</string>
    <string name="you_need_to_update_the_library">மாற்றங்களைப் பயன்படுத்த நூலகத்தைப் புதுப்பிக்கவும்</string>

@@ -11,6 +11,17 @@
    <string name="empty_hint_books">डाउनलोड, SD कार्ड वा सिंक गरिएको फोल्डरका किताबहरू यहाँ देखिनेछन्।</string>
    <string name="bookmarks_empty_hint">अझै बुकमार्क छैन। पढ्दा शब्दमा लामो समय थिच्नुहोस्।</string>
    <string name="share_quote_card">उद्धरण कार्ड साझा गर्नुहोस्</string>
+   <string name="contact_source_title">OmniShelf बारे तपाईंले कहाँ सुन्नुभयो?</string>
+   <string name="contact_source_friend">साथीले भन्यो</string>
+   <string name="contact_source_blog">ब्लग वा लेख</string>
+   <string name="contact_source_other">अन्त कतै</string>
+   <string name="contact_source_thanks">धन्यवाद। यो उत्तर विकासकर्तालाई पठाउने हो? पठाउनु नथिचेसम्म केही पठाइँदैन।</string>
+   <string name="contact_source_send">पठाउनु</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">अभिलेखहरू</string>
    <string name="other">अन्य</string>
    <string name="you_need_to_update_the_library">परिवर्तनहरू लागू गर्न अब लाइब्रेरी अपडेट गर्नुहोस्</string>

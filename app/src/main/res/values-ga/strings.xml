@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Taispeántar leabhair ó Íoslódálacha, ó chárta SD nó ó fhillteán sioncronaithe anseo.</string>
    <string name="bookmarks_empty_hint">Níl aon leabharmharc fós. Coinnigh focal brúite agus tú ag léamh chun áit a mharcáil.</string>
    <string name="share_quote_card">Roinn cárta athfhriotail</string>
+   <string name="contact_source_title">Cá bhfuaireas tú eolas faoi OmniShelf?</string>
+   <string name="contact_source_friend">Dúirt cara liom</string>
+   <string name="contact_source_blog">Blag nó alt</string>
+   <string name="contact_source_other">Áit éigin eile</string>
+   <string name="contact_source_thanks">Go raibh maith agat. An seoladh an freagra seo chuig an bhforbróir? Ní sheoltar rud ar bith mura bpróbáil tú Seol.</string>
+   <string name="contact_source_send">Seol</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Cartlanna</string>
    <string name="other">Eile</string>
    <string name="you_need_to_update_the_library">Déan an leabharlann a nuashonrú anois chun athruithe a chur i bhfeidhm</string>

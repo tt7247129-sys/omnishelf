@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Жүктеулер, SD карта немесе синхрондалған қалтадағы кітаптар осында көрінеді.</string>
    <string name="bookmarks_empty_hint">Әзірге бетбелгі жоқ. Оқып жатқанда сөзді ұзақ басып, орынды белгілеңіз.</string>
    <string name="share_quote_card">Дәйексөз картасымен бөлісу</string>
+   <string name="contact_source_title">OmniShelf туралы қайдан білдіңіз?</string>
+   <string name="contact_source_friend">Досым айтты</string>
+   <string name="contact_source_blog">Блог немесе мақала</string>
+   <string name="contact_source_other">Басқа жерден</string>
+   <string name="contact_source_thanks">Рақмет. Бұл жауапты әзірлеушіге жіберу керек пе? «Жіберу» түймесін баспасаңыз, ештеңе жіберілмейді.</string>
+   <string name="contact_source_send">Жіберу</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Мұрағат</string>
    <string name="other">Басқа</string>
    <string name="you_need_to_update_the_library">Енді өзгертулерді қолдану үшін Кітапхананы жаңартыңыз</string>

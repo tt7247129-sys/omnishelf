@@ -9,6 +9,17 @@
    <string name="empty_hint_books">کتاب‌های پوشه دانلود، کارت SD یا پوشه همگام‌شده اینجا ظاهر می‌شوند.</string>
    <string name="bookmarks_empty_hint">هنوز نشانکی نیست. هنگام خواندن روی کلمه‌ای نگه دارید تا جایی را علامت بزنید.</string>
    <string name="share_quote_card">اشتراک‌گذاری کارت نقل‌قول</string>
+   <string name="contact_source_title">از OmniShelf از کجا باخبر شدید؟</string>
+   <string name="contact_source_friend">یک دوست گفت</string>
+   <string name="contact_source_blog">وبلاگ یا مقاله</string>
+   <string name="contact_source_other">جای دیگر</string>
+   <string name="contact_source_thanks">ممنون. این پاسخ برای توسعه‌دهنده ارسال شود؟ تا زمانی که «ارسال» را نزنید چیزی فرستاده نمی‌شود.</string>
+   <string name="contact_source_send">ارسال</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">بایگانی</string>
    <string name="other">دیگر</string>
    <string name="you_need_to_update_the_library">شما باید کتابخانه را به روز کنید</string>

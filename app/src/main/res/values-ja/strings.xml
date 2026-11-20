@@ -9,6 +9,17 @@
    <string name="empty_hint_books">ダウンロード、SDカード、同期フォルダの本がここに表示されます。</string>
    <string name="bookmarks_empty_hint">まだブックマークがありません。読書中に単語を長押しすると位置を記録できます。</string>
    <string name="share_quote_card">引用カードを共有</string>
+   <string name="contact_source_title">OmniShelf をどこで知りましたか?</string>
+   <string name="contact_source_friend">友人に聞いた</string>
+   <string name="contact_source_blog">ブログ・記事</string>
+   <string name="contact_source_other">その他</string>
+   <string name="contact_source_thanks">ありがとうございます。この回答を開発者に送りますか?「送信」を押さない限り何も送信されません。</string>
+   <string name="contact_source_send">送信</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">アーカイブ</string>
    <string name="other">その他</string>
    <string name="you_need_to_update_the_library">ライブラリを更新する必要があります</string>

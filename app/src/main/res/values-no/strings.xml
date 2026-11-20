@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Bøker i Nedlastinger, på et SD-kort eller i en synkronisert mappe vises her.</string>
    <string name="bookmarks_empty_hint">Ingen bokmerker ennå. Hold et ord inne mens du leser for å merke et sted.</string>
    <string name="share_quote_card">Del sitatkort</string>
+   <string name="contact_source_title">Hvor hørte du om OmniShelf?</string>
+   <string name="contact_source_friend">En venn fortalte meg det</string>
+   <string name="contact_source_blog">Blogg eller artikkel</string>
+   <string name="contact_source_other">Et annet sted</string>
+   <string name="contact_source_thanks">Takk. Sende dette svaret til utvikleren? Ingenting sendes med mindre du trykker Send.</string>
+   <string name="contact_source_send">Send</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Arkiv</string>
    <string name="other">Annen</string>
    <string name="you_need_to_update_the_library">Du må oppdatere biblioteket</string>

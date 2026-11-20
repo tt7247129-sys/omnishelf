@@ -11,6 +11,17 @@
    <string name="empty_hint_books">Yuklab olinganlar, SD karta yoki sinxronlangan papkadagi kitoblar shu yerda ko\'rinadi.</string>
    <string name="bookmarks_empty_hint">Hali xatcho\'plar yo\'q. O\'qiyotganda so\'zni uzoq bosib joyni belgilang.</string>
    <string name="share_quote_card">Iqtibos kartasini ulashish</string>
+   <string name="contact_source_title">OmniShelf haqida qayerdan eshitdingiz?</string>
+   <string name="contact_source_friend">Do\'stim aytdi</string>
+   <string name="contact_source_blog">Blog yoki maqola</string>
+   <string name="contact_source_other">Boshqa joydan</string>
+   <string name="contact_source_thanks">Rahmat. Bu javobni ishlab chiquvchiga yuborilsinmi? «Yuborish» bosilmaguncha hech narsa yuborilmaydi.</string>
+   <string name="contact_source_send">Yuborish</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Arxivlar</string>
    <string name="other">Boshqa</string>
    <string name="you_need_to_update_the_library">O\'zgarishlarni qo\'llash uchun kutubxonani yangilang</string>

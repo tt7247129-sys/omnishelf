@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Los libros de Descargas, de una tarjeta SD o de una carpeta sincronizada aparecen aquí.</string>
    <string name="bookmarks_empty_hint">Todavía no hay marcadores. Mantenga pulsada una palabra mientras lee para marcar un punto.</string>
    <string name="share_quote_card">Compartir la cita</string>
+   <string name="contact_source_title">¿Dónde oíste hablar de OmniShelf?</string>
+   <string name="contact_source_friend">Me lo dijo un amigo</string>
+   <string name="contact_source_blog">Blog o artículo</string>
+   <string name="contact_source_other">En otro sitio</string>
+   <string name="contact_source_thanks">Gracias. ¿Enviar esta respuesta al desarrollador? No se envía nada salvo que pulses Enviar.</string>
+   <string name="contact_source_send">Enviar</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archivo</string>
    <string name="other">Otro</string>
    <string name="you_need_to_update_the_library">Necesita actualizar la biblioteca</string>

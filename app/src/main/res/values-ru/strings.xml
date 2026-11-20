@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Книги из «Загрузок», с SD-карты или из синхронизированной папки появятся здесь.</string>
    <string name="bookmarks_empty_hint">Закладок пока нет. Нажмите и удерживайте слово во время чтения, чтобы поставить закладку.</string>
    <string name="share_quote_card">Поделиться цитатой</string>
+   <string name="contact_source_title">Откуда вы узнали об OmniShelf?</string>
+   <string name="contact_source_friend">Посоветовал друг</string>
+   <string name="contact_source_blog">Блог или статья</string>
+   <string name="contact_source_other">Где-то ещё</string>
+   <string name="contact_source_thanks">Спасибо. Отправить этот ответ разработчику? Ничего не отправится, пока вы не нажмёте «Отправить».</string>
+   <string name="contact_source_send">Отправить</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Архивы</string>
    <string name="other">Другое</string>
    <string name="you_need_to_update_the_library">Для вступления изменений в силу нужно пересканировать библиотеку. Сделать это сейчас?</string>

@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Vitabu katika Vipakuliwa, kwenye kadi ya SD au folda iliyosawazishwa vinaonekana hapa.</string>
    <string name="bookmarks_empty_hint">Bado hakuna alamisho. Bonyeza kwa muda mrefu neno unaposoma ili kuweka alama.</string>
    <string name="share_quote_card">Shiriki kadi ya nukuu</string>
+   <string name="contact_source_title">Ulijuaje wapi kuhusu OmniShelf?</string>
+   <string name="contact_source_friend">Rafiki aliniambia</string>
+   <string name="contact_source_blog">Blogu au makala</string>
+   <string name="contact_source_other">Mahali pengine</string>
+   <string name="contact_source_thanks">Asante. Tuma jibu hili kwa msanidi? Hakuna kinachotumwa bila kubonyeza Tuma.</string>
+   <string name="contact_source_send">Tuma</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Nyaraka</string>
    <string name="other">Nyingine</string>
    <string name="you_need_to_update_the_library">Unahitaji kusasisha maktaba</string>

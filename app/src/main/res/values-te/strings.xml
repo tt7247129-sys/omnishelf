@@ -11,6 +11,17 @@
    <string name="empty_hint_books">డౌన్‌లోడ్‌లు, SD కార్డ్ లేదా సింక్ చేసిన ఫోల్డర్‌లోని పుస్తకాలు ఇక్కడ కనిపిస్తాయి.</string>
    <string name="bookmarks_empty_hint">ఇంకా బుక్‌మార్క్‌లు లేవు. చదివేటప్పుడు పదాన్ని ఎక్కువసేపు నొక్కండి.</string>
    <string name="share_quote_card">కోట్ కార్డ్‌ను షేర్ చేయండి</string>
+   <string name="contact_source_title">OmniShelf గురించి మీకు ఎక్కడ తెలిసింది?</string>
+   <string name="contact_source_friend">స్నేహితుడు చెప్పాడు</string>
+   <string name="contact_source_blog">బ్లాగ్ లేదా వ్యాసం</string>
+   <string name="contact_source_other">మరెక్కడో</string>
+   <string name="contact_source_thanks">ధన్యవాదాలు. ఈ సమాధానాన్ని డెవలపర్కు పంపాలా? పంపు నొక్కకుండా ఏదీ పంపబడదు.</string>
+   <string name="contact_source_send">పంపు</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">ఆర్కైవ్లు</string>
    <string name="other">ఇతర</string>
    <string name="you_need_to_update_the_library">మార్పులు వర్తింపజేయడానికి ఇప్పుడు లైబ్రరీని అప్డేట్ చేయండి</string>

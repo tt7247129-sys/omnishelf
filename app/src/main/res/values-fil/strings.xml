@@ -11,6 +11,17 @@
    <string name="empty_hint_books">Lalabas dito ang mga aklat sa Downloads, sa SD card, o sa naka-sync na folder.</string>
    <string name="bookmarks_empty_hint">Wala pang bookmark. Pindutin nang matagal ang isang salita habang nagbabasa para markahan ang isang lugar.</string>
    <string name="share_quote_card">Ibahagi ang quote card</string>
+   <string name="contact_source_title">Saan mo narinig ang tungkol sa OmniShelf?</string>
+   <string name="contact_source_friend">Sinabi ng kaibigan</string>
+   <string name="contact_source_blog">Blog o artikulo</string>
+   <string name="contact_source_other">Sa ibang lugar</string>
+   <string name="contact_source_thanks">Salamat. Ipadala ang sagot na ito sa developer? Walang ipapadala maliban kung pindutin mo ang Ipadala.</string>
+   <string name="contact_source_send">Ipadala</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Mga Archive</string>
    <string name="other">Iba pa</string>
    <string name="you_need_to_update_the_library">I-update na ang Library para mailapat ang mga pagbabago</string>

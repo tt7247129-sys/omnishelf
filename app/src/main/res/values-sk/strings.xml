@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Knihy zo priečinka Stiahnuté, z SD karty alebo zo synchronizovaného priečinka sa zobrazia tu.</string>
    <string name="bookmarks_empty_hint">Zatiaľ žiadne záložky. Podržaním slova počas čítania označíte miesto.</string>
    <string name="share_quote_card">Zdieľať kartu citátu</string>
+   <string name="contact_source_title">Kde ste sa o OmniShelf dozvedeli?</string>
+   <string name="contact_source_friend">Povedal mi priateľ</string>
+   <string name="contact_source_blog">Blog alebo článok</string>
+   <string name="contact_source_other">Niekde inde</string>
+   <string name="contact_source_thanks">Ďakujem. Poslať túto odpoveď vývojárovi? Nič sa neodošle, kým nestlačíte Odoslať.</string>
+   <string name="contact_source_send">Odoslať</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archív</string>
    <string name="other">Ostatné</string>
    <string name="you_need_to_update_the_library">Aktualizovať knižnicu na uplatnenie zmien</string>

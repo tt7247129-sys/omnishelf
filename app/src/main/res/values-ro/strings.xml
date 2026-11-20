@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Cărțile din Descărcări, de pe un card SD sau dintr-un folder sincronizat apar aici.</string>
    <string name="bookmarks_empty_hint">Încă nu există semne de carte. Țineți apăsat un cuvânt în timp ce citiți pentru a marca un loc.</string>
    <string name="share_quote_card">Partajează cartea de citat</string>
+   <string name="contact_source_title">De unde ai aflat de OmniShelf?</string>
+   <string name="contact_source_friend">Mi-a spus un prieten</string>
+   <string name="contact_source_blog">Blog sau articol</string>
+   <string name="contact_source_other">În altă parte</string>
+   <string name="contact_source_thanks">Mulțumesc. Trimiți acest răspuns dezvoltatorului? Nimic nu este trimis dacă nu apeși Trimite.</string>
+   <string name="contact_source_send">Trimite</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Arhive</string>
    <string name="other">Alte</string>
    <string name="you_need_to_update_the_library">Trebuie să actualizați biblioteca</string>

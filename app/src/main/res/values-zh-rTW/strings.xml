@@ -9,6 +9,17 @@
    <string name="empty_hint_books">下載、SD 卡或已同步資料夾中的書籍會顯示在這裡。</string>
    <string name="bookmarks_empty_hint">還沒有書籤。閱讀時長按詞語即可標記位置。</string>
    <string name="share_quote_card">分享書摘卡</string>
+   <string name="contact_source_title">你從哪裡知道 OmniShelf 的?</string>
+   <string name="contact_source_friend">朋友推薦</string>
+   <string name="contact_source_blog">部落格或文章</string>
+   <string name="contact_source_other">其他管道</string>
+   <string name="contact_source_thanks">謝謝!要把這個答案發給開發者嗎?你不點「傳送」就不會送出任何東西。</string>
+   <string name="contact_source_send">傳送</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">檔案</string>
    <string name="other">其他</string>
    <string name="you_need_to_update_the_library">更新書架？</string>

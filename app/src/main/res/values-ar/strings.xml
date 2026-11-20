@@ -9,6 +9,17 @@
    <string name="empty_hint_books">تظهر هنا الكتب الموجودة في التنزيل أو على بطاقة SD أو في مجلد متزامن.</string>
    <string name="bookmarks_empty_hint">لا توجد علامات بعد. اضغط مطولًا على كلمة أثناء القراءة لوضع علامة.</string>
    <string name="share_quote_card">مشاركة بطاقة اقتباس</string>
+   <string name="contact_source_title">أين سمعت عن OmniShelf؟</string>
+   <string name="contact_source_friend">أخبرني صديق</string>
+   <string name="contact_source_blog">مدونة أو مقال</string>
+   <string name="contact_source_other">مكان آخر</string>
+   <string name="contact_source_thanks">شكرًا. هل ترسل هذه الإجابة إلى المطور؟ لا يُرسل شيء إلا إذا ضغطت «إرسال».</string>
+   <string name="contact_source_send">إرسال</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">أرشيف</string>
    <string name="other">آخر</string>
    <string name="you_need_to_update_the_library">تحتاج إلى تحديث المكتبة</string>

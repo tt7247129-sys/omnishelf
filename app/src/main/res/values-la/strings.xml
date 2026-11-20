@@ -9,6 +9,17 @@
    <string name="empty_hint_books">Libri in Downloads, in scheda SD vel in plica synchrodata hic apparent.</string>
    <string name="bookmarks_empty_hint">Nondum signa. Verbum in legendo diu premere ut locum notes.</string>
    <string name="share_quote_card">Partiri cardam sententiae</string>
+   <string name="contact_source_title">Unde de OmniShelf audivisti?</string>
+   <string name="contact_source_friend">Amicus mihi dixit</string>
+   <string name="contact_source_blog">Blog vel articulus</string>
+   <string name="contact_source_other">Alibi</string>
+   <string name="contact_source_thanks">Gratias. Hanc responsionem ad creatorem mittere? Nihil mittitur nisi Mittere premis.</string>
+   <string name="contact_source_send">Mittere</string>
+   <string name="contact_source_play">Google Play</string>
+   <string name="contact_source_youtube">YouTube</string>
+   <string name="contact_source_reddit">Reddit</string>
+   <string name="contact_source_social">Xiaohongshu / Zhihu</string>
+   <string name="contact_source_github">GitHub / F-Droid</string>
    <string name="archives">Archivi</string>
    <string name="other">Cetera</string>
    <string name="you_need_to_update_the_library">You need to update the library</string>

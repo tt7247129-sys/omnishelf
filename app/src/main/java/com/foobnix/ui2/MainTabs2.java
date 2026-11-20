@@ -210,24 +210,29 @@ public class MainTabs2 extends AdsFragmentActivity {
                 return;
             }
             AppState.get().isAskedContactSource = true;
-            final String[] channels = {"Google Play search", "YouTube", "Reddit",
-                    "Xiaohongshu / Zhihu", "A friend told me", "GitHub / F-Droid",
-                    "Blog or article", "Somewhere else"};
+            final String[] channels = {
+                    getString(R.string.contact_source_play),
+                    getString(R.string.contact_source_youtube),
+                    getString(R.string.contact_source_reddit),
+                    getString(R.string.contact_source_social),
+                    getString(R.string.contact_source_friend),
+                    getString(R.string.contact_source_github),
+                    getString(R.string.contact_source_blog),
+                    getString(R.string.contact_source_other)};
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (isFinishing() || isDestroyed()) {
                     return;
                 }
                 new AlertDialog.Builder(this)
-                        .setTitle("Where did you hear about OmniShelf?")
+                        .setTitle(R.string.contact_source_title)
                         .setItems(channels, (d, which) -> {
                             AppState.get().contactSource = channels[which];
                             if (AppProfile.syncState != null) {
                                 com.foobnix.android.utils.IO.writeObjSync(AppProfile.syncState, AppState.get());
                             }
                             new AlertDialog.Builder(this)
-                                    .setMessage("Thanks. Would you like to send this answer to the "
-                                            + "developer? Nothing is sent unless you press Send.")
-                                    .setPositiveButton("Send", (dd, w) -> {
+                                    .setMessage(R.string.contact_source_thanks)
+                                    .setPositiveButton(R.string.contact_source_send, (dd, w) -> {
                                         try {
                                             Intent mail = new Intent(Intent.ACTION_SENDTO,
                                                     android.net.Uri.parse("mailto:hello@omnishelf.cc"));
@@ -237,10 +242,10 @@ public class MainTabs2 extends AdsFragmentActivity {
                                         } catch (Throwable ignored) {
                                         }
                                     })
-                                    .setNegativeButton("Not now", null)
+                                    .setNegativeButton(R.string.cancel, null)
                                     .show();
                         })
-                        .setNegativeButton("Skip", null)
+                        .setNegativeButton(R.string.cancel, null)
                         .show();
             }, 1600);
         } catch (Throwable e) {
