@@ -114,10 +114,8 @@ else
 fi
 VERSION=$("$ADB" shell dumpsys package "$PKG" 2>/dev/null | grep -m1 versionName | tr -d '\r' | cut -d= -f2)
 info "installed version: ${VERSION:-unknown}"
-HAS_1_2=1
-case "$VERSION" in
-  1.0*|1.1*) HAS_1_2=0 ;;
-esac
+# The version string is reported, never used to skip a check: a build can carry the
+# 1.2.0 code while the version file still says 1.1.0, and a skipped check proves nothing.
 "$ADB" shell pm grant "$PKG" android.permission.MANAGE_EXTERNAL_STORAGE >/dev/null 2>&1 || true
 "$ADB" shell appops set "$PKG" MANAGE_EXTERNAL_STORAGE allow >/dev/null 2>&1 || true
 "$ADB" shell appops set "$PKG" READ_EXTERNAL_STORAGE allow >/dev/null 2>&1 || true
@@ -126,12 +124,16 @@ sleep 8
 dismiss_dialogs
 
 # ---- 2. the source question ----
+# The question is a list dialog: it has no positive button to tap, so answer it by
+# choosing the first channel. That also stops it covering the library underneath.
+
 D=$(dump)
 if [ -n "$D" ] && has_text "Where did you hear" "$D"; then
   pass "first-run source question shown"
   info "title: $(grep -o 'text="Where did you hear[^"]*"' "$D" | head -1)"
   # answer it so the rest of the run is not blocked, then confirm it does not come back
-  XY=$(center_of "contact_source_play" "$D")
+  XY=$(find_text_center '^(Google Play)$' "$D")
+  [ -z "$XY" ] && XY=$(find_text_center '^(YouTube)$' "$D")
   if [ -n "$XY" ]; then
     "$ADB" shell input tap $XY
     sleep 3
@@ -147,8 +149,6 @@ if [ -n "$D" ] && has_text "Where did you hear" "$D"; then
   else
     pass "source question shown only once"
   fi
-elif [ "$HAS_1_2" -eq 0 ]; then
-  skip "first-run source question (build $VERSION predates 1.2.0)"
 else
   fail "first-run source question not found"
   info "texts on screen: $(grep -o 'text="[^"]*"' "$D" 2>/dev/null | head -5 | tr '\n' ' ')"
@@ -213,8 +213,6 @@ else
   fi
   if [ -n "$ROW_XY" ]; then
     pass "share-quote-card row reachable behind the fold"
-  elif [ "$HAS_1_2" -eq 0 ]; then
-    skip "share-quote-card row (build $VERSION predates 1.2.0)"
   else
     fail "share-quote-card row not found in the selection panel"
     info "ids: $(grep -o 'resource-id="[^"]*"' "$D" 2>/dev/null | head -8 | tr '\n' ' ')"
