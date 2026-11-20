@@ -138,8 +138,10 @@ jobs:
           set -uo pipefail
           AAB=$(find app/build/outputs/bundle/proRelease -name '*.aab' | head -1)
           # Not a bare find: this job also builds a debug APK, and picking that one would
-          # publish a debug-signed file under the name "signed".
-          APK=$(find app/build/outputs/apk/pro/release -name '*arm64*.apk' | head -1)
+          # publish a debug-signed file under the name "signed". The release build produces
+          # one universal APK when the bundle task runs in the same invocation, so any apk
+          # under pro/release is the right one.
+          APK=$(find app/build/outputs/apk/pro/release -name '*.apk' | head -1)
           echo "AAB=$AAB"; echo "APK=$APK"
           jarsigner -verify "$AAB" | grep -q "jar verified" || { echo "::error::AAB not signed"; exit 1; }
           COUNT=$(unzip -l "$AAB" | grep -cE 'META-INF/.*\.(RSA|SF)')
