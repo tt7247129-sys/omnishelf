@@ -3,6 +3,10 @@
 
 
     <style name="StyledIndicatorsWhite" parent="@android:style/Theme.Light.NoTitleBar">
+        <!-- The platform accent leaks into checkboxes, switches and links when the theme
+             leaves it unset; without these two the controls stay the system teal. -->
+        <item name="android:colorAccent">@color/omni_accent</item>
+        <item name="android:colorControlActivated">@color/omni_accent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
@@ -13,6 +17,11 @@
     </style>
 
     <style name="StyledIndicatorsBlack" parent="@android:style/Theme.Black.NoTitleBar">
+        <!-- The platform accent leaks into checkboxes, switches and links when the theme
+             leaves it unset, which is why those controls stayed teal while the chrome was
+             already cinnabar. -->
+        <item name="android:colorAccent">@color/omni_accent</item>
+        <item name="android:colorControlActivated">@color/omni_accent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:popupMenuStyle">@style/PopupMenuRound</item>
@@ -61,7 +70,7 @@
         <item name="android:padding">4dip</item>
         <item name="android:layout_marginLeft">1.5dip</item>
         <item name="android:layout_marginRight">1.5dip</item>
-        <item name="android:tint">?android:attr/textColorLink</item>
+        <item name="android:tint">@color/omni_accent</item>
     </style>
 
 
@@ -89,7 +98,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:tag">textLink</item>
-        <item name="android:textColor">?android:attr/textColorLink</item>
+        <item name="android:textColor">@color/omni_accent</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
@@ -97,7 +106,7 @@
          pass sizes and tints to the word; the tint here is for a link drawn without that pass. -->
     <style name="textLinkDropdown" parent="textLink">
         <item name="android:drawableEnd">@drawable/ic_chevron_down</item>
-        <item name="android:drawableTint">?android:attr/textColorLink</item>
+        <item name="android:drawableTint">@color/omni_accent</item>
     </style>
 
     <style name="textLinkWhite" parent="textLink">
@@ -114,7 +123,7 @@
     <style name="textLinkStyle">
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:textColor">?android:attr/textColorLink</item>
+        <item name="android:textColor">@color/omni_accent</item>
     </style>
 
     <style name="buttonClear">
@@ -154,7 +163,7 @@
     <!-- A fact that answers a tap - an author to search by, a year, a tongue - set in the
          colour links are set in and left unmarked otherwise. -->
     <style name="infoValueLink" parent="infoValue">
-        <item name="android:textColor">?android:attr/textColorLink</item>
+        <item name="android:textColor">@color/omni_accent</item>
         <item name="android:textIsSelectable">false</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>

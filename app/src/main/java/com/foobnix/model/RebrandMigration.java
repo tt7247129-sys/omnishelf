@@ -35,6 +35,9 @@ public class RebrandMigration {
     private static final int NEW_TINT = Color.parseColor("#4A5D4E");
     private static final int CINNABAR = Color.parseColor("#8E2B21");
 
+    /** The colours this fork accepts as its own; anything else is a leftover. */
+    private static final String[] OMNI_PALETTE = {"#8E2B21", "#C83A2A", "#6E1F17"};
+
     /** What the app shipped with before the redesign. */
     private static final String OLD_TINT = "#3949AB";
     private static final String OLD_TABS = "0#1,1#1,2#1,3#1,4#1,5#0,6#0,7#0";
@@ -164,8 +167,13 @@ public class RebrandMigration {
             if (state == null) {
                 return;
             }
+            // Upstream ships a palette of a dozen colours, and a reader upgrading from that
+            // build carries one of them in the profile - which survives a reinstall on
+            // /sdcard. Accepting the upstream palette kept the panels and checkboxes teal
+            // while the chrome was already cinnabar: two brands on one screen. Only this
+            // fork's own colours count as known now.
             boolean known = false;
-            for (String c : AppState.STYLE_COLORS) {
+            for (String c : OMNI_PALETTE) {
                 try {
                     if (Color.parseColor(c) == state.tintThemeColor) {
                         known = true;
