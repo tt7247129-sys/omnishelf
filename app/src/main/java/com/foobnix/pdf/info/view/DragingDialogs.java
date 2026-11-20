@@ -2123,9 +2123,11 @@ public class DragingDialogs {
                                 dir.mkdirs();
                                 java.io.File file = new java.io.File(dir,
                                         "quote-" + System.currentTimeMillis() + ".png");
-                                java.io.FileOutputStream out = new java.io.FileOutputStream(file);
-                                card.compress(android.graphics.Bitmap.CompressFormat.PNG, 95, out);
-                                out.close();
+                                try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
+                                    card.compress(android.graphics.Bitmap.CompressFormat.PNG, 95, out);
+                                }
+                                card.recycle();
+                                ShareQuoteCard.pruneOldCards(dir);
                                 android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(
                                         v.getContext(), Apps.getPackageName(v.getContext()) + ".provider", file);
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);

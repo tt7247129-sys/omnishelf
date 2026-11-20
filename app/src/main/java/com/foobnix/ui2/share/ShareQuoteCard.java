@@ -57,7 +57,9 @@ public class ShareQuoteCard {
 
             TextPaint quotePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             quotePaint.setColor(foreground);
-            quotePaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
+            // Sans, not serif: a device without a CJK serif face renders tofu boxes, and the
+            // quote is usually Chinese. The visual difference is small; a missing glyph is not.
+            quotePaint.setTypeface(Typeface.DEFAULT);
             quotePaint.setTextSize(fitTextSize(body, MARGIN, WIDTH - MARGIN * 2, 60));
             quotePaint.setSubpixelText(true);
 
@@ -110,6 +112,27 @@ public class ShareQuoteCard {
             // A card that cannot be laid out is still a card: the caller gets the background.
         }
         return bitmap;
+    }
+
+    /**
+     * Deletes cards older than a week. They live in filesDir/share, one PNG per share, and
+     * without this the directory only grows.
+     */
+    public static void pruneOldCards(java.io.File dir) {
+        if (dir == null || !dir.isDirectory()) {
+            return;
+        }
+        java.io.File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        long cutoff = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000;
+        for (java.io.File f : files) {
+            if (f != null && f.isFile() && f.lastModified() < cutoff) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            }
+        }
     }
 
     /** Single line when it fits, otherwise the largest size down to 34sp that fits three lines. */
