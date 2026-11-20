@@ -1,0 +1,107 @@
+# Builds the store artifacts and signs them with the upload key Play already knows.
+# Manual trigger only: a signed bundle should be a decision, not a side effect of a push.
+#
+# Secrets (Settings -> Secrets and variables -> Actions):
+#   ANDROID_KEYSTORE_BASE64      base64 of the upload keystore
+#   ANDROID_KEYSTORE_PASSWORD    its store password
+#   ANDROID_KEY_ALIAS            key alias inside it
+#   ANDROID_KEY_PASSWORD         key password
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'release tag to publish to'
+        required: true
+        default: '1.2.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Android SDK components
+        run: |
+          set -uo pipefail
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKM=$(ls -d "$SDK"/cmdline-tools/*/bin/sdkmanager 2>/dev/null | head -1)
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          for pkg in "platform-tools" "platforms;android-37" "platforms;android-37.0" \
+                     "build-tools;36.0.0" "build-tools;37.0.0"; do
+            "$SDKM" --install "$pkg" || echo "skipped $pkg"
+          done
+
+      - name: Decode the upload keystore
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          set -uo pipefail
+          if [ -z "${KEYSTORE:-}" ]; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is not configured"; exit 1
+          fi
+          echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          ls -l "$RUNNER_TEMP/upload.jks"
+
+      - name: Signed bundle and APK
+        env:
+          S: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          A: ${{ secrets.ANDROID_KEY_ALIAS }}
+          K: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -uo pipefail
+          chmod +x gradlew
+          ./gradlew --no-daemon :app:bundleProRelease :app:assembleProRelease -x lint \
+            --no-configuration-cache \
+            -PRELEASE_STORE_FILE="$RUNNER_TEMP/upload.jks" \
+            -PRELEASE_STORE_PASSWORD="$S" \
+            -PRELEASE_KEY_ALIAS="$A" \
+            -PRELEASE_KEY_PASSWORD="$K"
+
+      - name: Verify the signature (one chain, the right key)
+        run: |
+          set -uo pipefail
+          AAB=$(find app/build/outputs/bundle -name '*.aab' | head -1)
+          APK=$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)
+          echo "AAB=$AAB"; echo "APK=$APK"
+          jarsigner -verify "$AAB" | grep -q "jar verified" || { echo "::error::AAB not signed"; exit 1; }
+          COUNT=$(unzip -l "$AAB" | grep -cE 'META-INF/.*\.(RSA|SF)')
+          echo "signature entries in the bundle: $COUNT"
+          [ "$COUNT" = "2" ] || { echo "::error::expected exactly one signature chain"; exit 1; }
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs "$APK" | head -6
+          unzip -l "$APK" | grep -q 'lib/arm64-v8a/libmupdf.so' || { echo "::error::libmupdf.so missing"; exit 1; }
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -uo pipefail
+          mkdir -p out
+          cp "$(find app/build/outputs/bundle -name '*.aab' | head -1)" "out/OmniShelf-${TAG}.aab"
+          cp "$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)" "out/OmniShelf-${TAG}-arm64.apk"
+          ls -lh out
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --title "OmniShelf $TAG" --notes "Signed release artifacts." || true
+          fi
+          gh release upload "$TAG" out/* --clobber
+          echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: omnishelf-signed-${{ inputs.tag }}
+          path: out/*
+          if-no-files-found: error
