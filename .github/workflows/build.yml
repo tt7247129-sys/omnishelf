@@ -19,7 +19,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
+    env:
+      # Secrets cannot be read in an if: conditional, so the check is done here and the
+      # signed steps below look at this flag instead.
+      HAS_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && 'yes' || 'no' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -104,6 +108,57 @@ jobs:
           fi
           gh release upload "$TAG" out/* --clobber || true
           echo "下载页:https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+
+
+      # ---- signed artifacts, only when the upload key is configured ----
+      - name: Decode the upload keystore
+        if: env.HAS_KEYSTORE == 'yes'
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: echo "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/upload.jks"
+
+      - name: Signed bundle and APK
+        if: env.HAS_KEYSTORE == 'yes'
+        env:
+          S: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          A: ${{ secrets.ANDROID_KEY_ALIAS }}
+          K: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -uo pipefail
+          ./gradlew --no-daemon :app:bundleProRelease :app:assembleProRelease -x lint \
+            --no-configuration-cache \
+            -PRELEASE_STORE_FILE="$RUNNER_TEMP/upload.jks" \
+            -PRELEASE_STORE_PASSWORD="$S" \
+            -PRELEASE_KEY_ALIAS="$A" \
+            -PRELEASE_KEY_PASSWORD="$K"
+
+      - name: Verify the signed artifacts
+        if: env.HAS_KEYSTORE == 'yes'
+        run: |
+          set -uo pipefail
+          AAB=$(find app/build/outputs/bundle -name '*.aab' | head -1)
+          APK=$(find app/build/outputs/apk -name '*arm64*.apk' | head -1)
+          jarsigner -verify "$AAB" | grep -q "jar verified" || { echo "::error::AAB not signed"; exit 1; }
+          COUNT=$(unzip -l "$AAB" | grep -cE 'META-INF/.*\.(RSA|SF)')
+          echo "signature entries: $COUNT"
+          [ "$COUNT" = "2" ] || { echo "::error::expected one certificate chain"; exit 1; }
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs "$APK" | grep -E "Signer #1 certificate SHA-1" || true
+          cp "$AAB" out/OmniShelf-1.2.0.aab
+          cp "$APK" out/OmniShelf-1.2.0-arm64-signed.apk
+
+      - name: Publish signed artifacts
+        if: env.HAS_KEYSTORE == 'yes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          TAG=signed
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --title "OmniShelf 签名构建" \
+              --notes "已用 Play 上传密钥签名,可直接上架或安装。" --prerelease || true
+          fi
+          gh release upload "$TAG" out/OmniShelf-1.2.0.aab out/OmniShelf-1.2.0-arm64-signed.apk --clobber || true
+          echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
 
       - uses: actions/upload-artifact@v4
         with:
