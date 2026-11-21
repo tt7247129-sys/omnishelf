@@ -1,0 +1,7 @@
+OmniShelf 上传密钥(务必离线备份,丢了就无法再更新已上架的应用)
+
+文件        : omnishelf-upload.jks
+别名 alias  : omnishelf
+密钥库口令  : KwsbVANaaeMsa5n9wNj37YFB
+密钥口令    : KwsbVANaaeMsa5n9wNj37YFB
+有效期      : 10000 天

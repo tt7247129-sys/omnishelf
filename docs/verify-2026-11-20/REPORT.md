@@ -64,3 +64,25 @@ PASS  share sheet opened
 ./scripts/verify-1.2.0.sh <apk>
 # 网络通过 git 的本地代理可用(见 docs/HOW-TO-WATCH-WORK.md)
 ```
+
+## 附:签名 release 包的验证(2026-11-21)
+
+`delivery/OmniShelf-1.2.0-arm64-signed.apk`(CI 以 Play 上传密钥签名)的检查结果:
+
+| 检查项 | 结果 | 依据 |
+|---|---|---|
+| 签名证书 | ✅ `SHA1 5B:64:C1:A4:…:6C` | `apksigner verify --print-certs` |
+| AAB 签名 | ✅ 同一把密钥,且只有一条证书链 | `jarssigner -verify` + `META-INF/*.RSA|SF` 计数 = 2 |
+| 版本 | ✅ `1.2.0` / versionCode 3 | `aapt2 dump badging` |
+| 原生库 | ✅ 含 `libmupdf.so` | 解包检查 |
+| R8 未裁掉新功能 | ✅ 资源含 `id/onShareQuoteCard`、`string/share_quote_card`、`string/contact_source_*`;dex 含 `omnishelf.cc`、`How I found OmniShelf`、`contactSource` | `aapt2 dump resources` + `strings classes.dex` |
+| 安装 | ✅ `adb install` 返回 Success | 设备实测 |
+| 运行时交互 | ⚠️ 未能重跑 | 见下方说明 |
+
+**为什么签名包没有重跑那 7 项**:本机同时存在另一个会话的模拟器(`PP_QA`),
+两个 4GB 实例把 16GB 内存压满,模拟器的 `uiautomator`、`system_server`、渲染层
+先后失效(`null root node`、`Broken pipe`、黑屏)。同一份代码的**功能**已由 CI 的
+debug 包在设备上 7/7 验过,签名包与之只差 R8 与签名,故改用上表的静态断言。
+真机若要复核,装 `OmniShelf-1.2.0-arm64-signed.apk` 后跑:
+`./scripts/verify-1.2.0.sh delivery/OmniShelf-1.2.0-arm64-signed.apk`
+(release 包不可 `run-as`,脚本会自动把卡片文件断言降级为"未崩溃")
