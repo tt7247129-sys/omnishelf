@@ -191,7 +191,9 @@ public class ShareQuoteCard {
             textTop(c, lines[i], textX, qy + i * 78, 44, serif, NIGHT_TEXT);
         }
         qy += quoteH;
-        textTop(c, "/ " + texts.chapter, textX, qy + 26, 24, serif, NIGHT_MUTED);
+        if (texts.chapter != null && texts.chapter.trim().length() > 0) {
+            textTop(c, "/ " + texts.chapter, textX, qy + 26, 24, serif, NIGHT_MUTED);
+        }
         seal(c, textX, qy + 70, 74, "書");
         stub(c, b, true, spineW + 40, "spine", "night", 108);
         vignette(b, 0.45f);
