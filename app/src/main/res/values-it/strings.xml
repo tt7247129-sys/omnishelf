@@ -17,6 +17,7 @@
    <string name="contact_source_send">Invia</string>
    <string name="share_card_intro">OmniShelf: un lettore senza pubblicità. 34 formati, lettura vocale offline, 55 lingue.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">Scansiona per leggere</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

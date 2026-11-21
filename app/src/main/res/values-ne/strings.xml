@@ -19,6 +19,7 @@
    <string name="contact_source_send">पठाउनु</string>
    <string name="share_card_intro">OmniShelf: विज्ञापनरहित रिडर। ३४ ढाँचा, अफलाइन वाचन, ५५ भाषा।</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">स्क्यान गरेर पढ्नुहोस्</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

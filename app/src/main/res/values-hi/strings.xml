@@ -17,6 +17,7 @@
    <string name="contact_source_send">भेजें</string>
    <string name="share_card_intro">OmniShelf: बिना विज्ञापन वाला रीडर। 34 फ़ॉर्मैट, ऑफ़लाइन वाचन, 55 भाषाएँ।</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">स्कैन करें और पढ़ें</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

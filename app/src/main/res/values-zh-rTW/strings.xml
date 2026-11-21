@@ -17,6 +17,7 @@
    <string name="contact_source_send">傳送</string>
    <string name="share_card_intro">OmniShelf：一個不給你看廣告的閱讀器，34 種格式、離線朗讀、55 種語言。</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">掃碼 · 讀同款</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -17,6 +17,7 @@
    <string name="contact_source_send">ارسال</string>
    <string name="share_card_intro">OmniShelf: خواننده‌ای بدون تبلیغات. ۳۴ قالب، خواندن صوتی آفلاین، ۵۵ زبان.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">برای خواندن اسکن کنید</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

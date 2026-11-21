@@ -17,6 +17,7 @@
    <string name="contact_source_send">إرسال</string>
    <string name="share_card_intro">OmniShelf: قارئ بلا إعلانات. 34 صيغة، قراءة صوتية دون اتصال، 55 لغة.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">امسح للقراءة</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -17,6 +17,7 @@
    <string name="contact_source_send">보내기</string>
    <string name="share_card_intro">OmniShelf: 광고 없는 리더. 34가지 형식, 오프라인 낭독, 55개 언어.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">스캔해서 읽기</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

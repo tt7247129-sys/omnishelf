@@ -17,6 +17,7 @@
    <string name="contact_source_send">Kirim</string>
    <string name="share_card_intro">OmniShelf: pembaca tanpa iklan. 34 format, suara offline, 55 bahasa.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">Pindai untuk membaca</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

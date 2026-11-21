@@ -19,6 +19,7 @@
    <string name="contact_source_send">Ipadala</string>
    <string name="share_card_intro">OmniShelf: reader na walang ads. 34 na format, offline na pagbasa, 55 wika.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">I-scan para magbasa</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -19,6 +19,7 @@
    <string name="contact_source_send">ပို့မည်</string>
    <string name="share_card_intro">OmniShelf: ကြော်ငြာမပါသော စာဖတ်ကိရိယာ။ ဖော်မတ် 34၊ အော့ဖ်လိုင်း အသံဖတ်၊ ဘာသာ 55။</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">စကင်ဖတ်ပါ</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

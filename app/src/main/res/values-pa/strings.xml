@@ -19,6 +19,7 @@
    <string name="contact_source_send">ਭੇਜੋ</string>
    <string name="share_card_intro">OmniShelf: ਬਿਨਾਂ ਇਸ਼ਤਿਹਾਰ ਦਾ ਰੀਡਰ। 34 ਫ਼ਾਰਮੈਟ, ਆਫ਼ਲਾਈਨ ਪੜ੍ਹਾਈ, 55 ਭਾਸ਼ਾਵਾਂ।</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">ਸਕੈਨ ਕਰਕੇ ਪੜ੍ਹੋ</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -17,6 +17,7 @@
    <string name="contact_source_send">അയക്കുക</string>
    <string name="share_card_intro">OmniShelf: പരസ്യമില്ലാത്ത വായനക്കാരൻ. 34 ഫോർമാറ്റുകൾ, ഓഫ്‌ലൈൻ വായന, 55 ഭാഷകൾ.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">സ്കാൻ ചെയ്ത് വായിക്കുക</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

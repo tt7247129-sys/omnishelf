@@ -17,6 +17,7 @@
    <string name="contact_source_send">Skicka</string>
    <string name="share_card_intro">OmniShelf: en läsare utan annonser. 34 format, uppläsning offline, 55 språk.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">Skanna för att läsa</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

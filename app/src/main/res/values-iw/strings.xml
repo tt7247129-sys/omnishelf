@@ -17,6 +17,7 @@
    <string name="contact_source_send">שליחה</string>
    <string name="share_card_intro">OmniShelf: קורא בלי פרסומות. 34 פורמטים, הקראה ללא אינטרנט, 55 שפות.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">סרוק כדי לקרוא</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

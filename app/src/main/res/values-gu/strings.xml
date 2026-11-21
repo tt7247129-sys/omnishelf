@@ -19,6 +19,7 @@
    <string name="contact_source_send">મોકલો</string>
    <string name="share_card_intro">OmniShelf: જાહેરાત વગરનું રીડર. 34 ફોર્મેટ, ઑફલાઇન વાંચન, 55 ભાષાઓ.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">સ્કેન કરીને વાંચો</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

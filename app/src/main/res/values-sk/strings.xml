@@ -17,6 +17,7 @@
    <string name="contact_source_send">Odoslať</string>
    <string name="share_card_intro">OmniShelf: čítačka bez reklám. 34 formátov, offline predčítanie, 55 jazykov.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">Naskenuj a čítaj</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

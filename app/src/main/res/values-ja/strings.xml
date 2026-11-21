@@ -17,6 +17,7 @@
    <string name="contact_source_send">送信</string>
    <string name="share_card_intro">OmniShelf：広告を表示しないリーダー。34 形式、オフライン読み上げ、55 言語対応。</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">スキャンして読む</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

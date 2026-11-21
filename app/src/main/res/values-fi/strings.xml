@@ -17,6 +17,7 @@
    <string name="contact_source_send">Lähetä</string>
    <string name="share_card_intro">OmniShelf: lukija ilman mainoksia. 34 formaattia, offline-lukuääni, 55 kieltä.</string>
    <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
+   <string name="share_card_scan">Skannaa ja lue</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>
