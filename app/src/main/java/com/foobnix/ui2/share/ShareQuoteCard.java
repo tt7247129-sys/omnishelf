@@ -84,6 +84,7 @@ public class ShareQuoteCard {
     private Typeface sans;
     private Bitmap noise;
     private Bitmap qr;
+    private boolean qrDark;
 
     private ShareQuoteCard(Context context, Texts texts, int template, Bitmap cover) {
         this.context = context;
@@ -184,8 +185,10 @@ public class ShareQuoteCard {
         text(c, texts.dateLine, M, 742, 22, serif, NIGHT_MUTED);
 
         TextPaint quote = quotePaint(NIGHT_TEXT, 46);
-        float y = 800;
-        for (String line : wrap(quote, texts.quote, W - 2 * M)) {
+        String[] lines = wrap(quote, texts.quote, W - 2 * M);
+        float blockTop = 800, blockBottom = H - 380;
+        float y = blockTop + Math.max(0, (blockBottom - blockTop - lines.length * 78 - 60) / 2f);
+        for (String line : lines) {
             c.drawText(line, M, y, quote);
             y += 78;
         }
@@ -254,8 +257,10 @@ public class ShareQuoteCard {
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
         TextPaint quote = quotePaint(INK, 46);
-        float qy = bandH + 100;
-        for (String line : wrap(quote, texts.quote, W - 2 * M)) {
+        String[] lines = wrap(quote, texts.quote, W - 2 * M);
+        float top = bandH + 90, bottom = H - 360;
+        float qy = top + Math.max(0, (bottom - top - lines.length * 80 - 70) / 2f);
+        for (String line : lines) {
             c.drawText(line, M, qy, quote);
             qy += 80;
         }
@@ -296,7 +301,8 @@ public class ShareQuoteCard {
         text(c, "“", 104, 520, 330, serif, 0xFF3B2C27);
         TextPaint quote = quotePaint(NIGHT_TEXT, 54);
         String[] lines = wrap(quote, texts.quote, 800);
-        float y = 330;
+        float top = 260, bottom = H - 360;
+        float y = top + Math.max(0, (bottom - top - lines.length * 92 - 120) / 2f);
         for (String line : lines) {
             c.drawText(line, 150, y, quote);
             y += 92;
@@ -337,7 +343,7 @@ public class ShareQuoteCard {
         }
 
         // QR + its two labels, one typographic group centred on the code
-        Bitmap qrBmp = qr(qrSize);
+        Bitmap qrBmp = qr(qrSize, dark);
         if (qrBmp != null) c.drawBitmap(qrBmp, qrX, qrY, null);
         float labelSize = 16f;
         while (labelSize > 11f && trackedWidth(texts.scan, labelSize, 0.10f) > qrSize + 26) {
@@ -416,20 +422,24 @@ public class ShareQuoteCard {
         c.drawRect(l, t, r, bt, p);
     }
 
-    private Bitmap qr(int size) {
-        if (qr == null) {
-            try {
-                com.google.zxing.common.BitMatrix m = new QRCodeWriter()
-                        .encode(texts.url, BarcodeFormat.QR_CODE, size, size);
-                qr = Bitmap.createBitmap(m.getWidth(), m.getHeight(), Bitmap.Config.ARGB_8888);
-                for (int y = 0; y < m.getHeight(); y++) {
-                    for (int x = 0; x < m.getWidth(); x++) {
-                        qr.setPixel(x, y, m.get(x, y) ? 0xFF201814 : 0x00000000);
-                    }
+    private Bitmap qr(int size, boolean dark) {
+        if (qr != null && qrDark == dark && qr.getWidth() == size) {
+            return qr;
+        }
+        try {
+            com.google.zxing.common.BitMatrix m = new QRCodeWriter()
+                    .encode(texts.url, BarcodeFormat.QR_CODE, size, size);
+            qr = Bitmap.createBitmap(m.getWidth(), m.getHeight(), Bitmap.Config.ARGB_8888);
+            int module = dark ? 0xFFF2E7E2 : 0xFF201814;
+            for (int y = 0; y < m.getHeight(); y++) {
+                for (int x = 0; x < m.getWidth(); x++) {
+                    qr.setPixel(x, y, m.get(x, y) ? module : 0x00000000);
                 }
-            } catch (Throwable ignored) {
-                qr = null;
             }
+            qrDark = dark;
+        } catch (Throwable e) {
+            android.util.Log.e("ShareQuoteCard", "qr failed", e);
+            qr = null;
         }
         return qr;
     }
