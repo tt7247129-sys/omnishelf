@@ -131,7 +131,7 @@ if [ -z "$ROW" ]; then fail "share-quote-card row not found"; else
   START=""
   for i in $(seq 1 10); do
     D=$(dump)
-    START=$(grep -oE '[0-9] / 6' "$D" 2>/dev/null | head -1)
+    START=$(grep -oE '[0-9] / 5' "$D" 2>/dev/null | head -1)
     [ -n "$START" ] && break
     sleep 2
   done
@@ -143,18 +143,18 @@ if [ -z "$ROW" ]; then fail "share-quote-card row not found"; else
   if [ -n "$START" ]; then
     # flip through the six layouts; the counter must visit six different values
     SEEN_VALUES="$START"
-    for step in 1 2 3 4 5 6; do
+    for step in 1 2 3 4 5; do
       NEXT=$(center_of "cardNext" "$D")
       [ -z "$NEXT" ] && { fail "next button missing"; break; }
       "$ADB" shell input tap $NEXT; sleep 2
       D=$(dump)
-      V=$(grep -oE '[0-9] / 6' "$D" 2>/dev/null | head -1)
+      V=$(grep -oE '[0-9] / 5' "$D" 2>/dev/null | head -1)
       [ -z "$V" ] && { fail "counter vanished after tap"; break; }
       SEEN_VALUES="$SEEN_VALUES $V"
     done
     # match whole labels: "2 / 6" rather than the tokens around the slash
-    DISTINCT=$(echo "$SEEN_VALUES" | grep -oE '[0-9] / 6' | sort -u | wc -l | tr -d ' ')
-    if [ "$DISTINCT" -eq 6 ]; then pass "all six layouts rendered (visited $DISTINCT distinct counters)"
+    DISTINCT=$(echo "$SEEN_VALUES" | grep -oE '[0-9] / 5' | sort -u | wc -l | tr -d ' ')
+    if [ "$DISTINCT" -eq 5 ]; then pass "all five layouts rendered (visited $DISTINCT distinct counters)"
     else fail "only $DISTINCT distinct template counters seen: $SEEN_VALUES"; fi
     CRASH=$("$ADB" logcat -d 2>/dev/null | grep -cE "FATAL EXCEPTION.*$PKG")
     [ "$CRASH" -eq 0 ] && pass "no crash while flipping templates" || fail "crash in logcat ($CRASH)"

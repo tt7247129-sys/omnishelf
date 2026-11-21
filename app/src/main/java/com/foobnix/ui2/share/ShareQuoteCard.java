@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
@@ -22,28 +21,29 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 /**
- * Renders a quote card. Six layouts, all drawn from the app's palette.
+ * Renders a quote card. Five layouts, all drawn from the app's palette.
  *
- * <p>The geometry mirrors docs/share-card/v3/render-cards.py one to one - every coordinate
- * below is the same number the approved mockups were drawn with - so a card made on a phone
- * and a card made for the design review are the same card. Only the typefaces differ: the
- * device uses the bundled Noto Serif SC and the system sans, the mockups used Songti and
- * Helvetica, which are the same roles in a different file.
+ * <p>This is a line-by-line port of docs/share-card/v3/render-cards.py: the same coordinates,
+ * the same sizes, the same tracking and the same top-anchored text, so a card rendered on a
+ * phone is the card that was approved. Only the typefaces differ in file, not in role: the
+ * approved art used Songti and Helvetica, the phone has the bundled Noto Serif SC and the
+ * system sans, which take their places.
  *
- * <p>Everything here is android.* plus ZXing; strings are passed in, so the renderer never
- * touches the app's R class and can be compiled on its own.
+ * <p>Every date comes from {@link Date} and the reader's locale, so the card is always the
+ * card of today.
  */
 public class ShareQuoteCard {
 
+    // The five approved layouts. The cover-ticket card was cut by request.
     public static final int T_DATE_PAPER = 0;
-    public static final int T_COVER_TICKET_NIGHT = 1;
-    public static final int T_VERTICAL_SPINE_NIGHT = 2;
-    public static final int T_COVER_FULL_PAPER = 3;
-    public static final int T_CINNABAR_FRAME_PAPER = 4;
-    public static final int T_GALLERY_NIGHT = 5;
-    public static final int TEMPLATE_COUNT = 6;
+    public static final int T_VERTICAL_SPINE_NIGHT = 1;
+    public static final int T_COVER_FULL_PAPER = 2;
+    public static final int T_CINNABAR_FRAME_PAPER = 3;
+    public static final int T_GALLERY_NIGHT = 4;
+    public static final int TEMPLATE_COUNT = 5;
 
     private static final int W = 1080, H = 1440, M = 84;
     private static final int PAPER = 0xFFFBF8F2, INK = 0xFF241815, MUTED = 0xFF7C6B63;
@@ -61,9 +61,19 @@ public class ShareQuoteCard {
         public String scan = "";
         public String url = "https://omnishelf.cc";
         public String urlLabel = "omnishelf.cc";
-        /** Localized date, e.g. "2026 年 11 月 21 日" or "Nov 21, 2026". */
+        /** The day as "21", from the device clock. */
+        public String day = "";
+        /** Month label for the date card: NOVEMBER, or 十一月 in Chinese. */
+        public String monthLabel = "";
+        /** The year as "2026". */
+        public String year = "";
+        /** Weekday in the reader's language. */
+        public String weekday = "";
+        /** Full date, e.g. 2026 年 11 月 21 日 or Nov 21, 2026. */
         public String dateLine = "";
-        /** The same date as 二〇二六年十一月二十一日 for the vertical column. */
+        /** Month and year, e.g. 二〇二六年十一月 or November 2026. */
+        public String monthYearLine = "";
+        /** A column of date characters for the spine layout. */
         public String verticalDate = "";
     }
 
@@ -97,7 +107,6 @@ public class ShareQuoteCard {
             serif = load("fonts/NotoSerifSC-OmniShelf.ttf");
             sans = Typeface.SANS_SERIF;
             switch (template) {
-                case T_COVER_TICKET_NIGHT: dateCoverTicket(canvas, bitmap); break;
                 case T_VERTICAL_SPINE_NIGHT: verticalSpine(canvas, bitmap); break;
                 case T_COVER_FULL_PAPER: coverFullPaper(canvas, bitmap); break;
                 case T_CINNABAR_FRAME_PAPER: cinnabarFrame(canvas, bitmap); break;
@@ -115,116 +124,81 @@ public class ShareQuoteCard {
 
     private void datePaper(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
-        rect(c, 82, 92, 82 + 46, 96, CINNABAR);
-        text(c, "NOVEMBER", 82, 128, 22, sans, MUTED);
-        TextPaint big = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        big.setTypeface(Typeface.create(sans, Typeface.BOLD));
-        big.setTextSize(200);
-        big.setColor(INK);
-        Rect bb = new Rect();
-        big.getTextBounds("21", 0, 2, bb);
-        c.drawText("21", 84 - bb.left, 150 - bb.top, big);
-        text(c, "2026", 86, 372, 58, sans, INK);
-        text(c, weekday(), 86, 446, 26, serif, MUTED);
+        rect(c, 84, 92, 84 + 46, 96, CINNABAR);
+        textTop(c, texts.monthLabel, 84, 116, 22, sans, MUTED);
+        // the day is drawn as a block, optically aligned to the margin
+        TextPaint big = paint(Typeface.create(sans, Typeface.BOLD), 200, INK);
+        Rect bounds = new Rect();
+        big.getTextBounds(texts.day, 0, texts.day.length(), bounds);
+        c.drawText(texts.day, 84 - bounds.left, 150 - bounds.top, big);
+        textTop(c, texts.year, 86, 372, 58, sans, INK);
+        textTop(c, texts.weekday, 86, 446, 26, serif, MUTED);
         line(c, 86, 512, W - 86, 512, HAIR_LIGHT, 1);
 
-        TextPaint quote = quotePaint(48, INK);
+        TextPaint quote = paint(serif, 48, INK);
         String[] lines = wrap(quote, texts.quote, 800);
         float quoteH = lines.length * 80f;
         float blockH = quoteH + 118;
         float top = 540, bottom = H - 330;
         float y = top + Math.max(24, (bottom - top - blockH) / 2f);
-        for (String l : lines) {
-            c.drawText(l, 86, y + 60, quote);
-            y += 80;
+        for (int i = 0; i < lines.length; i++) {
+            textTop(c, lines[i], 86, y + i * 80, 48, serif, INK);
         }
-        text(c, "《" + texts.title + "》", 86, y + 34, 30, serif, INK);
-        text(c, join(texts.author, " · ", texts.chapter), 86, y + 82, 22, serif, MUTED);
+        y += quoteH;
+        textTop(c, "《" + texts.title + "》", 86, y + 34, 30, Typeface.create(serif, Typeface.BOLD), INK);
+        textTop(c, join(texts.author, " · ", texts.chapter), 86, y + 82, 22, serif, MUTED);
         seal(c, W - 86 - 84, y + 20, 84, "書");
         stub(c, b, false, M, "paper", "paper", 112);
         grain(b, 0.05f);
     }
 
-    // ---------------------------------------------------------------- 2 封面票根 · 夜
-
-    private void dateCoverTicket(Canvas c, Bitmap b) {
-        c.drawColor(NIGHT);
-        int left = 132, top = 118, right = W - 132, bottom = 704;
-        if (cover != null) {
-            c.drawBitmap(cover, centerCrop(left, top, right, bottom),
-                    new RectF(left, top, right, bottom), new Paint(Paint.FILTER_BITMAP_FLAG));
-        } else {
-            plate(c, left, top, right, bottom);
-        }
-        frame(c, left + 14, top + 14, right - 14, bottom - 14, 0xFFF6E2D8, 1);
-        seal(c, left - 40, top - 40, 80, "書");
-        text(c, texts.title, left + 24, top + 56, 28, serif, 0xFFF6E2D8);
-        text(c, texts.dateLine, M, 742, 22, serif, NIGHT_MUTED);
-
-        TextPaint quote = quotePaint(46, NIGHT_TEXT);
-        String[] lines = wrap(quote, texts.quote, W - 2 * M);
-        float blockH = lines.length * 78f + 60;
-        float t0 = 800, b0 = H - 380;
-        float y = t0 + Math.max(0, (b0 - t0 - blockH) / 2f);
-        for (String l : lines) {
-            c.drawText(l, M, y + 52, quote);
-            y += 78;
-        }
-        text(c, "/ " + join(texts.title, " · ", texts.chapter), M, y + 20, 24, serif, NIGHT_MUTED);
-        stub(c, b, true, M, "night", "night", 112);
-        vignette(b);
-        grain(b, 0.05f);
-    }
-
-    // ---------------------------------------------------------------- 3 竖排书脊 · 夜
+    // ---------------------------------------------------------------- 2 竖排书脊 · 夜
 
     private void verticalSpine(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
         int spineW = 176;
-        Paint sp = new Paint(Paint.ANTI_ALIAS_FLAG);
-        sp.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9C3025, Shader.TileMode.CLAMP));
-        c.drawRect(0, 0, spineW, H, sp);
+        Paint spine = new Paint(Paint.ANTI_ALIAS_FLAG);
+        spine.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9E3025, Shader.TileMode.CLAMP));
+        c.drawRect(0, 0, spineW, H, spine);
 
-        float ty0 = 150;
+        float y = 150;
+        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 54, ty0 + 64, 74, serif, 0xFFF7E3D9);
-            ty0 += 88;
+            textTop(c, String.valueOf(ch), 54, y, 74, titleFace, 0xFFF7E3D9);
+            y += 88;
         }
         float ay = H - 360;
         for (char ch : texts.author.toCharArray()) {
-            text(c, String.valueOf(ch), 54, ay, 22, serif, 0xFFE4C2B4);
+            textTop(c, String.valueOf(ch), 54, ay, 22, serif, 0xFFE4C2B4);
             ay += 32;
         }
         int rx = W - 120;
         float dy = 120;
-        for (char ch : verticalDateChars().toCharArray()) {
-            text(c, String.valueOf(ch), rx, dy + 24, 24, serif, NIGHT_MUTED);
+        for (char ch : texts.verticalDate.toCharArray()) {
+            textTop(c, String.valueOf(ch), rx, dy, 24, serif, NIGHT_MUTED);
             dy += 34;
         }
         line(c, rx - 40, 120, rx - 40, 700, HAIR_DARK, 1);
 
         int textX = spineW + 70;
-        TextPaint quote = quotePaint(44, NIGHT_TEXT);
+        TextPaint quote = paint(serif, 44, NIGHT_TEXT);
         String[] lines = wrap(quote, texts.quote, (rx - 60) - textX);
         float quoteH = lines.length * 78f;
         float blockH = quoteH + 150;
-        float t0 = 220, b0 = H - 320;
-        float y = t0 + Math.max(20, (b0 - t0 - blockH) / 2f);
-        for (String l : lines) {
-            c.drawText(l, textX, y + 50, quote);
-            y += 78;
+        float top = 220, bottom = H - 320;
+        float qy = top + Math.max(20, (bottom - top - blockH) / 2f);
+        for (int i = 0; i < lines.length; i++) {
+            textTop(c, lines[i], textX, qy + i * 78, 44, serif, NIGHT_TEXT);
         }
-        String meta = join(texts.title, " · ", texts.chapter);
-        if (meta.length() > 0) {
-            text(c, "/ " + meta, textX, y + 26, 24, serif, NIGHT_MUTED);
-        }
-        seal(c, textX, y + 70, 74, "書");
+        qy += quoteH;
+        textTop(c, "/ " + texts.chapter, textX, qy + 26, 24, serif, NIGHT_MUTED);
+        seal(c, textX, qy + 70, 74, "書");
         stub(c, b, true, spineW + 40, "spine", "night", 108);
-        vignette(b);
+        vignette(b, 0.45f);
         grain(b, 0.05f);
     }
 
-    // ---------------------------------------------------------------- 4 影像封面 · 纸
+    // ---------------------------------------------------------------- 3 影像封面 · 纸
 
     private void coverFullPaper(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
@@ -236,78 +210,91 @@ public class ShareQuoteCard {
             scrim.setShader(new LinearGradient(0, 0, 0, bandH, 0x33000000, 0x00000000, Shader.TileMode.CLAMP));
             c.drawRect(0, 0, W, bandH, scrim);
         } else {
-            plate(c, 0, 0, W, bandH);
+            Paint plate = new Paint();
+            plate.setShader(new LinearGradient(0, 0, W, bandH,
+                    new int[]{0xFF86281F, 0xFF9E3A2B, 0xFFC0503A}, new float[]{0f, 0.55f, 1f},
+                    Shader.TileMode.CLAMP));
+            c.drawRect(0, 0, W, bandH, plate);
+            // the warm lamp of the reference art
+            Paint lamp = new Paint();
+            lamp.setShader(new RadialGradient(W / 2f, bandH * 0.42f, W * 0.62f,
+                    new int[]{0x33FFD9B0, 0x00000000}, new float[]{0f, 1f}, Shader.TileMode.CLAMP));
+            c.drawRect(0, 0, W, bandH, lamp);
         }
         float vy = 96;
+        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 74, vy + 56, 64, serif, 0xFFFBF3EC);
+            textTop(c, String.valueOf(ch), 74, vy, 64, titleFace, 0xFFFBF3EC);
             vy += 76;
         }
-        text(c, texts.author, 74, vy + 40, 24, serif, 0xFFECD2C4);
+        textTop(c, texts.author, 74, vy + 15, 24, serif, 0xFFECD2C4);
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
-        TextPaint quote = quotePaint(46, INK);
-        String[] lines = wrap(quote, texts.quote, W - 2 * M);
-        float blockH = lines.length * 80f + 70;
-        float t0 = bandH + 90, b0 = H - 360;
-        float qy = t0 + Math.max(0, (b0 - t0 - blockH) / 2f);
-        for (String l : lines) {
-            c.drawText(l, M, qy + 52, quote);
-            qy += 80;
+        TextPaint quote = paint(serif, 46, INK);
+        String[] lines = wrap(quote, texts.quote, W - 164);
+        float qy = bandH + 76;
+        for (int i = 0; i < lines.length; i++) {
+            textTop(c, lines[i], 82, qy + i * 80, 46, serif, INK);
         }
-        text(c, texts.chapter, M, qy + 22, 24, serif, MUTED);
-        text(c, join(texts.author, " · ", texts.dateLine), M, qy + 60, 20, serif, MUTED);
+        qy += lines.length * 80f;
+        textTop(c, texts.chapter, 82, qy + 22, 24, serif, MUTED);
+        textTop(c, join(texts.author, " · ", texts.dateLine), 82, qy + 62, 20, serif, MUTED);
         stub(c, b, false, M, "paper", "paper", 108);
-        grain(b, 0.05f);
+        grain(b, 0.08f);
     }
 
-    // ---------------------------------------------------------------- 5 朱砂框 · 纸
+    // ---------------------------------------------------------------- 4 朱砂框 · 纸
 
     private void cinnabarFrame(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
         int m = 56;
         frame(c, m, m, W - m, H - m, CINNABAR, 3);
         frame(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xFFE2D1C2, 1);
-        text(c, texts.dateLine, m + 40, m + 66, 21, serif, MUTED);
+        textTop(c, cjk() ? "摘录 · " + texts.monthYearLine : texts.monthYearLine, m + 40, m + 44,
+                21, serif, MUTED);
         seal(c, W - m - 40 - 70, m + 36, 70, "書");
 
-        TextPaint quote = quotePaint(52, INK);
+        TextPaint quote = paint(serif, 52, INK);
         String[] lines = wrap(quote, texts.quote, W - 2 * m - 120);
         float y = (H - lines.length * 88f) / 2f - 40;
-        for (String l : lines) {
-            float w = quote.measureText(l);
-            c.drawText(l, (W - w) / 2f, y + 84, quote);
-            y += 88;
+        for (int i = 0; i < lines.length; i++) {
+            float w = quote.measureText(lines[i]);
+            textTop(c, lines[i], (W - w) / 2f, y + i * 88, 52, serif, INK);
         }
-        y += 10;
-        rect(c, W / 2f - 40, y + 30, W / 2f + 40, y + 32, CINNABAR);
+        y += lines.length * 88f;
+        line(c, W / 2f - 40, y + 40, W / 2f + 40, y + 40, CINNABAR, 2);
+        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
         String t = "《" + texts.title + "》";
-        text(c, t, (W - measure(t, 32, serif)) / 2f, y + 76, 32, serif, INK);
-        text(c, texts.author, (W - measure(texts.author, 24, serif)) / 2f, y + 122, 24, serif, MUTED);
+        float tw = measure(t, titleFace, 32);
+        textTop(c, t, (W - tw) / 2f, y + 66, 32, titleFace, INK);
+        float aw = measure(texts.author, serif, 24);
+        textTop(c, texts.author, (W - aw) / 2f, y + 116, 24, serif, MUTED);
         stub(c, b, false, M, "paper", "paper", 100);
-        grain(b, 0.05f);
+        grain(b, 0.09f);
     }
 
-    // ---------------------------------------------------------------- 6 画廊极简 · 夜
+    // ---------------------------------------------------------------- 5 画廊极简 · 夜
 
     private void gallery(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
-        text(c, "“", 58, 360, 320, serif, 0xFF42312B);
-        TextPaint quote = quotePaint(54, NIGHT_TEXT);
+        textTop(c, "“", 104, 210, 330, Typeface.create(serif, Typeface.BOLD), 0xFF3B2C27);
+        TextPaint quote = paint(serif, 54, NIGHT_TEXT);
         String[] lines = wrap(quote, texts.quote, 800);
-        float blockH = lines.length * 92f + 230;
-        float t0 = 200, b0 = H - 320;
-        float y = t0 + Math.max(20, (b0 - t0 - blockH) / 2f);
-        for (String l : lines) {
-            c.drawText(l, 150, y + 62, quote);
-            y += 92;
+        float quoteH = lines.length * 92f;
+        float blockH = quoteH + 230;
+        float top = 200, bottom = H - 320;
+        float y = top + Math.max(20, (bottom - top - blockH) / 2f);
+        for (int i = 0; i < lines.length; i++) {
+            textTop(c, lines[i], 150, y + i * 92, 54, serif, NIGHT_TEXT);
         }
-        rect(c, 150, y + 34, 150 + 64, y + 37, ACCENT);
-        text(c, "《" + texts.title + "》", 150, y + 94, 30, serif, NIGHT_TEXT);
-        text(c, join(texts.author, " · ", texts.chapter), 150, y + 138, 22, serif, NIGHT_MUTED);
-        seal(c, W - 82 - 78, y + 60, 78, "讀");
+        y += quoteH;
+        line(c, 150, y + 34, 150 + 64, y + 34, ACCENT, 3);
+        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
+        textTop(c, "《" + texts.title + "》", 150, y + 64, 30, titleFace, NIGHT_TEXT);
+        textTop(c, join(texts.author, " · ", texts.chapter), 150, y + 112, 22, serif, NIGHT_MUTED);
+        seal(c, W - 82 - 78, y + 40, 78, "讀");
         stub(c, b, true, M, "night", "night", 104);
-        vignette(b);
+        vignette(b, 0.60f);
         grain(b, 0.05f);
     }
 
@@ -321,57 +308,74 @@ public class ShareQuoteCard {
         int hair = dark ? HAIR_DARK : HAIR_LIGHT;
         int muted = dark ? NIGHT_MUTED : MUTED;
 
-        Paint dash = new Paint(Paint.ANTI_ALIAS_FLAG);
-        dash.setColor(hair);
-        dash.setStyle(Paint.Style.STROKE);
-        dash.setStrokeWidth(2f);
-        dash.setPathEffect(new DashPathEffect(new float[]{9f, 9f}, 0f));
-        c.drawLine(left, perfY, W - 84, perfY, dash);
+        // the perforation is drawn as segments, exactly as the approved art drew it
+        for (int x = left; x < W - 84; x += 18) {
+            line(c, x, perfY, Math.min(x + 9, W - 84), perfY, hair, 2);
+        }
         Paint notch = new Paint(Paint.ANTI_ALIAS_FLAG);
         notch.setColor(notchColor(leftNotch));
         c.drawCircle(0, perfY, 13, notch);
         notch.setColor(notchColor(rightNotch));
         c.drawCircle(W, perfY, 13, notch);
 
+        // one group: the scan line, the code, the domain - same size, same tracking, same axis
+        float qrCx = qrX + qrSize / 2f;
+        float label = 16f;
+        while (label > 11f && trackedWidth(texts.scan, label, 0.10f, sans) > qrSize + 26) {
+            label -= 1f;
+        }
+        drawTrackedCentered(c, texts.scan, qrCx, qrY - 18 - label, label, muted, 0.10f);
         Bitmap code = qr(qrSize, dark);
         if (code != null) c.drawBitmap(code, qrX, qrY, null);
+        drawTrackedCentered(c, texts.urlLabel, qrCx, qrY + qrSize + 10, label, muted, 0.06f);
 
-        // the scan line and the domain are one group, centred on the code
-        float label = 16f;
-        while (label > 11f && trackedWidth(texts.scan, label, 0.10f) > qrSize + 26) label -= 1f;
-        drawTracked(c, texts.scan, qrX + qrSize / 2f, qrY - 18 - label, label, muted, 0.10f);
-        drawTracked(c, texts.urlLabel, qrX + qrSize / 2f, qrY + qrSize + 22, label, muted, 0.06f);
+        colophon(c, dark, left, qrY - 34, qrY + qrSize, qrX - left - 46);
+    }
 
-        // colophon: kicker, name, claim, specs
-        String[] parts = splitIntro(texts.intro);
-        TextPaint claim = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        claim.setTypeface(serif);
-        claim.setTextSize(23);
-        claim.setColor(dark ? NIGHT_TEXT : INK);
-        String[] claimLines = wrapText(claim, parts[1], qrX - left - 46);
-        TextPaint spec = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        spec.setTypeface(sans);
-        spec.setTextSize(14);
-        spec.setColor(muted);
-        String[] specLines = parts[2].length() == 0 ? new String[0]
-                : wrapText(spec, parts[2], qrX - left - 46);
-        float total = 6 + 12 + 26 + claimLines.length * 34f
-                + (specLines.length == 0 ? 0 : 8 + specLines.length * 22f);
-        float y = qrY - 34;
-        if (total > (qrY + qrSize) - (qrY - 34) + 18) y = qrY + qrSize - total;
-        rect(c, left, y, left + 34, y + 4, dark ? ACCENT : CINNABAR);
+    /** Three tiers: kicker, tracked name, claim, specs. Port of intro_block(). */
+    private void colophon(Canvas c, boolean dark, int left, float topY, float bottomY, int maxw) {
+        int fg = dark ? NIGHT_MUTED : MUTED;
+        int strong = dark ? NIGHT_TEXT : INK;
+        int accent = dark ? ACCENT : CINNABAR;
+
+        String brand = "OmniShelf", claim = texts.intro, specs = "";
+        int sep = texts.intro.indexOf('：');
+        if (sep < 0) sep = texts.intro.indexOf(':');
+        if (sep > 0) {
+            brand = texts.intro.substring(0, sep).trim();
+            claim = texts.intro.substring(sep + 1).trim();
+        }
+        int cut = claim.lastIndexOf('，');
+        if (cut < 0) cut = claim.lastIndexOf(',');
+        if (cut > 0) {
+            specs = claim.substring(cut + 1).trim();
+            claim = claim.substring(0, cut).trim() + (claim.indexOf('，') >= 0 ? "。" : ".");
+        }
+
+        TextPaint claimPaint = paint(serif, 23, strong);
+        TextPaint specPaint = paint(sans, 14, fg);
+        String[] claimLines = wrap(claimPaint, claim, maxw);
+        String[] specLines = specs.length() == 0 ? new String[0] : wrap(specPaint, specs, maxw);
+
+        float brandH = 26, claimH = claimLines.length * 34f;
+        float specH = specLines.length * 22f;
+        float total = 6 + 12 + brandH + claimH + (specs.length() == 0 ? 0 : 8 + specH);
+        float y = total <= (bottomY - topY) + 18 ? topY : bottomY - total;
+
+        rect(c, left, y, left + 34, y + 4, accent);
         y += 18;
-        drawTracked(c, parts[0], left, y + 18, 19f, dark ? ACCENT : CINNABAR, 0.14f);
-        y += 26;
-        for (String l : claimLines) {
-            c.drawText(l, left, y + 22, claim);
-            y += 34;
+        drawTrackedLeft(c, brand, left, y, 19, accent, 0.14f);
+        y += brandH;
+        for (int i = 0; i < claimLines.length; i++) {
+            textTop(c, claimLines[i], left, y + i * 34, 23, serif, strong);
         }
-        for (String l : specLines) {
-            y += 22;
-            drawTracked(c, l, left, y, 14f, muted, 0.05f);
+        y += claimH;
+        if (specs.length() > 0) {
+            y += 8;
+            for (int i = 0; i < specLines.length; i++) {
+                drawTrackedLeft(c, specLines[i], left, y + i * 22, 14, fg, 0.05f);
+            }
         }
-        if (specLines.length > 0) y += 22;
     }
 
     private int notchColor(String side) {
@@ -382,10 +386,43 @@ public class ShareQuoteCard {
 
     // ---------------------------------------------------------------- 绘制工具
 
+    /** Top-anchored text: the y the approved art used is the top of the ascender. */
+    private void textTop(Canvas c, String s, float x, float topY, float size, Typeface face, int color) {
+        if (s == null || s.length() == 0) return;
+        TextPaint p = paint(face, size, color);
+        c.drawText(s, x, topY - p.getFontMetrics().ascent, p);
+    }
+
+    private void drawTrackedLeft(Canvas c, String s, float x, float topY, float size, int color, float track) {
+        if (s == null || s.length() == 0) return;
+        TextPaint p = paint(sans, size, color);
+        float cx = x;
+        float baseline = topY - p.getFontMetrics().ascent;
+        for (char ch : s.toCharArray()) {
+            c.drawText(String.valueOf(ch), cx, baseline, p);
+            cx += p.measureText(String.valueOf(ch)) + size * track;
+        }
+    }
+
+    private void drawTrackedCentered(Canvas c, String s, float centerX, float topY, float size,
+                                     int color, float track) {
+        if (s == null || s.length() == 0) return;
+        float w = trackedWidth(s, size, track, sans);
+        drawTrackedLeft(c, s, centerX - w / 2f, topY, size, color, track);
+    }
+
+    private float trackedWidth(String s, float size, float track, Typeface face) {
+        if (s == null || s.length() == 0) return 0;
+        TextPaint p = paint(face, size, INK);
+        float sum = 0;
+        for (char ch : s.toCharArray()) sum += p.measureText(String.valueOf(ch));
+        return sum + track * size * Math.max(0, s.length() - 1);
+    }
+
     private void grain(Bitmap b, float alpha) {
         if (noise == null) {
             noise = Bitmap.createBitmap(160, 160, Bitmap.Config.ARGB_8888);
-            java.util.Random rnd = new java.util.Random(7);
+            Random rnd = new Random(7);
             for (int y = 0; y < 160; y++) {
                 for (int x = 0; x < 160; x++) {
                     int v = 128 + rnd.nextInt(48) - 24;
@@ -399,20 +436,12 @@ public class ShareQuoteCard {
         new Canvas(b).drawRect(0, 0, W, H, p);
     }
 
-    private void vignette(Bitmap b) {
+    private void vignette(Bitmap b, float strength) {
         Paint p = new Paint();
         p.setShader(new RadialGradient(W / 2f, H / 2f, W * 0.72f,
-                new int[]{0x00000000, 0x00000000, 0x66000000}, new float[]{0f, 0.55f, 1f},
-                Shader.TileMode.CLAMP));
+                new int[]{0x00000000, 0x00000000, (int) (0x66 * strength / 0.55f) << 24},
+                new float[]{0f, 0.55f, 1f}, Shader.TileMode.CLAMP));
         new Canvas(b).drawRect(0, 0, W, H, p);
-    }
-
-    private void plate(Canvas c, int l, int t, int r, int bt) {
-        Paint p = new Paint();
-        p.setShader(new LinearGradient(l, t, r, bt,
-                new int[]{0xFF7E261E, 0xFF9E3A2B, 0xFFC0503A}, new float[]{0f, 0.6f, 1f},
-                Shader.TileMode.CLAMP));
-        c.drawRect(l, t, r, bt, p);
     }
 
     private Bitmap qr(int size, boolean dark) {
@@ -439,61 +468,34 @@ public class ShareQuoteCard {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(CINNABAR);
         c.drawRoundRect(new RectF(x, y, x + size, y + size), 8, 8, p);
-        TextPaint t = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        t.setTypeface(serif);
-        t.setTextSize(size * 0.56f);
-        t.setColor(0xFFFBF8F2);
-        float w = t.measureText(glyph);
-        c.drawText(glyph, x + (size - w) / 2f, y + size * 0.72f, t);
+        // a few specks off the edge, as if the stamp pressed unevenly
+        Random rnd = new Random(7);
+        Paint speck = new Paint(Paint.ANTI_ALIAS_FLAG);
+        speck.setColor(PAPER);
+        speck.setAlpha(30);
+        for (int i = 0; i < 90; i++) {
+            c.drawCircle(x + rnd.nextInt(size), y + rnd.nextInt(size), 1.1f, speck);
+        }
+        Typeface face = Typeface.create(serif, Typeface.BOLD);
+        TextPaint t = paint(face, size * 0.56f, PAPER);
+        Rect bounds = new Rect();
+        t.getTextBounds(glyph, 0, glyph.length(), bounds);
+        float gx = x + (size - bounds.width()) / 2f - bounds.left;
+        float gy = y + (size - bounds.height()) / 2f - bounds.top;
+        c.drawText(glyph, gx, gy, t);
     }
 
-    private void text(Canvas c, String s, float x, float y, float size, Typeface face, int color) {
-        if (s == null || s.length() == 0) return;
+    private TextPaint paint(Typeface face, float size, int color) {
         TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         p.setTypeface(face);
-        p.setTextSize(size);
-        p.setColor(color);
-        c.drawText(s, x, y, p);
-    }
-
-    private float measure(String s, float size, Typeface face) {
-        TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        p.setTypeface(face);
-        p.setTextSize(size);
-        return p.measureText(s == null ? "" : s);
-    }
-
-    private TextPaint quotePaint(float size, int color) {
-        TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        p.setTypeface(serif);
         p.setTextSize(size);
         p.setColor(color);
         return p;
     }
 
-    private void drawTracked(Canvas c, String s, float cx, float baseline, float size,
-                             int color, float track) {
-        if (s == null || s.length() == 0) return;
-        TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        p.setTypeface(sans);
-        p.setTextSize(size);
-        p.setColor(color);
-        float w = trackedWidth(s, size, track);
-        float x = cx - w / 2f;
-        for (char ch : s.toCharArray()) {
-            c.drawText(String.valueOf(ch), x, baseline, p);
-            x += p.measureText(String.valueOf(ch)) + size * track;
-        }
-    }
-
-    private float trackedWidth(String s, float size, float track) {
+    private float measure(String s, Typeface face, float size) {
         if (s == null || s.length() == 0) return 0;
-        TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        p.setTypeface(sans);
-        p.setTextSize(size);
-        float w = 0;
-        for (char ch : s.toCharArray()) w += p.measureText(String.valueOf(ch)) + size * track;
-        return w - size * track;
+        return paint(face, size, INK).measureText(s);
     }
 
     private void rect(Canvas c, float l, float t, float r, float b, int color) {
@@ -545,20 +547,20 @@ public class ShareQuoteCard {
         return new Rect(x0, y0, x0 + Math.round(srcW), y0 + Math.round(srcH));
     }
 
-    /** CJK-aware wrapping that never starts a line with a closing mark. */
+    /** CJK-aware wrapping with the reference's no-leading-punctuation and orphan rules. */
     private String[] wrap(TextPaint p, String text, float maxWidth) {
         String body = text == null ? "" : text.trim();
         if (body.length() == 0) return new String[]{""};
         List<String> out = new ArrayList<>();
         for (String para : body.split("\n")) {
-            for (String line : wrapText(p, para.trim(), maxWidth)) {
+            for (String line : wrapLine(p, para.trim(), maxWidth)) {
                 if (line.length() > 0) out.add(line);
             }
         }
         return out.toArray(new String[0]);
     }
 
-    private String[] wrapText(TextPaint p, String body, float maxWidth) {
+    private String[] wrapLine(TextPaint p, String body, float maxWidth) {
         if (body == null || body.length() == 0) return new String[0];
         String noStart = "，。、；：！？）》」』】…·,.;:!?)]}";
         List<String> lines = new ArrayList<>();
@@ -581,26 +583,14 @@ public class ShareQuoteCard {
             }
         }
         if (cur.length() > 0) lines.add(cur.toString());
+        if (lines.size() > 1 && lines.get(lines.size() - 1).length() <= 2) {
+            String prev = lines.get(lines.size() - 2);
+            if (prev.length() > 4) {
+                lines.set(lines.size() - 2, prev.substring(0, prev.length() - 2));
+                lines.set(lines.size() - 1, prev.substring(prev.length() - 2) + lines.get(lines.size() - 1));
+            }
+        }
         return lines.toArray(new String[0]);
-    }
-
-    /** "OmniShelf：claim，specs。" -> {name, claim, specs}; never drops a word. */
-    private String[] splitIntro(String intro) {
-        String s = intro == null ? "" : intro.trim();
-        String name = "OmniShelf", claim = s, specs = "";
-        int sep = s.indexOf('：');
-        if (sep < 0) sep = s.indexOf(':');
-        if (sep > 0) {
-            name = s.substring(0, sep).trim();
-            claim = s.substring(sep + 1).trim();
-        }
-        int cut = claim.lastIndexOf('，');
-        if (cut < 0) cut = claim.lastIndexOf(',');
-        if (cut > 0) {
-            specs = claim.substring(cut + 1).trim();
-            claim = claim.substring(0, cut).trim() + (claim.indexOf('，') >= 0 ? "。" : ".");
-        }
-        return new String[]{name, claim, specs};
     }
 
     private String join(String a, String sep, String b) {
@@ -614,16 +604,6 @@ public class ShareQuoteCard {
     private boolean cjk() {
         String lang = Locale.getDefault().getLanguage();
         return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
-    }
-
-    private String weekday() {
-        return new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
-    }
-
-    private String verticalDateChars() {
-        return texts.verticalDate != null && texts.verticalDate.length() > 0
-                ? texts.verticalDate.replace(" ", "")
-                : new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
     }
 
     /**
@@ -641,5 +621,60 @@ public class ShareQuoteCard {
                 f.delete();
             }
         }
+    }
+
+    /** Builds every date the five layouts use, from the device clock and locale. */
+    public static void fillDates(Texts texts) {
+        Date now = new Date();
+        Locale locale = Locale.getDefault();
+        boolean cjk = "zh".equals(locale.getLanguage()) || "ja".equals(locale.getLanguage())
+                || "ko".equals(locale.getLanguage());
+        texts.day = new SimpleDateFormat("dd", locale).format(now);
+        texts.year = new SimpleDateFormat("yyyy", locale).format(now);
+        texts.weekday = new SimpleDateFormat("EEEE", locale).format(now);
+        texts.dateLine = new SimpleDateFormat(cjk ? "yyyy 年 M 月 d 日" : "MMM d, yyyy", locale).format(now);
+        if (cjk) {
+            texts.monthLabel = chineseMonth(now);
+            texts.monthYearLine = chineseYearMonth(now);
+            texts.verticalDate = chineseYearMonthDay(now);
+        } else {
+            texts.monthLabel = new SimpleDateFormat("MMMM", locale).format(now).toUpperCase(locale);
+            texts.monthYearLine = new SimpleDateFormat("MMMM yyyy", locale).format(now);
+            texts.verticalDate = new SimpleDateFormat("yyyy.MM.dd", locale).format(now);
+        }
+    }
+
+    private static String chineseMonth(Date d) {
+        String[] names = {"一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"};
+        int month = Integer.parseInt(new SimpleDateFormat("M", Locale.CHINA).format(d));
+        return names[Math.min(11, Math.max(0, month - 1))];
+    }
+
+    private static String chineseYearMonth(Date d) {
+        return chineseYear(d) + "年" + chineseMonth(d);
+    }
+
+    private static String chineseYearMonthDay(Date d) {
+        int month = Integer.parseInt(new SimpleDateFormat("M", Locale.CHINA).format(d));
+        int day = Integer.parseInt(new SimpleDateFormat("d", Locale.CHINA).format(d));
+        return chineseYear(d) + "年" + chineseNumber(month) + "月" + chineseNumber(day) + "日";
+    }
+
+    private static String chineseYear(Date d) {
+        String digits = "〇一二三四五六七八九";
+        StringBuilder out = new StringBuilder();
+        for (char ch : new SimpleDateFormat("yyyy", Locale.CHINA).format(d).toCharArray()) {
+            out.append(digits.charAt(ch - '0'));
+        }
+        return out.toString();
+    }
+
+    private static String chineseNumber(int n) {
+        String digits = "〇一二三四五六七八九";
+        if (n < 10) return String.valueOf(digits.charAt(n));
+        if (n == 10) return "十";
+        if (n < 20) return "十" + digits.charAt(n - 10);
+        int tens = n / 10, ones = n % 10;
+        return digits.charAt(tens) + "十" + (ones == 0 ? "" : String.valueOf(digits.charAt(ones)));
     }
 }

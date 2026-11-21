@@ -58,8 +58,7 @@ public class ShareCardDialog {
             texts.scan = activity.getString(R.string.share_card_scan);
             texts.url = activity.getString(R.string.share_card_url);
             texts.urlLabel = texts.url.replace("https://", "").replace("http://", "").replace("/", "");
-            texts.dateLine = dateLine();
-            texts.verticalDate = verticalDate();
+            ShareQuoteCard.fillDates(texts);
 
             dialog = new Dialog(activity, R.style.DialogRoundLight);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -76,7 +75,7 @@ public class ShareCardDialog {
 
             int start = AppState.get().shareCardTemplate;
             if (start < 0 || start >= ShareQuoteCard.TEMPLATE_COUNT) {
-                start = ShareQuoteCard.T_COVER_TICKET_NIGHT;
+                start = ShareQuoteCard.T_DATE_PAPER;
             }
             final int[] current = {start};
             final Bitmap[] cover = {null};
@@ -274,52 +273,4 @@ public class ShareCardDialog {
         dialog = null;
     }
 
-    /** Date in the reader's own convention: 2026 年 11 月 21 日, or Nov 21, 2026. */
-    private static String dateLine() {
-        String pattern = cjk() ? "yyyy 年 M 月 d 日" : "MMM d, yyyy";
-        return new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date());
-    }
-
-    /** The same date as a column of characters: 二〇二六年十一月二十一日. */
-    private static String verticalDate() {
-        if (!cjk()) {
-            return new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
-        }
-        String digits = "〇一二三四五六七八九";
-        SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.getDefault());
-        SimpleDateFormat month = new SimpleDateFormat("M", Locale.getDefault());
-        SimpleDateFormat day = new SimpleDateFormat("d", Locale.getDefault());
-        StringBuilder out = new StringBuilder();
-        for (char ch : year.format(new Date()).toCharArray()) {
-            out.append(digits.charAt(ch - '0'));
-        }
-        out.append("年");
-        out.append(numberWords(Integer.parseInt(month.format(new Date()))));
-        out.append("月");
-        out.append(numberWords(Integer.parseInt(day.format(new Date()))));
-        out.append("日");
-        return out.toString();
-    }
-
-    /** 1..31 as Chinese numerals, enough for a date column. */
-    private static String numberWords(int n) {
-        String digits = "〇一二三四五六七八九";
-        if (n < 10) {
-            return String.valueOf(digits.charAt(n));
-        }
-        if (n == 10) {
-            return "十";
-        }
-        if (n < 20) {
-            return "十" + digits.charAt(n - 10);
-        }
-        int tens = n / 10;
-        int ones = n % 10;
-        return digits.charAt(tens) + "十" + (ones == 0 ? "" : String.valueOf(digits.charAt(ones)));
-    }
-
-    private static boolean cjk() {
-        String lang = Locale.getDefault().getLanguage();
-        return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
-    }
 }
