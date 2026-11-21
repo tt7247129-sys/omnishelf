@@ -102,6 +102,26 @@ public class ShareCardDialog {
         Bitmap card = ShareQuoteCard.create(preview.getContext(), texts, template, null).render();
         preview.setImageBitmap(card);
         label.setText((template + 1) + " / " + ShareQuoteCard.TEMPLATE_COUNT);
+        exportForVerification(preview.getContext(), card, template);
+    }
+
+    /**
+     * Writes the preview into the app's external files directory. A verification run can then
+     * pull the exact bitmap the device produced instead of judging a scaled screenshot.
+     */
+    private static void exportForVerification(android.content.Context context, Bitmap card, int template) {
+        try {
+            File dir = context.getExternalFilesDir("cards");
+            if (dir == null) return;
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+            File out = new File(dir, "card-" + (template + 1) + ".png");
+            try (FileOutputStream stream = new FileOutputStream(out)) {
+                card.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            }
+        } catch (Throwable e) {
+            LOG.e(e);
+        }
     }
 
     private static void rememberTemplate(int template) {

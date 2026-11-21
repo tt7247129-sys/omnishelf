@@ -112,8 +112,10 @@ public class ShareQuoteCard {
                 case T_DATE_PAPER:
                 default: datePaper(canvas, bitmap); break;
             }
-        } catch (Throwable ignored) {
-            // A card that cannot be laid out is still a card: the caller gets the ground.
+        } catch (Throwable e) {
+            // A card that cannot be laid out is still a card, but the reason must be visible
+            // in logcat: a silently blank card is worse than a crash.
+            android.util.Log.e("ShareQuoteCard", "render failed for template " + template, e);
         }
         return bitmap;
     }
