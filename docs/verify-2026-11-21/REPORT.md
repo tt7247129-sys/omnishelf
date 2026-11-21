@@ -6,7 +6,7 @@
 |---|---|
 | 签名包与 AAB | Play 上传密钥 `5B:64:C1:…:6C`,单一证书链,versionName **1.3.0**(versionCode 4) |
 | 设备验证(逐项) | 见下,全部通过 |
-| 6 套卡片真实渲染 | 已从设备导出 1080×1440 PNG,逐张核对 |
+| 6 套卡片真实渲染 | 已从设备导出 1080×1440 PNG 六张,逐张核对(见 `device-six-templates.png`) |
 | 多语言 | 介绍词、扫码引导、二维码地址随系统语言;56 个语言文件 743 键零差异 |
 
 ## 设备验证(scripts/verify-1.3.0.sh,签名包)
@@ -24,6 +24,9 @@ PASS  share sheet opened
 
 == 8 passed, 0 failed ==
 ```
+
+最终包为 `OmniShelf-1.3.0-arm64-signed.apk`(Play 上传密钥签名,SHA-1 5B:64:C1:…:6C),
+AAB `OmniShelf-1.3.0.aab` 同密钥、单一证书链、versionName 1.3.0、versionCode 4。
 
 ## 本轮验证发现并修复的缺陷
 
