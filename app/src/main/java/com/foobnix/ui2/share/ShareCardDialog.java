@@ -114,22 +114,88 @@ public class ShareCardDialog {
         }
     }
 
-    private static void loadCover(Activity activity, String bookPath, IMG.ResourceReady ready) {
+    private static void loadCover(final Activity activity, final String bookPath,
+                                  final IMG.ResourceReady ready) {
+        // Two attempts. The image loader knows the app's own pipeline; when it has nothing
+        // for this file (a hand-made EPUB is enough to confuse it), decode the archive here.
         try {
-            // The call returns a request, it does not start one: without submit() nothing loads.
             IMG.getCoverPageWithEffect(activity, bookPath, bitmap -> {
-                LOG.d("ShareCard cover for", bookPath, bitmap == null ? "none" : bitmap.getWidth() + "x" + bitmap.getHeight());
-                if (bitmap == null) {
+                if (bitmap != null) {
+                    LOG.d("ShareCard cover for", bookPath, bitmap.getWidth() + "x" + bitmap.getHeight());
+                    runOnUi(activity, ready, bitmap);
                     return;
                 }
-                if (activity.isFinishing()) {
-                    return;
-                }
-                activity.runOnUiThread(() -> ready.onResourceReady(bitmap));
+                LOG.d("ShareCard cover for", bookPath, "loader empty, trying the archive");
+                loadCoverFromArchive(activity, bookPath, ready);
             }).submit();
         } catch (Throwable e) {
             LOG.e(e);
+            loadCoverFromArchive(activity, bookPath, ready);
         }
+    }
+
+    /** EPUB and CBZ are ZIP archives: the cover is simply the first sensible image inside. */
+    private static void loadCoverFromArchive(final Activity activity, final String bookPath,
+                                             final IMG.ResourceReady ready) {
+        new Thread(() -> {
+            Bitmap bitmap = null;
+            try {
+                java.util.zip.ZipFile zip = new java.util.zip.ZipFile(bookPath);
+                java.util.zip.ZipEntry chosen = null;
+                java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zip.entries();
+                while (entries.hasMoreElements()) {
+                    java.util.zip.ZipEntry entry = entries.nextElement();
+                    String name = entry.getName().toLowerCase(Locale.ROOT);
+                    if (entry.isDirectory()) continue;
+                    boolean image = name.endsWith(".jpg") || name.endsWith(".jpeg")
+                            || name.endsWith(".png") || name.endsWith(".webp");
+                    if (!image) continue;
+                    if (chosen == null) chosen = entry;
+                    if (name.contains("cover")) { chosen = entry; break; }
+                }
+                if (chosen != null) {
+                    java.io.InputStream in = zip.getInputStream(chosen);
+                    byte[] bytes = readAll(in);
+                    in.close();
+                    if (bytes != null && bytes.length > 0) {
+                        android.graphics.BitmapFactory.Options opts = new android.graphics.BitmapFactory.Options();
+                        opts.inJustDecodeBounds = true;
+                        android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+                        int sample = 1;
+                        while (opts.outWidth / sample > 900) sample *= 2;
+                        opts.inJustDecodeBounds = false;
+                        opts.inSampleSize = sample;
+                        bitmap = android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+                    }
+                }
+                zip.close();
+            } catch (Throwable e) {
+                LOG.d("ShareCard cover archive", String.valueOf(e.getMessage()));
+            }
+            LOG.d("ShareCard cover archive", bookPath, bitmap == null ? "none" : bitmap.getWidth() + "x" + bitmap.getHeight());
+            if (bitmap != null) {
+                runOnUi(activity, ready, bitmap);
+            }
+        }).start();
+    }
+
+    private static byte[] readAll(java.io.InputStream in) throws java.io.IOException {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        byte[] buffer = new byte[8192];
+        int read;
+        while ((read = in.read(buffer)) > 0) {
+            out.write(buffer, 0, read);
+        }
+        return out.toByteArray();
+    }
+
+    private static void runOnUi(final Activity activity, final IMG.ResourceReady ready,
+                                final Bitmap bitmap) {
+        activity.runOnUiThread(() -> {
+            if (!activity.isFinishing()) {
+                ready.onResourceReady(bitmap);
+            }
+        });
     }
 
     private static void render(ImageView preview, ShareQuoteCard.Texts texts, int template,
