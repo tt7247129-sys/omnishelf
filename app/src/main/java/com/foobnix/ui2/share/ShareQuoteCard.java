@@ -326,10 +326,10 @@ public class ShareQuoteCard {
         while (label > 11f && trackedWidth(texts.scan, label, 0.10f, sans) > qrSize + 26) {
             label -= 1f;
         }
-        drawTrackedCentered(c, texts.scan, qrCx, qrY - 18 - label, label, muted, 0.10f);
+        drawTrackedCentered(c, texts.scan, qrCx, qrY - 18 - label, label, muted, 0.10f, sans);
         Bitmap code = qr(qrSize, dark);
         if (code != null) c.drawBitmap(code, qrX, qrY, null);
-        drawTrackedCentered(c, texts.urlLabel, qrCx, qrY + qrSize + 10, label, muted, 0.06f);
+        drawTrackedCentered(c, texts.urlLabel, qrCx, qrY + qrSize + 10, label, muted, 0.06f, sans);
 
         colophon(c, dark, left, qrY - 34, qrY + qrSize, qrX - left - 46);
     }
@@ -366,7 +366,7 @@ public class ShareQuoteCard {
 
         rect(c, left, y, left + 34, y + 4, accent);
         y += 18;
-        drawTrackedLeft(c, brand, left, y, 19, accent, 0.14f);
+        drawTrackedLeft(c, brand, left, y, 19, accent, 0.14f, serif);
         y += brandH;
         for (int i = 0; i < claimLines.length; i++) {
             textTop(c, claimLines[i], left, y + i * 34, 23, serif, strong);
@@ -375,7 +375,7 @@ public class ShareQuoteCard {
         if (specs.length() > 0) {
             y += 8;
             for (int i = 0; i < specLines.length; i++) {
-                drawTrackedLeft(c, specLines[i], left, y + i * 22, 14, fg, 0.05f);
+                drawTrackedLeft(c, specLines[i], left, y + i * 22, 14, fg, 0.05f, sans);
             }
         }
     }
@@ -395,9 +395,10 @@ public class ShareQuoteCard {
         c.drawText(s, x, topY - p.getFontMetrics().ascent, p);
     }
 
-    private void drawTrackedLeft(Canvas c, String s, float x, float topY, float size, int color, float track) {
+    private void drawTrackedLeft(Canvas c, String s, float x, float topY, float size, int color,
+                                 float track, Typeface face) {
         if (s == null || s.length() == 0) return;
-        TextPaint p = paint(sans, size, color);
+        TextPaint p = paint(face, size, color);
         float cx = x;
         float baseline = topY - p.getFontMetrics().ascent;
         for (char ch : s.toCharArray()) {
@@ -407,10 +408,10 @@ public class ShareQuoteCard {
     }
 
     private void drawTrackedCentered(Canvas c, String s, float centerX, float topY, float size,
-                                     int color, float track) {
+                                     int color, float track, Typeface face) {
         if (s == null || s.length() == 0) return;
-        float w = trackedWidth(s, size, track, sans);
-        drawTrackedLeft(c, s, centerX - w / 2f, topY, size, color, track);
+        float w = trackedWidth(s, size, track, face);
+        drawTrackedLeft(c, s, centerX - w / 2f, topY, size, color, track, face);
     }
 
     private float trackedWidth(String s, float size, float track, Typeface face) {
@@ -465,19 +466,23 @@ public class ShareQuoteCard {
             }
             if (maxX < 0) return null;
             int modules = Math.max(maxX - minX + 1, maxY - minY + 1);
-            int scale = Math.max(1, size / modules);
-            int drawn = modules * scale;
-            int offset = (size - drawn) / 2;
+            // Fill the box exactly, as the approved art does: every module gets an equal
+            // share of the 112px and the edges land on whole pixels, so the code is the
+            // same size as the one in the mockup and the labels keep their 18px / 10px gaps.
+            float scale = size / (float) modules;
             qr = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(qr);
-            Paint darkPaint = new Paint();
-            darkPaint.setColor(dark ? 0xFFF2E7E2 : 0xFF201814);
+            Paint modulePaint = new Paint();
+            modulePaint.setColor(dark ? 0xFFF2E7E2 : 0xFF201814);
+            modulePaint.setAntiAlias(false);
             for (int y = minY; y <= maxY; y++) {
+                int top = Math.round((y - minY) * scale);
+                int bottom = Math.round((y - minY + 1) * scale);
                 for (int x = minX; x <= maxX; x++) {
                     if (m.get(x, y)) {
-                        float l = offset + (x - minX) * scale;
-                        float t = offset + (y - minY) * scale;
-                        c.drawRect(l, t, l + scale, t + scale, darkPaint);
+                        int left = Math.round((x - minX) * scale);
+                        int right = Math.round((x - minX + 1) * scale);
+                        c.drawRect(left, top, right, bottom, modulePaint);
                     }
                 }
             }
