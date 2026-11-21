@@ -2513,6 +2513,31 @@ public class DragingDialogs {
         });
     }
 
+    /** Paints every tagged link row, and its icon, in the app's colour. */
+    private static void applyBrandColourToRows(View root, int color) {
+        if (root == null) {
+            return;
+        }
+        if (root instanceof android.widget.TextView && "textLink".equals(root.getTag())) {
+            ((android.widget.TextView) root).setTextColor(color);
+            if (root.getParent() instanceof android.view.ViewGroup) {
+                android.view.ViewGroup row = (android.view.ViewGroup) root.getParent();
+                for (int i = 0; i < row.getChildCount(); i++) {
+                    View child = row.getChildAt(i);
+                    if (child instanceof android.widget.ImageView) {
+                        ((android.widget.ImageView) child).setColorFilter(color);
+                    }
+                }
+            }
+        }
+        if (root instanceof android.view.ViewGroup) {
+            android.view.ViewGroup group = (android.view.ViewGroup) root;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                applyBrandColourToRows(group.getChildAt(i), color);
+            }
+        }
+    }
+
     public static void dialogGoToPage(final FrameLayout anchor, final DocumentController dc) {
         if (dc == null) {
             return;

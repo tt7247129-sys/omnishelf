@@ -197,7 +197,7 @@ public class ShareQuoteCard {
         }
         int rx = W - 120;
         float dy = 120;
-        for (char ch : verticalDateChars()) {
+        for (char ch : verticalDateChars().toCharArray()) {
             text(c, String.valueOf(ch), rx, dy + 24, 24, serif, NIGHT_MUTED);
             dy += 34;
         }
