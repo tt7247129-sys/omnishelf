@@ -60,6 +60,14 @@ READING
 - Auto-scroll, tap zones, volume-key page turns
 - Continue reading: a card on the shelf takes you back to the last page you stopped at
 
+SHARE CARDS
+- Long-press a word to select it, then tap "Share quote card"
+- Six layouts to choose from: date card, cover ticket, vertical spine, cover band, cinnabar frame, gallery
+- Each card carries a cinnabar seal, a paper texture and a perforated ticket stub, so it looks printed
+- The card adds the book, the author, the date and a one-line introduction
+- A QR code points at omnishelf.cc today and at the download page once the app is public
+- Your last chosen layout is remembered
+
 LIBRARY
 - Five shelves: recent, library, folders, favourites and bookmarks
 - Grid, compact, list and cover layouts; sort by date, title, author, size
@@ -110,6 +118,14 @@ OmniShelf 只做一件事:让你好好读书。没有广告,没有内购,没有�
 · 高亮、笔记、书签,支持快速跳转
 · 自动滚动、点击分区翻页、音量键翻页
 · 继续阅读:书架上会显示上次读到的那本书和进度,一点即回到原处
+
+书摘分享卡
+· 长按选中一句话,在选词面板点「分享书摘卡」
+· 6 套版式:日期卡、封面票根、竖排书脊、影像封面、朱砂画框、画廊
+· 每张卡都有朱砂印章、纸张肌理与票根式页脚,分享出去像印刷品
+· 自动带上书名、作者、日期,以及一句产品介绍
+· 二维码指向官网 omnishelf.cc,上线后自动变为下载页
+· 记住你上次选择的版式
 
 书库
 · 五个栏目:最近、书库、文件夹、收藏、书签

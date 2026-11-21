@@ -148,8 +148,12 @@ jobs:
           echo "signature entries: $COUNT"
           [ "$COUNT" = "2" ] || { echo "::error::expected one certificate chain"; exit 1; }
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --print-certs "$APK" | grep -E "Signer #1 certificate SHA-1" || true
-          cp "$AAB" out/OmniShelf-1.2.0.aab
-          cp "$APK" out/OmniShelf-1.2.0-arm64-signed.apk
+          BASE=$(grep '^appVersionNumberBase' app/gradle.properties | cut -d= -f2)
+          IDX=$(grep '^appVersionNumberIndex' app/gradle.properties | cut -d= -f2)
+          VERSION="${BASE}.${IDX}"
+          echo "version: $VERSION"
+          cp "$AAB" "out/OmniShelf-${VERSION}.aab"
+          cp "$APK" "out/OmniShelf-${VERSION}-arm64-signed.apk"
 
       - name: Publish signed artifacts
         if: env.HAS_KEYSTORE == 'yes'
@@ -162,7 +166,7 @@ jobs:
             gh release create "$TAG" --title "OmniShelf 签名构建" \
               --notes "已用 Play 上传密钥签名,可直接上架或安装。" --prerelease || true
           fi
-          gh release upload "$TAG" out/OmniShelf-1.2.0.aab out/OmniShelf-1.2.0-arm64-signed.apk --clobber || true
+          gh release upload "$TAG" out/*.aab out/*.apk --clobber || true
           echo "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
 
       - uses: actions/upload-artifact@v4
