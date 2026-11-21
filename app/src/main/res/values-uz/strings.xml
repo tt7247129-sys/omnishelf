@@ -17,6 +17,8 @@
    <string name="contact_source_other">Boshqa joydan</string>
    <string name="contact_source_thanks">Rahmat. Bu javobni ishlab chiquvchiga yuborilsinmi? «Yuborish» bosilmaguncha hech narsa yuborilmaydi.</string>
    <string name="contact_source_send">Yuborish</string>
+   <string name="share_card_intro">OmniShelf: reklamasiz o\'quvchi. 34 format, oflayn ovozli o\'qish, 55 til.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

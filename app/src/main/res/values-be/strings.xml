@@ -15,6 +15,8 @@
    <string name="contact_source_other">Дзесьці яшчэ</string>
    <string name="contact_source_thanks">Дзякуй. Даслаць гэты адказ распрацоўшчыку? Нічога не дасылаецца, пакуль вы не націснеце «Даслаць».</string>
    <string name="contact_source_send">Даслаць</string>
+   <string name="share_card_intro">OmniShelf: чытач без рэкламы. 34 фарматы, афлайн чытанне ўголас, 55 моў.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -15,6 +15,8 @@
    <string name="contact_source_other">Другаде</string>
    <string name="contact_source_thanks">Благодаря. Да изпратим ли този отговор на разработчика? Нищо не се изпраща, освен ако не натиснете „Изпрати“.</string>
    <string name="contact_source_send">Изпрати</string>
+   <string name="share_card_intro">OmniShelf: четец без реклами. 34 формата, офлайн четене на глас, 55 езика.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

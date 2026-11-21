@@ -17,6 +17,8 @@
    <string name="contact_source_other">Tempat lain</string>
    <string name="contact_source_thanks">Terima kasih. Hantar jawapan ini kepada pembangun? Tiada apa dihantar melainkan anda tekan Hantar.</string>
    <string name="contact_source_send">Hantar</string>
+   <string name="share_card_intro">OmniShelf: pembaca tanpa iklan. 34 format, bacaan luar talian, 55 bahasa.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

@@ -15,6 +15,8 @@
    <string name="contact_source_other">Ergens anders</string>
    <string name="contact_source_thanks">Bedankt. Dit antwoord naar de ontwikkelaar sturen? Er wordt niets verzonden tenzij je op Verzenden drukt.</string>
    <string name="contact_source_send">Verzenden</string>
+   <string name="share_card_intro">OmniShelf: een lezer zonder advertenties. 34 formaten, offline voorlezen, 55 talen.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

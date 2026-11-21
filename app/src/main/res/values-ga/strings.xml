@@ -15,6 +15,8 @@
    <string name="contact_source_other">Áit éigin eile</string>
    <string name="contact_source_thanks">Go raibh maith agat. An seoladh an freagra seo chuig an bhforbróir? Ní sheoltar rud ar bith mura bpróbáil tú Seol.</string>
    <string name="contact_source_send">Seol</string>
+   <string name="share_card_intro">OmniShelf: léitheoir gan fógraí. 34 formáid, léamh os ard as líne, 55 teanga.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

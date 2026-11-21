@@ -15,6 +15,8 @@
    <string name="contact_source_other">Dari tempat lain</string>
    <string name="contact_source_thanks">Terima kasih. Kirim jawaban ini ke pengembang? Tidak ada yang dikirim kecuali Anda menekan Kirim.</string>
    <string name="contact_source_send">Kirim</string>
+   <string name="share_card_intro">OmniShelf: pembaca tanpa iklan. 34 format, suara offline, 55 bahasa.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

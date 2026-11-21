@@ -15,6 +15,8 @@
    <string name="contact_source_other">Et annet sted</string>
    <string name="contact_source_thanks">Takk. Sende dette svaret til utvikleren? Ingenting sendes med mindre du trykker Send.</string>
    <string name="contact_source_send">Send</string>
+   <string name="share_card_intro">OmniShelf: en leser uten annonser. 34 formater, opplesing offline, 55 språk.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

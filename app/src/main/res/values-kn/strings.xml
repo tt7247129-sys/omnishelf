@@ -17,6 +17,8 @@
    <string name="contact_source_other">ಬೇರೆ ಎಲ್ಲೋ</string>
    <string name="contact_source_thanks">ಧನ್ಯವಾದ. ಈ ಉತ್ತರವನ್ನು ಡೆವಲಪರ್‌ಗೆ ಕಳುಹಿಸಬೇಕೇ? ಕಳುಹಿಸು ಒತ್ತದ ಹೊರತು ಏನೂ ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ.</string>
    <string name="contact_source_send">ಕಳುಹಿಸು</string>
+   <string name="share_card_intro">OmniShelf: ಜಾಹೀರಾತುಗಳಿಲ್ಲದ ಓದುಗ. 34 ಸ್ವರೂಪಗಳು, ಆಫ್‌ಲೈನ್ ಓದುವಿಕೆ, 55 ಭಾಷೆಗಳು.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

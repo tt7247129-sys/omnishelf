@@ -17,6 +17,8 @@
    <string name="contact_source_other">మరెక్కడో</string>
    <string name="contact_source_thanks">ధన్యవాదాలు. ఈ సమాధానాన్ని డెవలపర్కు పంపాలా? పంపు నొక్కకుండా ఏదీ పంపబడదు.</string>
    <string name="contact_source_send">పంపు</string>
+   <string name="share_card_intro">OmniShelf: ప్రకటనలు లేని రీడర్. 34 ఫార్మాట్‌లు, ఆఫ్‌లైన్ పఠనం, 55 భాషలు.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

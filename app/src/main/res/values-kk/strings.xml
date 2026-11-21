@@ -15,6 +15,8 @@
    <string name="contact_source_other">Басқа жерден</string>
    <string name="contact_source_thanks">Рақмет. Бұл жауапты әзірлеушіге жіберу керек пе? «Жіберу» түймесін баспасаңыз, ештеңе жіберілмейді.</string>
    <string name="contact_source_send">Жіберу</string>
+   <string name="share_card_intro">OmniShelf: жарнамасыз оқырман. 34 формат, офлайн дауыстау, 55 тіл.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

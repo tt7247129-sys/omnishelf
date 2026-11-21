@@ -15,6 +15,8 @@
    <string name="contact_source_other">In otru logu</string>
    <string name="contact_source_thanks">Gràtzias. Boles imbiare custa risposta a su isvilupadore? Nudda s\'imbitat si non primis Imbia.</string>
    <string name="contact_source_send">Imbia</string>
+   <string name="share_card_intro">OmniShelf: unu letore chenza publitzidade. 34 formatos, boghe chene rete, 55 limbas.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

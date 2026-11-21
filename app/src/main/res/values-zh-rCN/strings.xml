@@ -15,6 +15,8 @@
    <string name="contact_source_other">其他渠道</string>
    <string name="contact_source_thanks">谢谢!要把这个答案发给开发者吗?你不点"发送"就不会发出任何东西。</string>
    <string name="contact_source_send">发送</string>
+   <string name="share_card_intro">OmniShelf：一个不给你看广告的阅读器，34 种格式、离线朗读、55 种语言。</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

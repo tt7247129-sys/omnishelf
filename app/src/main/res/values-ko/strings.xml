@@ -15,6 +15,8 @@
    <string name="contact_source_other">다른 곳</string>
    <string name="contact_source_thanks">감사합니다. 이 답변을 개발자에게 보낼까요? 보내기를 누르지 않으면 아무것도 전송되지 않습니다.</string>
    <string name="contact_source_send">보내기</string>
+   <string name="share_card_intro">OmniShelf: 광고 없는 리더. 34가지 형식, 오프라인 낭독, 55개 언어.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

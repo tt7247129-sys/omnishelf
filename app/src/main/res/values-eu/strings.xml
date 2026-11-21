@@ -15,6 +15,8 @@
    <string name="contact_source_other">Beste leku batean</string>
    <string name="contact_source_thanks">Eskerrik asko. Erantzun hau garatzaileari bidali? Ez da ezer bidaltzen Bidali sakatzen ez baduzu.</string>
    <string name="contact_source_send">Bidali</string>
+   <string name="share_card_intro">OmniShelf: iragarkirik gabeko irakurgailua. 34 formatu, lineaz kanpoko ahotsa, 55 hizkuntza.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

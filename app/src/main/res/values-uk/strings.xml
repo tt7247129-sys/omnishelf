@@ -15,6 +15,8 @@
    <string name="contact_source_other">Деінде</string>
    <string name="contact_source_thanks">Дякую. Надіслати цю відповідь розробнику? Нічого не надсилається, доки ви не натиснете «Надіслати».</string>
    <string name="contact_source_send">Надіслати</string>
+   <string name="share_card_intro">OmniShelf: читач без реклами. 34 формати, озвучення офлайн, 55 мов.</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>

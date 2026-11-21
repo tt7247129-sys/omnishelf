@@ -17,6 +17,8 @@
    <string name="contact_source_other">کہیں اور</string>
    <string name="contact_source_thanks">شکریہ۔ یہ جواب ڈویلپر کو بھیجیں؟ بھیجیں دبائے بغیر کچھ نہیں بھیجا جاتا۔</string>
    <string name="contact_source_send">بھیجیں</string>
+   <string name="share_card_intro">OmniShelf: بغیر اشتہار کا ریڈر۔ 34 فارمیٹس، آف لائن آواز، 55 زبانیں۔</string>
+   <string name="share_card_url" translatable="false">https://omnishelf.cc</string>
    <string name="contact_source_play">Google Play</string>
    <string name="contact_source_youtube">YouTube</string>
    <string name="contact_source_reddit">Reddit</string>
