@@ -112,7 +112,62 @@ def wordmark(d, x, y, fill, size=22):
     f = f_helv(size, False)
     letterspaced(d, "OMNISHELF", x, y, f, fill, track=0.28)
 
-def stub(im, d, intro, dark, qr_path, cta, qr_size=112, notches=("paper", "paper")):
+def intro_block(d, intro, dark, top_y, bottom_y, maxw, left=84):
+    """Draws the product line as a colophon: kicker, name, claim, specs.
+
+    It is laid out from the QR's top edge, so the two columns of the stub start and end
+    on the same lines. If a longer translation would overflow, it falls back to sitting
+    on the shared bottom edge instead.
+    """
+    fg = NIGHT_MUTED if dark else MUTED
+    strong = NIGHT_TEXT if dark else INK
+    accent = ACCENT if dark else CINNABAR
+    # split "OmniShelf: claim, specs" without translating anything away
+    brand, claim, specs = "OmniShelf", intro, ""
+    for sep in ("：", ":"):
+        if sep in intro:
+            brand, rest = intro.split(sep, 1)
+            brand, claim = brand.strip(), rest.strip()
+            break
+    if "，" in claim:
+        claim, specs = claim.rsplit("，", 1)
+        claim, specs = claim.strip() + "。", specs.strip()
+    elif "," in claim:
+        claim, specs = claim.rsplit(",", 1)
+        claim, specs = claim.strip() + ".", specs.strip()
+
+    brand_font = f_song(19, 0)
+    claim_font = f_song(23, 0)
+    spec_font = f_cjk(14)
+
+    claim_lines = wrap_cjk(claim, claim_font, maxw, d)
+    spec_lines = wrap_cjk(specs, spec_font, maxw, d) if specs else []
+
+    brand_h = 26
+    claim_h = len(claim_lines) * 34
+    spec_h = len(spec_lines) * 22
+    total = 6 + 12 + brand_h + claim_h + (8 + spec_h if specs else 0)
+    y = top_y if total <= (bottom_y - top_y) + 18 else bottom_y - total
+    d.rectangle([left, y, left + 34, y + 4], fill=accent)
+    y += 6 + 12
+    # the name: small, tracked, warm
+    cx = left
+    for ch in brand:
+        d.text((cx, y), ch, font=brand_font, fill=accent)
+        cx += brand_font.getlength(ch) + brand_font.size * 0.14
+    y += brand_h
+    for i, line in enumerate(claim_lines):
+        d.text((left, y + i * 34), line, font=claim_font, fill=strong)
+    y += claim_h
+    if specs:
+        y += 8
+        for i, line in enumerate(spec_lines):
+            sx = left
+            for ch in line:
+                d.text((sx, y + i * 22), ch, font=spec_font, fill=fg)
+                sx += spec_font.getlength(ch) + spec_font.size * 0.05
+
+def stub(im, d, intro, dark, qr_path, cta, qr_size=112, notches=("paper", "paper"), left=84):
     """The bottom of the card, a ticket stub: perforation, intro on the left, QR on the right.
 
     There is deliberately no wordmark down here - the intro already opens with the name,
@@ -123,7 +178,7 @@ def stub(im, d, intro, dark, qr_path, cta, qr_size=112, notches=("paper", "paper
     qr_x = W - 84 - qr_size
     qr_y = H - 84 - qr_size
     perforation_y = H - 296
-    x = 84
+    x = left
     while x < W - 84:
         d.line([(x, perforation_y), (min(x + 9, W - 84), perforation_y)], fill=line, width=2)
         x += 18
@@ -132,28 +187,38 @@ def stub(im, d, intro, dark, qr_path, cta, qr_size=112, notches=("paper", "paper
         fill = edge.get(side)
         if fill is not None:
             d.ellipse([cx - 13, perforation_y - 13, cx + 13, perforation_y + 13], fill=fill)
-    # CTA right-aligned over the QR
-    cf = f_song(19, 0)
-    cw = d.textlength(cta, font=cf)
-    d.text((qr_x + qr_size - cw, qr_y - 34), cta, font=cf, fill=fg)
+    # The two labels around the QR are one typographic group: same size, same tracking,
+    # both centred on the QR axis, and the CTA shrinks until it fits that axis.
+    qr_cx = qr_x + qr_size / 2.0
+    label_size = 16
+    while label_size > 11:
+        probe = f_cjk(label_size)
+        w = sum(d.textlength(ch, font=probe) + label_size * 0.10 for ch in cta)
+        if w <= qr_size + 26:
+            break
+        label_size -= 1
+    cf = f_cjk(label_size)
+    def track_width(text, font, track):
+        return sum(font.getlength(ch) for ch in text) + track * font.size * (len(text) - 1)
+    tw = track_width(cta, cf, 0.10)
+    x = qr_cx - tw / 2
+    for ch in cta:
+        d.text((x, qr_y - 18 - label_size), ch, font=cf, fill=fg)
+        x += cf.getlength(ch) + cf.size * 0.10
     qr = Image.open(qr_path).convert("RGB").resize((qr_size, qr_size), Image.LANCZOS)
     im.paste(qr, (qr_x, qr_y))
-    cap = f_helv(15, False)
-    capw = d.textlength("omnishelf.cc", font=cap)
-    d.text((qr_x + (qr_size - capw) / 2, qr_y + qr_size + 7), "omnishelf.cc", font=cap, fill=fg)
-    # intro: two lines at most, bottom aligned with the QR
-    font = f_cjk(22)
-    maxw = qr_x - 84 - 48
-    lines = wrap_cjk(intro, font, maxw, d)
-    if len(lines) > 1:
-        cut = intro.rfind("，")
-        if cut > 0:
-            a, b = intro[:cut + 1], intro[cut + 1:].strip()
-            if d.textlength(a, font=font) <= maxw and d.textlength(b, font=font) <= maxw:
-                lines = [a, b]
-    y0 = qr_y + qr_size - (len(lines) - 1) * 31
-    for i, line in enumerate(lines):
-        d.text((84, y0 + i * 31), line, font=font, fill=fg)
+    cap = f_cjk(label_size)
+    capw = track_width("omnishelf.cc", cap, 0.06)
+    cx = qr_cx - capw / 2
+    for ch in "omnishelf.cc":
+        d.text((cx, qr_y + qr_size + 10), ch, font=cap, fill=fg)
+        cx += cap.getlength(ch) + cap.size * 0.06
+
+    # The colophon on the left is a three-tier block, not a paragraph: a cinnabar kicker,
+    # the name as a small tracked label, the claim in Songti, the specs as a tracked line.
+    # It mirrors the QR group on the right (label + content), which is what made the old
+    # two-line paragraph look pasted on.
+    intro_block(d, intro, dark, qr_y - 34, qr_y + qr_size, qr_x - left - 46, left=left)
 
 def rule(d, x1, y, x2, fill, w=1):
     """Horizontal hairline; y may be passed as the fourth argument."""
@@ -263,7 +328,7 @@ def card3(intro, name="03-vertical-spine-night"):
     d.text((text_x, y + 26), "/ " + CHAPTER, font=f_song(24, 0), fill=NIGHT_MUTED)
     seal(im, text_x, y + 70, 74)
     stub(im, d, intro, dark=True, qr_path="docs/share-card/v2/qr-night.png", cta=SCAN_ZH, qr_size=108,
-         notches=("spine", "night"))
+         notches=("spine", "night"), left=spine_w + 40)
     im = vignette(im, 0.45)
     im = paper_grain(im, 5)
     im.save(OUT / f"{name}.png"); return im
