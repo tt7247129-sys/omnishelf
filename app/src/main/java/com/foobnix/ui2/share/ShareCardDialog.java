@@ -117,6 +117,7 @@ public class ShareCardDialog {
     private static void loadCover(Activity activity, String bookPath, IMG.ResourceReady ready) {
         try {
             IMG.getCoverPageWithEffect(activity, bookPath, bitmap -> {
+                LOG.d("ShareCard cover for", bookPath, bitmap == null ? "none" : bitmap.getWidth() + "x" + bitmap.getHeight());
                 if (bitmap == null) {
                     return;
                 }
