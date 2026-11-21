@@ -151,7 +151,6 @@ public class ShareQuoteCard {
         text(c, monthLabel(), M, 128, 22, sans, MUTED);
         rect(c, M, 96, M + 46, 100, CINNABAR);
         text(c, day(), M, 300, 200, Typeface.create(sans, Typeface.BOLD), INK);
-        text(c, year(), M + 2, 400, 58, sans, INK);
         text(c, texts.dateLine, M + 2, 470, 26, serif, MUTED);
         line(c, M + 2, 512, W - M, 512, HAIR_LIGHT, 1);
 
@@ -217,7 +216,7 @@ public class ShareQuoteCard {
         }
         int rx = W - 120;
         float dy = 120;
-        for (char ch : verticalDate().toCharArray()) {
+        for (char ch : verticalDate().replace(" ", "").toCharArray()) {
             text(c, String.valueOf(ch), rx, dy + 24, 24, serif, NIGHT_MUTED);
             dy += 34;
         }
@@ -229,7 +228,10 @@ public class ShareQuoteCard {
             c.drawText(line, spineW + 70, ty, quote);
             ty += 78;
         }
-        text(c, "/ " + texts.chapter, spineW + 70, ty + 24, 24, serif, NIGHT_MUTED);
+        String spineMeta = join(texts.title, " · ", texts.chapter);
+        if (spineMeta.length() > 0) {
+            text(c, "/ " + spineMeta, spineW + 70, ty + 24, 24, serif, NIGHT_MUTED);
+        }
         seal(c, spineW + 70, ty + 68, 74, "書");
         stub(c, b, true, spineW + 40, new String[]{"spine", "night"});
         vignette(b);
@@ -265,7 +267,7 @@ public class ShareQuoteCard {
             qy += 80;
         }
         text(c, texts.chapter, M, qy + 22, 24, serif, MUTED);
-        text(c, join(texts.author, " · ", dateSlash()), M, qy + 60, 20, serif, MUTED);
+        text(c, join(texts.author, " · ", texts.dateLine), M, qy + 60, 20, serif, MUTED);
         stub(c, b, false, M, new String[]{"paper", "paper"});
         grain(b, 0.05f);
     }

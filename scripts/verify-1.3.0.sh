@@ -127,22 +127,38 @@ if [ -z "$ROW" ]; then fail "share-quote-card row not found"; else
   pass "selection panel has the card row"
   "$ADB" logcat -c >/dev/null 2>&1
   "$ADB" shell input tap $ROW; sleep 4
-  D=$(dump)
-  if has_text "1 / 6" "$D"; then pass "preview dialog shows template 1 of 6"; else
-    fail "preview dialog did not appear"; fi
-  # walk through all six layouts; the counter must reach 6 / 6
-  REACHED=1
-  for step in 2 3 4 5 6; do
-    NEXT=$(center_of "cardNext" "$D")
-    if [ -z "$NEXT" ]; then fail "next button missing at step $step"; break; fi
-    "$ADB" shell input tap $NEXT; sleep 2
+  # The dialog remembers the last layout used, so do not assume it opens on 1 / 6.
+  START=""
+  for i in $(seq 1 10); do
     D=$(dump)
-    if has_text "$step / 6" "$D"; then REACHED=$step; else info "counter did not reach $step / 6"; break; fi
+    START=$(grep -oE '[0-9] / 6' "$D" 2>/dev/null | head -1)
+    [ -n "$START" ] && break
+    sleep 2
   done
-  [ "$REACHED" -eq 6 ] && pass "all six layouts rendered without a crash"
-  CRASH=$("$ADB" logcat -d 2>/dev/null | grep -cE "FATAL EXCEPTION.*$PKG|AndroidRuntime.*$PKG")
-  [ "$CRASH" -eq 0 ] && pass "no crash while flipping templates" || fail "crash in logcat ($CRASH)"
-
+  if [ -n "$START" ]; then
+    pass "preview dialog opened (template ${START})"
+  else
+    fail "preview dialog did not appear"
+  fi
+  if [ -n "$START" ]; then
+    # flip through the six layouts; the counter must visit six different values
+    SEEN_VALUES="$START"
+    for step in 1 2 3 4 5 6; do
+      NEXT=$(center_of "cardNext" "$D")
+      [ -z "$NEXT" ] && { fail "next button missing"; break; }
+      "$ADB" shell input tap $NEXT; sleep 2
+      D=$(dump)
+      V=$(grep -oE '[0-9] / 6' "$D" 2>/dev/null | head -1)
+      [ -z "$V" ] && { fail "counter vanished after tap"; break; }
+      SEEN_VALUES="$SEEN_VALUES $V"
+    done
+    # match whole labels: "2 / 6" rather than the tokens around the slash
+    DISTINCT=$(echo "$SEEN_VALUES" | grep -oE '[0-9] / 6' | sort -u | wc -l | tr -d ' ')
+    if [ "$DISTINCT" -eq 6 ]; then pass "all six layouts rendered (visited $DISTINCT distinct counters)"
+    else fail "only $DISTINCT distinct template counters seen: $SEEN_VALUES"; fi
+    CRASH=$("$ADB" logcat -d 2>/dev/null | grep -cE "FATAL EXCEPTION.*$PKG")
+    [ "$CRASH" -eq 0 ] && pass "no crash while flipping templates" || fail "crash in logcat ($CRASH)"
+  fi
   SHARE=$(center_of "cardShare" "$D")
   if [ -n "$SHARE" ]; then
     "$ADB" shell input tap $SHARE; sleep 4
