@@ -474,6 +474,8 @@ public class AppState {
      * which channel works.
      */
     public String contactSource = "";
+    /** Which quote-card layout the reader last shared; 0..5, see ShareQuoteCard. */
+    public int shareCardTemplate = 1;
     public boolean isAskedContactSource = false;
     @IgnoreHashCode public boolean isRewindEnable = true;
     // The reader's own clock and battery are already up there; a second pair along the foot of

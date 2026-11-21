@@ -113,6 +113,7 @@ import com.foobnix.pdf.SlidingTabLayout;
 import com.foobnix.pdf.info.Engines;
 import com.foobnix.pdf.info.EpubEngineMenu;
 import com.foobnix.pdf.info.PdfEngineMenu;
+import com.foobnix.ui2.share.ShareCardDialog;
 import com.foobnix.ui2.share.ShareQuoteCard;
 import com.foobnix.pdf.info.AppsConfig;
 import com.foobnix.model.AppAnnotation;
@@ -2093,8 +2094,9 @@ public class DragingDialogs {
                     }
                 });
 
-                // A quote card: the selected line rendered as an image, book and page on it,
-                // so a reader can post it anywhere without an account.
+                // A quote card: the selection rendered as one of six layouts, previewed and
+                // shared from a dialog. The row keeps the panel compact; the work lives in
+                // ShareCardDialog.
                 View onShareQuoteCard = view.findViewById(R.id.onShareQuoteCard);
                 if (onShareQuoteCard != null) {
                     onShareQuoteCard.setOnClickListener(new OnClickListener() {
@@ -2104,38 +2106,10 @@ public class DragingDialogs {
                                 if (quote.length() == 0) {
                                     quote = AppState.get().selectedText;
                                 }
-                                if (quote == null) {
-                                    quote = "";
-                                }
                                 FileMeta cardMeta = controller.getBookFileMeta();
                                 String cardTitle = cardMeta != null ? cardMeta.getTitle() : "";
                                 String cardAuthor = cardMeta != null ? cardMeta.getAuthor() : "";
-                                // The card does not need the page number to be useful, and the
-                                // controller exposes no plain accessor for it here.
-                                String cardPage = "";
-                                int style = AppState.get().appTheme == AppState.THEME_DARK_OLED
-                                        || AppState.get().appTheme == AppState.THEME_INK
-                                        ? ShareQuoteCard.STYLE_NIGHT : ShareQuoteCard.STYLE_CINNABAR;
-                                android.graphics.Bitmap card = ShareQuoteCard.render(v.getContext(),
-                                        quote == null ? "" : quote, cardTitle, cardAuthor, cardPage, style);
-                                java.io.File dir = new java.io.File(v.getContext().getFilesDir(), "share");
-                                //noinspection ResultOfMethodCallIgnored
-                                dir.mkdirs();
-                                java.io.File file = new java.io.File(dir,
-                                        "quote-" + System.currentTimeMillis() + ".png");
-                                try (java.io.FileOutputStream out = new java.io.FileOutputStream(file)) {
-                                    card.compress(android.graphics.Bitmap.CompressFormat.PNG, 95, out);
-                                }
-                                card.recycle();
-                                ShareQuoteCard.pruneOldCards(dir);
-                                android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(
-                                        v.getContext(), Apps.getPackageName(v.getContext()) + ".provider", file);
-                                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                                shareIntent.setType("image/png");
-                                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                shareIntent.putExtra(Intent.EXTRA_TEXT, quote);
-                                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                v.getContext().startActivity(Intent.createChooser(shareIntent, null));
+                                ShareCardDialog.show(controller.getActivity(), quote, cardTitle, cardAuthor);
                                 closeDialog();
                             } catch (Throwable e) {
                                 LOG.e(e);
