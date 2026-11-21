@@ -451,11 +451,34 @@ public class ShareQuoteCard {
         try {
             com.google.zxing.common.BitMatrix m = new QRCodeWriter()
                     .encode(texts.url, BarcodeFormat.QR_CODE, size, size);
-            qr = Bitmap.createBitmap(m.getWidth(), m.getHeight(), Bitmap.Config.ARGB_8888);
-            int module = dark ? 0xFFF2E7E2 : 0xFF201814;
+            // ZXing reserves a four-module quiet zone. The card itself is the quiet zone -
+            // its ground is uniform around the code - and the approved art has none, so the
+            // code is drawn to fill its box: find the module area, scale by whole modules.
+            int minX = m.getWidth(), minY = m.getHeight(), maxX = -1, maxY = -1;
             for (int y = 0; y < m.getHeight(); y++) {
                 for (int x = 0; x < m.getWidth(); x++) {
-                    qr.setPixel(x, y, m.get(x, y) ? module : 0x00000000);
+                    if (m.get(x, y)) {
+                        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+                        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+                    }
+                }
+            }
+            if (maxX < 0) return null;
+            int modules = Math.max(maxX - minX + 1, maxY - minY + 1);
+            int scale = Math.max(1, size / modules);
+            int drawn = modules * scale;
+            int offset = (size - drawn) / 2;
+            qr = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(qr);
+            Paint darkPaint = new Paint();
+            darkPaint.setColor(dark ? 0xFFF2E7E2 : 0xFF201814);
+            for (int y = minY; y <= maxY; y++) {
+                for (int x = minX; x <= maxX; x++) {
+                    if (m.get(x, y)) {
+                        float l = offset + (x - minX) * scale;
+                        float t = offset + (y - minY) * scale;
+                        c.drawRect(l, t, l + scale, t + scale, darkPaint);
+                    }
                 }
             }
             qrDark = dark;
