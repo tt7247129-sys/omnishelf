@@ -118,6 +118,28 @@ public class ShareQuoteCard {
         return bitmap;
     }
 
+
+    /**
+     * Deletes cards older than a week. They live in filesDir/share, one PNG per share, and
+     * without this the directory only grows.
+     */
+    public static void pruneOldCards(java.io.File dir) {
+        if (dir == null || !dir.isDirectory()) {
+            return;
+        }
+        java.io.File[] files = dir.listFiles();
+        if (files == null) {
+            return;
+        }
+        long cutoff = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000;
+        for (java.io.File f : files) {
+            if (f != null && f.isFile() && f.lastModified() < cutoff) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            }
+        }
+    }
+
     // ------------------------------------------------------------------ templates
 
     private void datePaper(Canvas c, Bitmap b) {
