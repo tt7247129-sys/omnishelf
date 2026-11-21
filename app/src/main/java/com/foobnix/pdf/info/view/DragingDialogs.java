@@ -2109,7 +2109,8 @@ public class DragingDialogs {
                                 FileMeta cardMeta = controller.getBookFileMeta();
                                 String cardTitle = cardMeta != null ? cardMeta.getTitle() : "";
                                 String cardAuthor = cardMeta != null ? cardMeta.getAuthor() : "";
-                                ShareCardDialog.show(controller.getActivity(), quote, cardTitle, cardAuthor);
+                                ShareCardDialog.show(controller.getActivity(), quote, cardTitle, cardAuthor,
+                                        cardMeta != null ? cardMeta.getPath() : "");
                                 closeDialog();
                             } catch (Throwable e) {
                                 LOG.e(e);
@@ -2495,6 +2496,10 @@ public class DragingDialogs {
                     });
                 }
 
+                // The platform still paints some of these rows with its own link colour
+                // (#008577 on this device), which no resource override reached. Setting the
+                // brand colour on the views themselves is the one place nothing can override.
+                applyBrandColourToRows(view, TintUtil.color);
                 return view;
             }
         }.

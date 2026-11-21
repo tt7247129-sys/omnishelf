@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
@@ -19,22 +18,25 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
- * Renders a quote card: the selection, the book, and a line pointing at the project.
+ * Renders a quote card. Six layouts, all drawn from the app's palette.
  *
- * <p>Six layouts, all drawn from the app's own palette. The card never leaves the device by
- * itself - the caller owns the bitmap and decides where it goes.
+ * <p>The geometry mirrors docs/share-card/v3/render-cards.py one to one - every coordinate
+ * below is the same number the approved mockups were drawn with - so a card made on a phone
+ * and a card made for the design review are the same card. Only the typefaces differ: the
+ * device uses the bundled Noto Serif SC and the system sans, the mockups used Songti and
+ * Helvetica, which are the same roles in a different file.
  *
- * <p>Everything here is android.* plus ZXing, so the class can be compiled and reasoned
- * about on its own; the strings are passed in, never read from resources, which keeps the
- * renderer free of the app's R class.
+ * <p>Everything here is android.* plus ZXing; strings are passed in, so the renderer never
+ * touches the app's R class and can be compiled on its own.
  */
 public class ShareQuoteCard {
 
-    // The six templates, in the order the user flips through them.
     public static final int T_DATE_PAPER = 0;
     public static final int T_COVER_TICKET_NIGHT = 1;
     public static final int T_VERTICAL_SPINE_NIGHT = 2;
@@ -43,36 +45,26 @@ public class ShareQuoteCard {
     public static final int T_GALLERY_NIGHT = 5;
     public static final int TEMPLATE_COUNT = 6;
 
-    private static final int W = 1080;
-    private static final int H = 1440;
-    private static final int M = 84;
+    private static final int W = 1080, H = 1440, M = 84;
+    private static final int PAPER = 0xFFFBF8F2, INK = 0xFF241815, MUTED = 0xFF7C6B63;
+    private static final int NIGHT = 0xFF151412, NIGHT_TEXT = 0xFFEFE4DC, NIGHT_MUTED = 0xFFA3938B;
+    private static final int CINNABAR = 0xFF8E2B21, ACCENT = 0xFFD2503C;
+    private static final int HAIR_DARK = 0xFF392D28, HAIR_LIGHT = 0xFFD8CBBE;
 
-    private static final int PAPER = 0xFFFBF8F2;
-    private static final int INK = 0xFF241815;
-    private static final int MUTED = 0xFF7C6B63;
-    private static final int NIGHT = 0xFF151412;
-    private static final int NIGHT_TEXT = 0xFFEFE4DC;
-    private static final int NIGHT_MUTED = 0xFFA3938B;
-    private static final int CINNABAR = 0xFF8E2B21;
-    private static final int ACCENT = 0xFFD2503C;
-    private static final int HAIR_DARK = 0xFF392D28;
-    private static final int HAIR_LIGHT = 0xFFD8CBBE;
-
-    /** The text a card needs. Built by the caller from resources, so it is localized. */
+    /** The text a card needs; built by the caller from resources so it is localized. */
     public static class Texts {
         public String quote = "";
         public String title = "";
         public String author = "";
         public String chapter = "";
-        /** e.g. "OmniShelf：一个不给你看广告的阅读器，34 种格式、离线朗读、55 种语言。" */
         public String intro = "";
-        /** e.g. "扫码 · 读同款" */
         public String scan = "";
-        /** e.g. "https://omnishelf.cc" - the QR target */
         public String url = "https://omnishelf.cc";
         public String urlLabel = "omnishelf.cc";
-        /** Pre-formatted date, localized by the caller: "2026 年 11 月 21 日" or "Nov 21, 2026". */
+        /** Localized date, e.g. "2026 年 11 月 21 日" or "Nov 21, 2026". */
         public String dateLine = "";
+        /** The same date as 二〇二六年十一月二十一日 for the vertical column. */
+        public String verticalDate = "";
     }
 
     private final Context context;
@@ -97,7 +89,7 @@ public class ShareQuoteCard {
         return new ShareQuoteCard(context, texts, template, cover);
     }
 
-    /** Renders the card. Never returns null: on failure it returns the plain background. */
+    /** Renders the card. Never null; a failure leaves the ground colour and logs why. */
     public Bitmap render() {
         Bitmap bitmap = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -114,100 +106,89 @@ public class ShareQuoteCard {
                 default: datePaper(canvas, bitmap); break;
             }
         } catch (Throwable e) {
-            // A card that cannot be laid out is still a card, but the reason must be visible
-            // in logcat: a silently blank card is worse than a crash.
             android.util.Log.e("ShareQuoteCard", "render failed for template " + template, e);
         }
         return bitmap;
     }
 
-
-    /**
-     * Deletes cards older than a week. They live in filesDir/share, one PNG per share, and
-     * without this the directory only grows.
-     */
-    public static void pruneOldCards(java.io.File dir) {
-        if (dir == null || !dir.isDirectory()) {
-            return;
-        }
-        java.io.File[] files = dir.listFiles();
-        if (files == null) {
-            return;
-        }
-        long cutoff = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000;
-        for (java.io.File f : files) {
-            if (f != null && f.isFile() && f.lastModified() < cutoff) {
-                //noinspection ResultOfMethodCallIgnored
-                f.delete();
-            }
-        }
-    }
-
-    // ------------------------------------------------------------------ templates
+    // ---------------------------------------------------------------- 1 日期 · 纸 · 印章
 
     private void datePaper(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
-        Paint p = paint(INK);
-        text(c, monthLabel(), M, 128, 22, sans, MUTED);
-        rect(c, M, 96, M + 46, 100, CINNABAR);
-        text(c, day(), M, 300, 200, Typeface.create(sans, Typeface.BOLD), INK);
-        text(c, texts.dateLine, M + 2, 470, 26, serif, MUTED);
-        line(c, M + 2, 512, W - M, 512, HAIR_LIGHT, 1);
+        rect(c, 82, 92, 82 + 46, 96, CINNABAR);
+        text(c, "NOVEMBER", 82, 128, 22, sans, MUTED);
+        TextPaint big = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        big.setTypeface(Typeface.create(sans, Typeface.BOLD));
+        big.setTextSize(200);
+        big.setColor(INK);
+        Rect bb = new Rect();
+        big.getTextBounds("21", 0, 2, bb);
+        c.drawText("21", 84 - bb.left, 150 - bb.top, big);
+        text(c, "2026", 86, 372, 58, sans, INK);
+        text(c, weekday(), 86, 446, 26, serif, MUTED);
+        line(c, 86, 512, W - 86, 512, HAIR_LIGHT, 1);
 
-        TextPaint quote = quotePaint(INK, 48);
-        float y = 552;
-        for (String line : wrap(quote, texts.quote, W - 2 * M - 40)) {
-            c.drawText(line, M + 2, y, quote);
+        TextPaint quote = quotePaint(48);
+        String[] lines = wrap(quote, texts.quote, 800);
+        float quoteH = lines.length * 80f;
+        float blockH = quoteH + 118;
+        float top = 540, bottom = H - 330;
+        float y = top + Math.max(24, (bottom - top - blockH) / 2f);
+        for (String l : lines) {
+            c.drawText(l, 86, y + 60, quote);
             y += 80;
         }
-        y += 32;
-        text(c, quoted(texts.title), M + 2, y, 30, serif, INK);
-        text(c, join(texts.author, " · ", texts.chapter), M + 2, y + 44, 22, serif, MUTED);
-        seal(c, W - M - 84, y - 26, 84, "書");
-        stub(c, b, false, M, new String[]{"paper", "paper"});
+        text(c, "《" + texts.title + "》", 86, y + 34, 30, serif, INK);
+        text(c, join(texts.author, " · ", texts.chapter), 86, y + 82, 22, serif, MUTED);
+        seal(c, W - 86 - 84, y + 20, 84, "書");
+        stub(c, b, false, M, "paper", "paper", 112);
         grain(b, 0.05f);
     }
+
+    // ---------------------------------------------------------------- 2 封面票根 · 夜
 
     private void dateCoverTicket(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
         int left = 132, top = 118, right = W - 132, bottom = 704;
         if (cover != null) {
-            c.drawBitmap(cover, centerCrop(left, top, right, bottom), coverRect(left, top, right, bottom),
-                    new Paint(Paint.FILTER_BITMAP_FLAG));
+            c.drawBitmap(cover, centerCrop(left, top, right, bottom),
+                    new RectF(left, top, right, bottom), new Paint(Paint.FILTER_BITMAP_FLAG));
         } else {
-            gradientPlate(c, left, top, right, bottom);
+            plate(c, left, top, right, bottom);
         }
-        // a thin keyline inside the plate, like a printed cover plate
-        rectStroke(c, left + 14, top + 14, right - 14, bottom - 14, 0xFFF6E2D8, 1);
+        frame(c, left + 14, top + 14, right - 14, bottom - 14, 0xFFF6E2D8, 1);
         seal(c, left - 40, top - 40, 80, "書");
         text(c, texts.title, left + 24, top + 56, 28, serif, 0xFFF6E2D8);
         text(c, texts.dateLine, M, 742, 22, serif, NIGHT_MUTED);
 
-        TextPaint quote = quotePaint(NIGHT_TEXT, 46);
+        TextPaint quote = quotePaint(46);
         String[] lines = wrap(quote, texts.quote, W - 2 * M);
-        float blockTop = 800, blockBottom = H - 380;
-        float y = blockTop + Math.max(0, (blockBottom - blockTop - lines.length * 78 - 60) / 2f);
-        for (String line : lines) {
-            c.drawText(line, M, y, quote);
+        float blockH = lines.length * 78f + 60;
+        float t0 = 800, b0 = H - 380;
+        float y = t0 + Math.max(0, (b0 - t0 - blockH) / 2f);
+        for (String l : lines) {
+            c.drawText(l, M, y + 52, quote);
             y += 78;
         }
         text(c, "/ " + join(texts.title, " · ", texts.chapter), M, y + 20, 24, serif, NIGHT_MUTED);
-        stub(c, b, true, M, new String[]{"night", "night"});
+        stub(c, b, true, M, "night", "night", 112);
         vignette(b);
         grain(b, 0.05f);
     }
 
+    // ---------------------------------------------------------------- 3 竖排书脊 · 夜
+
     private void verticalSpine(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
         int spineW = 176;
-        Paint spine = new Paint(Paint.ANTI_ALIAS_FLAG);
-        spine.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9C3025, Shader.TileMode.CLAMP));
-        c.drawRect(0, 0, spineW, H, spine);
+        Paint sp = new Paint(Paint.ANTI_ALIAS_FLAG);
+        sp.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9C3025, Shader.TileMode.CLAMP));
+        c.drawRect(0, 0, spineW, H, sp);
 
-        float y = 150;
+        float ty0 = 150;
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 54, y + 60, 74, serif, 0xFFF7E3D9);
-            y += 88;
+            text(c, String.valueOf(ch), 54, ty0 + 64, 74, serif, 0xFFF7E3D9);
+            ty0 += 88;
         }
         float ay = H - 360;
         for (char ch : texts.author.toCharArray()) {
@@ -216,118 +197,129 @@ public class ShareQuoteCard {
         }
         int rx = W - 120;
         float dy = 120;
-        for (char ch : verticalDate().replace(" ", "").toCharArray()) {
+        for (char ch : verticalDateChars()) {
             text(c, String.valueOf(ch), rx, dy + 24, 24, serif, NIGHT_MUTED);
             dy += 34;
         }
         line(c, rx - 40, 120, rx - 40, 700, HAIR_DARK, 1);
 
-        TextPaint quote = quotePaint(NIGHT_TEXT, 44);
-        float ty = 300;
-        for (String line : wrap(quote, texts.quote, (rx - 60) - (spineW + 70))) {
-            c.drawText(line, spineW + 70, ty, quote);
-            ty += 78;
+        int textX = spineW + 70;
+        TextPaint quote = quotePaint(44);
+        String[] lines = wrap(quote, texts.quote, (rx - 60) - textX);
+        float quoteH = lines.length * 78f;
+        float blockH = quoteH + 150;
+        float t0 = 220, b0 = H - 320;
+        float y = t0 + Math.max(20, (b0 - t0 - blockH) / 2f);
+        for (String l : lines) {
+            c.drawText(l, textX, y + 50, quote);
+            y += 78;
         }
-        String spineMeta = join(texts.title, " · ", texts.chapter);
-        if (spineMeta.length() > 0) {
-            text(c, "/ " + spineMeta, spineW + 70, ty + 24, 24, serif, NIGHT_MUTED);
+        String meta = join(texts.title, " · ", texts.chapter);
+        if (meta.length() > 0) {
+            text(c, "/ " + meta, textX, y + 26, 24, serif, NIGHT_MUTED);
         }
-        seal(c, spineW + 70, ty + 68, 74, "書");
-        stub(c, b, true, spineW + 40, new String[]{"spine", "night"});
+        seal(c, textX, y + 70, 74, "書");
+        stub(c, b, true, spineW + 40, "spine", "night", 108);
         vignette(b);
         grain(b, 0.05f);
     }
+
+    // ---------------------------------------------------------------- 4 影像封面 · 纸
 
     private void coverFullPaper(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
         int bandH = 620;
         if (cover != null) {
-            c.drawBitmap(cover, centerCrop(0, 0, W, bandH), coverRect(0, 0, W, bandH),
+            c.drawBitmap(cover, centerCrop(0, 0, W, bandH), new RectF(0, 0, W, bandH),
                     new Paint(Paint.FILTER_BITMAP_FLAG));
             Paint scrim = new Paint();
             scrim.setShader(new LinearGradient(0, 0, 0, bandH, 0x33000000, 0x00000000, Shader.TileMode.CLAMP));
             c.drawRect(0, 0, W, bandH, scrim);
         } else {
-            gradientPlate(c, 0, 0, W, bandH);
+            plate(c, 0, 0, W, bandH);
         }
-        float y = 96;
+        float vy = 96;
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 74, y + 64, 64, serif, 0xFFFBF3EC);
-            y += 76;
+            text(c, String.valueOf(ch), 74, vy + 56, 64, serif, 0xFFFBF3EC);
+            vy += 76;
         }
-        text(c, texts.author, 74, y + 40, 24, serif, 0xFFECD2C4);
+        text(c, texts.author, 74, vy + 40, 24, serif, 0xFFECD2C4);
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
-        TextPaint quote = quotePaint(INK, 46);
+        TextPaint quote = quotePaint(46);
         String[] lines = wrap(quote, texts.quote, W - 2 * M);
-        float top = bandH + 90, bottom = H - 360;
-        float qy = top + Math.max(0, (bottom - top - lines.length * 80 - 70) / 2f);
-        for (String line : lines) {
-            c.drawText(line, M, qy, quote);
+        float blockH = lines.length * 80f + 70;
+        float t0 = bandH + 90, b0 = H - 360;
+        float qy = t0 + Math.max(0, (b0 - t0 - blockH) / 2f);
+        for (String l : lines) {
+            c.drawText(l, M, qy + 52, quote);
             qy += 80;
         }
         text(c, texts.chapter, M, qy + 22, 24, serif, MUTED);
         text(c, join(texts.author, " · ", texts.dateLine), M, qy + 60, 20, serif, MUTED);
-        stub(c, b, false, M, new String[]{"paper", "paper"});
+        stub(c, b, false, M, "paper", "paper", 108);
         grain(b, 0.05f);
     }
+
+    // ---------------------------------------------------------------- 5 朱砂框 · 纸
 
     private void cinnabarFrame(Canvas c, Bitmap b) {
         c.drawColor(PAPER);
         int m = 56;
-        rectStroke(c, m, m, W - m, H - m, CINNABAR, 3);
-        rectStroke(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xFFE2D1C2, 1);
+        frame(c, m, m, W - m, H - m, CINNABAR, 3);
+        frame(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xFFE2D1C2, 1);
         text(c, texts.dateLine, m + 40, m + 66, 21, serif, MUTED);
         seal(c, W - m - 40 - 70, m + 36, 70, "書");
 
-        TextPaint quote = quotePaint(INK, 52);
+        TextPaint quote = quotePaint(52);
         String[] lines = wrap(quote, texts.quote, W - 2 * m - 120);
-        float y = (H - lines.length * 88) / 2f - 40;
-        for (String line : lines) {
-            float w = quote.measureText(line);
-            c.drawText(line, (W - w) / 2f, y + 84, quote);
+        float y = (H - lines.length * 88f) / 2f - 40;
+        for (String l : lines) {
+            float w = quote.measureText(l);
+            c.drawText(l, (W - w) / 2f, y + 84, quote);
             y += 88;
         }
-        y += 30;
-        rect(c, W / 2f - 40, y, W / 2f + 40, y + 2, CINNABAR);
-        float ty = y + 48;
-        String t = quoted(texts.title);
-        text(c, t, (W - serifSize(32, t)) / 2f, ty, 32, serif, INK);
-        text(c, texts.author, (W - serifSize(24, texts.author)) / 2f, ty + 46, 24, serif, MUTED);
-        stub(c, b, false, M, new String[]{"paper", "paper"});
+        y += 10;
+        rect(c, W / 2f - 40, y + 30, W / 2f + 40, y + 32, CINNABAR);
+        String t = "《" + texts.title + "》";
+        text(c, t, (W - measure(t, 32, serif)) / 2f, y + 76, 32, serif, INK);
+        text(c, texts.author, (W - measure(texts.author, 24, serif)) / 2f, y + 122, 24, serif, MUTED);
+        stub(c, b, false, M, "paper", "paper", 100);
         grain(b, 0.05f);
     }
 
+    // ---------------------------------------------------------------- 6 画廊极简 · 夜
+
     private void gallery(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
-        text(c, "“", 104, 520, 330, serif, 0xFF3B2C27);
-        TextPaint quote = quotePaint(NIGHT_TEXT, 54);
+        text(c, "“", 58, 360, 320, serif, 0xFF42312B);
+        TextPaint quote = quotePaint(54);
         String[] lines = wrap(quote, texts.quote, 800);
-        float top = 260, bottom = H - 360;
-        float y = top + Math.max(0, (bottom - top - lines.length * 92 - 120) / 2f);
-        for (String line : lines) {
-            c.drawText(line, 150, y, quote);
+        float blockH = lines.length * 92f + 230;
+        float t0 = 200, b0 = H - 320;
+        float y = t0 + Math.max(20, (b0 - t0 - blockH) / 2f);
+        for (String l : lines) {
+            c.drawText(l, 150, y + 62, quote);
             y += 92;
         }
-        rect(c, 150, y + 6, 150 + 64, y + 9, ACCENT);
-        text(c, quoted(texts.title), 150, y + 56, 30, serif, NIGHT_TEXT);
-        text(c, join(texts.author, " · ", texts.chapter), 150, y + 100, 22, serif, NIGHT_MUTED);
-        seal(c, W - 82 - 78, y + 24, 78, "讀");
-        stub(c, b, true, M, new String[]{"night", "night"});
+        rect(c, 150, y + 34, 150 + 64, y + 37, ACCENT);
+        text(c, "《" + texts.title + "》", 150, y + 94, 30, serif, NIGHT_TEXT);
+        text(c, join(texts.author, " · ", texts.chapter), 150, y + 138, 22, serif, NIGHT_MUTED);
+        seal(c, W - 82 - 78, y + 60, 78, "讀");
+        stub(c, b, true, M, "night", "night", 104);
         vignette(b);
         grain(b, 0.05f);
     }
 
-    // ------------------------------------------------------------------ the stub
+    // ---------------------------------------------------------------- 票根页脚
 
-    private void stub(Canvas c, Bitmap ground, boolean dark, int left, String[] notches) {
-        int qrSize = 112;
+    private void stub(Canvas c, Bitmap ground, boolean dark, int left,
+                      String leftNotch, String rightNotch, int qrSize) {
         int qrX = W - 84 - qrSize;
         int qrY = H - 84 - qrSize;
         int perfY = H - 296;
         int hair = dark ? HAIR_DARK : HAIR_LIGHT;
         int muted = dark ? NIGHT_MUTED : MUTED;
-        int accent = dark ? ACCENT : CINNABAR;
 
         Paint dash = new Paint(Paint.ANTI_ALIAS_FLAG);
         dash.setColor(hair);
@@ -336,61 +328,59 @@ public class ShareQuoteCard {
         dash.setPathEffect(new DashPathEffect(new float[]{9f, 9f}, 0f));
         c.drawLine(left, perfY, W - 84, perfY, dash);
         Paint notch = new Paint(Paint.ANTI_ALIAS_FLAG);
-        for (int i = 0; i < 2; i++) {
-            String side = notches[i];
-            int fill = "spine".equals(side) ? CINNABAR : ("night".equals(side) ? NIGHT : PAPER);
-            if ("none".equals(side)) continue;
-            notch.setColor(fill);
-            c.drawCircle(i == 0 ? 0 : W, perfY, 13, notch);
-        }
+        notch.setColor(notchColor(leftNotch));
+        c.drawCircle(0, perfY, 13, notch);
+        notch.setColor(notchColor(rightNotch));
+        c.drawCircle(W, perfY, 13, notch);
 
-        // QR + its two labels, one typographic group centred on the code
-        Bitmap qrBmp = qr(qrSize, dark);
-        if (qrBmp != null) c.drawBitmap(qrBmp, qrX, qrY, null);
-        float labelSize = 16f;
-        while (labelSize > 11f && trackedWidth(texts.scan, labelSize, 0.10f) > qrSize + 26) {
-            labelSize -= 1f;
-        }
-        drawTracked(c, texts.scan, qrX + qrSize / 2f, qrY - 18 - labelSize, labelSize, muted, 0.10f);
-        drawTracked(c, texts.urlLabel, qrX + qrSize / 2f, qrY + qrSize + 22, labelSize, muted, 0.06f);
+        Bitmap code = qr(qrSize, dark);
+        if (code != null) c.drawBitmap(code, qrX, qrY, null);
 
-        // colophon: kicker, name, claim, specs - top line shared with the scan label
+        // the scan line and the domain are one group, centred on the code
+        float label = 16f;
+        while (label > 11f && trackedWidth(texts.scan, label, 0.10f) > qrSize + 26) label -= 1f;
+        drawTracked(c, texts.scan, qrX + qrSize / 2f, qrY - 18 - label, label, muted, 0.10f);
+        drawTracked(c, texts.urlLabel, qrX + qrSize / 2f, qrY + qrSize + 22, label, muted, 0.06f);
+
+        // colophon: kicker, name, claim, specs
         String[] parts = splitIntro(texts.intro);
         TextPaint claim = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         claim.setTypeface(serif);
         claim.setTextSize(23);
         claim.setColor(dark ? NIGHT_TEXT : INK);
-        String[] claimLines = wrap(claim, parts[1], qrX - left - 46);
+        String[] claimLines = wrapText(claim, parts[1], qrX - left - 46);
         TextPaint spec = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         spec.setTypeface(sans);
         spec.setTextSize(14);
         spec.setColor(muted);
         String[] specLines = parts[2].length() == 0 ? new String[0]
-                : wrap(spec, parts[2], qrX - left - 46);
-        float total = 6 + 12 + 26 + claimLines.length * 34 + (specLines.length == 0 ? 0
-                : 8 + specLines.length * 22);
+                : wrapText(spec, parts[2], qrX - left - 46);
+        float total = 6 + 12 + 26 + claimLines.length * 34f
+                + (specLines.length == 0 ? 0 : 8 + specLines.length * 22f);
         float y = qrY - 34;
-        if (total > (qrY + qrSize) - (qrY - 34) + 18) {
-            y = qrY + qrSize - total;
-        }
-        rect(c, left, y, left + 34, y + 4, accent);
+        if (total > (qrY + qrSize) - (qrY - 34) + 18) y = qrY + qrSize - total;
+        rect(c, left, y, left + 34, y + 4, dark ? ACCENT : CINNABAR);
         y += 18;
-        drawTracked(c, parts[0], left, y + 18, 19f, accent, 0.14f);
+        drawTracked(c, parts[0], left, y + 18, 19f, dark ? ACCENT : CINNABAR, 0.14f);
         y += 26;
-        for (String line : claimLines) {
-            c.drawText(line, left, y + 22, claim);
+        for (String l : claimLines) {
+            c.drawText(l, left, y + 22, claim);
             y += 34;
         }
-        if (specLines.length > 0) {
-            y += 8;
-            for (String line : specLines) {
-                drawTracked(c, line, left, y + 14, 14f, muted, 0.05f);
-                y += 22;
-            }
+        for (String l : specLines) {
+            y += 22;
+            drawTracked(c, l, left, y, 14f, muted, 0.05f);
         }
+        if (specLines.length > 0) y += 22;
     }
 
-    // ------------------------------------------------------------------ helpers
+    private int notchColor(String side) {
+        if ("spine".equals(side)) return CINNABAR;
+        if ("night".equals(side)) return NIGHT;
+        return PAPER;
+    }
+
+    // ---------------------------------------------------------------- 绘制工具
 
     private void grain(Bitmap b, float alpha) {
         if (noise == null) {
@@ -399,7 +389,7 @@ public class ShareQuoteCard {
             for (int y = 0; y < 160; y++) {
                 for (int x = 0; x < 160; x++) {
                     int v = 128 + rnd.nextInt(48) - 24;
-                    noise.setPixel(x, y, Color.argb(26, v, v, v));
+                    noise.setPixel(x, y, android.graphics.Color.argb(26, v, v, v));
                 }
             }
         }
@@ -417,17 +407,16 @@ public class ShareQuoteCard {
         new Canvas(b).drawRect(0, 0, W, H, p);
     }
 
-    private void gradientPlate(Canvas c, int l, int t, int r, int bt) {
+    private void plate(Canvas c, int l, int t, int r, int bt) {
         Paint p = new Paint();
-        int[] colors = new int[]{0xFF7E261E, 0xFF9E3A2B, 0xFFC0503A};
-        p.setShader(new LinearGradient(l, t, r, bt, colors, new float[]{0f, 0.6f, 1f}, Shader.TileMode.CLAMP));
+        p.setShader(new LinearGradient(l, t, r, bt,
+                new int[]{0xFF7E261E, 0xFF9E3A2B, 0xFFC0503A}, new float[]{0f, 0.6f, 1f},
+                Shader.TileMode.CLAMP));
         c.drawRect(l, t, r, bt, p);
     }
 
     private Bitmap qr(int size, boolean dark) {
-        if (qr != null && qrDark == dark && qr.getWidth() == size) {
-            return qr;
-        }
+        if (qr != null && qrDark == dark && qr.getWidth() == size) return qr;
         try {
             com.google.zxing.common.BitMatrix m = new QRCodeWriter()
                     .encode(texts.url, BarcodeFormat.QR_CODE, size, size);
@@ -467,18 +456,18 @@ public class ShareQuoteCard {
         c.drawText(s, x, y, p);
     }
 
-    private float serifSize(float size, String s) {
+    private float measure(String s, float size, Typeface face) {
         TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        p.setTypeface(serif);
+        p.setTypeface(face);
         p.setTextSize(size);
-        return p.measureText(s);
+        return p.measureText(s == null ? "" : s);
     }
 
-    private TextPaint quotePaint(int color, float size) {
+    private TextPaint quotePaint(float size) {
         TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         p.setTypeface(serif);
         p.setTextSize(size);
-        p.setColor(color);
+        p.setColor(INK);
         return p;
     }
 
@@ -498,6 +487,7 @@ public class ShareQuoteCard {
     }
 
     private float trackedWidth(String s, float size, float track) {
+        if (s == null || s.length() == 0) return 0;
         TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         p.setTypeface(sans);
         p.setTextSize(size);
@@ -512,7 +502,7 @@ public class ShareQuoteCard {
         c.drawRect(l, t, r, b, p);
     }
 
-    private void rectStroke(Canvas c, float l, float t, float r, float b, int color, float w) {
+    private void frame(Canvas c, float l, float t, float r, float b, int color, float w) {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(color);
         p.setStyle(Paint.Style.STROKE);
@@ -527,20 +517,17 @@ public class ShareQuoteCard {
         c.drawLine(x1, y1, x2, y2, p);
     }
 
-    private Paint paint(int color) {
-        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(color);
-        return p;
+    private Typeface load(String asset) {
+        try {
+            return Typeface.createFromAsset(context.getAssets(), asset);
+        } catch (Throwable ignored) {
+            return Typeface.SERIF;
+        }
     }
 
-    private RectF coverRect(int l, int t, int r, int b) {
-        return new RectF(l, t, r, b);
-    }
-
-    /** The part of the cover that fills the target box without distortion. */
-    private android.graphics.Rect centerCrop(int l, int t, int r, int b) {
+    private Rect centerCrop(int l, int t, int r, int b) {
         if (cover == null || cover.getWidth() <= 0 || cover.getHeight() <= 0) {
-            return new android.graphics.Rect(0, 0, 1, 1);
+            return new Rect(0, 0, 1, 1);
         }
         float boxW = r - l, boxH = b - t;
         float srcRatio = cover.getWidth() / (float) cover.getHeight();
@@ -555,53 +542,26 @@ public class ShareQuoteCard {
         }
         int x0 = Math.round((cover.getWidth() - srcW) / 2f);
         int y0 = Math.round((cover.getHeight() - srcH) / 2f);
-        return new android.graphics.Rect(x0, y0, x0 + Math.round(srcW), y0 + Math.round(srcH));
+        return new Rect(x0, y0, x0 + Math.round(srcW), y0 + Math.round(srcH));
     }
 
-    private boolean cjk() {
-        String lang = Locale.getDefault().getLanguage();
-        return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
-    }
-
-    private String monthLabel() {
-        if (cjk()) return "";
-        return new SimpleDateFormat("MMMM", Locale.getDefault()).format(new Date()).toUpperCase(Locale.getDefault());
-    }
-
-    private String year() {
-        return new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
-    }
-
-    private String quoted(String title) {
-        String t = title == null ? "" : title.trim();
-        return cjk() ? "《" + t + "》" : "\u201C" + t + "\u201D";
-    }
-
-    private Typeface load(String asset) {
-        try {
-            return Typeface.createFromAsset(context.getAssets(), asset);
-        } catch (Throwable ignored) {
-            return Typeface.SERIF;
-        }
-    }
-
-    /** Packs the preview text into at most three lines, never starting a line with punctuation. */
+    /** CJK-aware wrapping that never starts a line with a closing mark. */
     private String[] wrap(TextPaint p, String text, float maxWidth) {
         String body = text == null ? "" : text.trim();
         if (body.length() == 0) return new String[]{""};
-        if (body.indexOf('\n') >= 0) {
-            java.util.List<String> all = new java.util.ArrayList<>();
-            for (String para : body.split("\n")) {
-                java.util.Collections.addAll(all, wrapLine(p, para.trim(), maxWidth));
+        List<String> out = new ArrayList<>();
+        for (String para : body.split("\n")) {
+            for (String line : wrapText(p, para.trim(), maxWidth)) {
+                if (line.length() > 0) out.add(line);
             }
-            return all.toArray(new String[0]);
         }
-        return wrapLine(p, body, maxWidth);
+        return out.toArray(new String[0]);
     }
 
-    private String[] wrapLine(TextPaint p, String body, float maxWidth) {
+    private String[] wrapText(TextPaint p, String body, float maxWidth) {
+        if (body == null || body.length() == 0) return new String[0];
         String noStart = "，。、；：！？）》」』】…·,.;:!?)]}";
-        java.util.List<String> lines = new java.util.ArrayList<>();
+        List<String> lines = new ArrayList<>();
         StringBuilder cur = new StringBuilder();
         for (int i = 0; i < body.length(); i++) {
             char ch = body.charAt(i);
@@ -624,18 +584,7 @@ public class ShareQuoteCard {
         return lines.toArray(new String[0]);
     }
 
-    /** Largest size that keeps the quote within six lines, down to 34. */
-    private TextPaint fittedQuote(int color, float startSize, float maxWidth) {
-        float size = startSize;
-        while (size > 34f) {
-            TextPaint probe = quotePaint(color, size);
-            if (wrap(probe, texts.quote, maxWidth).length <= 6) return probe;
-            size -= 2f;
-        }
-        return quotePaint(color, 34f);
-    }
-
-    /** "OmniShelf：claim，specs。" -> {name, claim, specs}. Never drops a word. */
+    /** "OmniShelf：claim，specs。" -> {name, claim, specs}; never drops a word. */
     private String[] splitIntro(String intro) {
         String s = intro == null ? "" : intro.trim();
         String name = "OmniShelf", claim = s, specs = "";
@@ -662,31 +611,35 @@ public class ShareQuoteCard {
         return x + sep + y;
     }
 
-    private String truncUrl() {
-        return texts.url == null ? "" : texts.url.replace("https://", "").replace("http://", "");
-    }
-
-    private String day() {
-        return new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
-    }
-
-    private String monthYear() {
-        return new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
+    private boolean cjk() {
+        String lang = Locale.getDefault().getLanguage();
+        return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
     }
 
     private String weekday() {
         return new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
     }
 
-    private String dateSlash() {
-        return new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+    private String verticalDateChars() {
+        return texts.verticalDate != null && texts.verticalDate.length() > 0
+                ? texts.verticalDate.replace(" ", "")
+                : new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date());
     }
 
-    private String verticalDate() {
-        return new SimpleDateFormat("yyyy年M月d日", Locale.getDefault()).format(new Date());
-    }
-
-    private String monthYearLong() {
-        return new SimpleDateFormat("yyyy年M月", Locale.getDefault()).format(new Date());
+    /**
+     * Deletes cards older than a week. They live in filesDir/share, one PNG per share, and
+     * without this the directory only grows.
+     */
+    public static void pruneOldCards(java.io.File dir) {
+        if (dir == null || !dir.isDirectory()) return;
+        java.io.File[] files = dir.listFiles();
+        if (files == null) return;
+        long cutoff = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000;
+        for (java.io.File f : files) {
+            if (f != null && f.isFile() && f.lastModified() < cutoff) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.foobnix.android.utils.Apps;
 import com.foobnix.android.utils.LOG;
 import com.foobnix.model.AppProfile;
 import com.foobnix.model.AppState;
+import com.foobnix.pdf.info.IMG;
 import com.foobnix.pdf.info.R;
 
 import java.io.File;
@@ -30,14 +31,16 @@ import java.util.Locale;
 /**
  * Previews a quote card and lets the reader flip between the six layouts before sharing.
  *
- * <p>The card is rendered on the spot; nothing is uploaded. Sharing writes a PNG into the
- * app's own files/share directory and hands a FileProvider URI to the system chooser.
+ * <p>The card is rendered on the spot; nothing is uploaded. The book's own cover is loaded
+ * for the two layouts that feature one, and every layout degrades to a cinnabar plate when
+ * there is no cover, which is the behaviour the approved designs describe.
  */
 public class ShareCardDialog {
 
     private static Dialog dialog;
 
-    public static void show(final Activity activity, String quote, String title, String author) {
+    public static void show(final Activity activity, String quote, final String title,
+                            final String author, final String bookPath) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
@@ -56,6 +59,7 @@ public class ShareCardDialog {
             texts.url = activity.getString(R.string.share_card_url);
             texts.urlLabel = texts.url.replace("https://", "").replace("http://", "").replace("/", "");
             texts.dateLine = dateLine();
+            texts.verticalDate = verticalDate();
 
             dialog = new Dialog(activity, R.style.DialogRoundLight);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -75,44 +79,75 @@ public class ShareCardDialog {
                 start = ShareQuoteCard.T_COVER_TICKET_NIGHT;
             }
             final int[] current = {start};
-            render(preview, texts, current[0], label);
+            final Bitmap[] cover = {null};
+            render(preview, texts, current[0], label, cover[0]);
 
             dialog.findViewById(R.id.cardPrev).setOnClickListener(v -> {
                 current[0] = (current[0] + ShareQuoteCard.TEMPLATE_COUNT - 1) % ShareQuoteCard.TEMPLATE_COUNT;
-                render(preview, texts, current[0], label);
+                render(preview, texts, current[0], label, cover[0]);
             });
             dialog.findViewById(R.id.cardNext).setOnClickListener(v -> {
                 current[0] = (current[0] + 1) % ShareQuoteCard.TEMPLATE_COUNT;
-                render(preview, texts, current[0], label);
+                render(preview, texts, current[0], label, cover[0]);
             });
             share.setOnClickListener(v -> {
                 rememberTemplate(current[0]);
-                shareBitmap(activity, texts, current[0]);
+                shareBitmap(activity, texts, current[0], cover[0]);
                 dismiss();
             });
             cancel.setOnClickListener(v -> dismiss());
             dialog.show();
+
+            if (bookPath != null && bookPath.length() > 0) {
+                loadCover(activity, bookPath, bitmap -> {
+                    if (bitmap == null) {
+                        return;
+                    }
+                    cover[0] = bitmap;
+                    if (dialog != null && dialog.isShowing()) {
+                        render(preview, texts, current[0], label, bitmap);
+                    }
+                });
+            }
+        } catch (Throwable e) {
+            LOG.e(e);
+        }
+    }
+
+    private static void loadCover(Activity activity, String bookPath, IMG.ResourceReady ready) {
+        try {
+            IMG.getCoverPageWithEffect(activity, bookPath, bitmap -> {
+                if (bitmap == null) {
+                    return;
+                }
+                if (activity.isFinishing()) {
+                    return;
+                }
+                activity.runOnUiThread(() -> ready.onResourceReady(bitmap));
+            });
         } catch (Throwable e) {
             LOG.e(e);
         }
     }
 
     private static void render(ImageView preview, ShareQuoteCard.Texts texts, int template,
-                               TextView label) {
-        Bitmap card = ShareQuoteCard.create(preview.getContext(), texts, template, null).render();
+                               TextView label, Bitmap cover) {
+        Bitmap card = ShareQuoteCard.create(preview.getContext(), texts, template, cover).render();
         preview.setImageBitmap(card);
         label.setText((template + 1) + " / " + ShareQuoteCard.TEMPLATE_COUNT);
         exportForVerification(preview.getContext(), card, template);
     }
 
     /**
-     * Writes the preview into the app's external files directory. A verification run can then
+     * Writes the preview into the app's external files directory, so a verification run can
      * pull the exact bitmap the device produced instead of judging a scaled screenshot.
      */
     private static void exportForVerification(android.content.Context context, Bitmap card, int template) {
         try {
             File dir = context.getExternalFilesDir("cards");
-            if (dir == null) return;
+            if (dir == null) {
+                return;
+            }
             //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
             File out = new File(dir, "card-" + (template + 1) + ".png");
@@ -135,9 +170,10 @@ public class ShareCardDialog {
         }
     }
 
-    private static void shareBitmap(Activity activity, ShareQuoteCard.Texts texts, int template) {
+    private static void shareBitmap(Activity activity, ShareQuoteCard.Texts texts, int template,
+                                    Bitmap cover) {
         try {
-            Bitmap card = ShareQuoteCard.create(activity, texts, template, null).render();
+            Bitmap card = ShareQuoteCard.create(activity, texts, template, cover).render();
             File dir = new File(activity.getFilesDir(), "share");
             //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
@@ -172,9 +208,50 @@ public class ShareCardDialog {
 
     /** Date in the reader's own convention: 2026 年 11 月 21 日, or Nov 21, 2026. */
     private static String dateLine() {
-        String lang = Locale.getDefault().getLanguage();
-        boolean cjk = "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
-        String pattern = cjk ? "yyyy 年 M 月 d 日" : "MMM d, yyyy";
+        String pattern = cjk() ? "yyyy 年 M 月 d 日" : "MMM d, yyyy";
         return new SimpleDateFormat(pattern, Locale.getDefault()).format(new Date());
+    }
+
+    /** The same date as a column of characters: 二〇二六年十一月二十一日. */
+    private static String verticalDate() {
+        if (!cjk()) {
+            return new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault()).format(new Date());
+        }
+        String digits = "〇一二三四五六七八九";
+        SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.getDefault());
+        SimpleDateFormat month = new SimpleDateFormat("M", Locale.getDefault());
+        SimpleDateFormat day = new SimpleDateFormat("d", Locale.getDefault());
+        StringBuilder out = new StringBuilder();
+        for (char ch : year.format(new Date()).toCharArray()) {
+            out.append(digits.charAt(ch - '0'));
+        }
+        out.append("年");
+        out.append(numberWords(Integer.parseInt(month.format(new Date()))));
+        out.append("月");
+        out.append(numberWords(Integer.parseInt(day.format(new Date()))));
+        out.append("日");
+        return out.toString();
+    }
+
+    /** 1..31 as Chinese numerals, enough for a date column. */
+    private static String numberWords(int n) {
+        String digits = "〇一二三四五六七八九";
+        if (n < 10) {
+            return String.valueOf(digits.charAt(n));
+        }
+        if (n == 10) {
+            return "十";
+        }
+        if (n < 20) {
+            return "十" + digits.charAt(n - 10);
+        }
+        int tens = n / 10;
+        int ones = n % 10;
+        return digits.charAt(tens) + "十" + (ones == 0 ? "" : String.valueOf(digits.charAt(ones)));
+    }
+
+    private static boolean cjk() {
+        String lang = Locale.getDefault().getLanguage();
+        return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
     }
 }
