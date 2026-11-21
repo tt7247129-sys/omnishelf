@@ -47,16 +47,16 @@ public class ShareQuoteCard {
     private static final int H = 1440;
     private static final int M = 84;
 
-    private static final int PAPER = 0xFBF8F2;
-    private static final int INK = 0x241815;
-    private static final int MUTED = 0x7C6B63;
-    private static final int NIGHT = 0x151412;
-    private static final int NIGHT_TEXT = 0xEFE4DC;
-    private static final int NIGHT_MUTED = 0xA3938B;
-    private static final int CINNABAR = 0x8E2B21;
-    private static final int ACCENT = 0xD2503C;
-    private static final int HAIR_DARK = 0x392D28;
-    private static final int HAIR_LIGHT = 0xD8CBBE;
+    private static final int PAPER = 0xFFFBF8F2;
+    private static final int INK = 0xFF241815;
+    private static final int MUTED = 0xFF7C6B63;
+    private static final int NIGHT = 0xFF151412;
+    private static final int NIGHT_TEXT = 0xFFEFE4DC;
+    private static final int NIGHT_MUTED = 0xFFA3938B;
+    private static final int CINNABAR = 0xFF8E2B21;
+    private static final int ACCENT = 0xFFD2503C;
+    private static final int HAIR_DARK = 0xFF392D28;
+    private static final int HAIR_LIGHT = 0xFFD8CBBE;
 
     /** The text a card needs. Built by the caller from resources, so it is localized. */
     public static class Texts {
@@ -178,9 +178,9 @@ public class ShareQuoteCard {
             gradientPlate(c, left, top, right, bottom);
         }
         // a thin keyline inside the plate, like a printed cover plate
-        rectStroke(c, left + 14, top + 14, right - 14, bottom - 14, 0xF6E2D8, 1);
+        rectStroke(c, left + 14, top + 14, right - 14, bottom - 14, 0xFFF6E2D8, 1);
         seal(c, left - 40, top - 40, 80, "書");
-        text(c, texts.title, left + 24, top + 56, 28, serif, 0xF6E2D8);
+        text(c, texts.title, left + 24, top + 56, 28, serif, 0xFFF6E2D8);
         text(c, texts.dateLine, M, 742, 22, serif, NIGHT_MUTED);
 
         TextPaint quote = quotePaint(NIGHT_TEXT, 46);
@@ -199,17 +199,17 @@ public class ShareQuoteCard {
         c.drawColor(NIGHT);
         int spineW = 176;
         Paint spine = new Paint(Paint.ANTI_ALIAS_FLAG);
-        spine.setShader(new LinearGradient(0, 0, spineW, 0, 0x7A241B, 0x9C3025, Shader.TileMode.CLAMP));
+        spine.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9C3025, Shader.TileMode.CLAMP));
         c.drawRect(0, 0, spineW, H, spine);
 
         float y = 150;
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 54, y + 60, 74, serif, 0xF7E3D9);
+            text(c, String.valueOf(ch), 54, y + 60, 74, serif, 0xFFF7E3D9);
             y += 88;
         }
         float ay = H - 360;
         for (char ch : texts.author.toCharArray()) {
-            text(c, String.valueOf(ch), 54, ay, 22, serif, 0xE4C2B4);
+            text(c, String.valueOf(ch), 54, ay, 22, serif, 0xFFE4C2B4);
             ay += 32;
         }
         int rx = W - 120;
@@ -247,10 +247,10 @@ public class ShareQuoteCard {
         }
         float y = 96;
         for (char ch : texts.title.toCharArray()) {
-            text(c, String.valueOf(ch), 74, y + 64, 64, serif, 0xFBF3EC);
+            text(c, String.valueOf(ch), 74, y + 64, 64, serif, 0xFFFBF3EC);
             y += 76;
         }
-        text(c, texts.author, 74, y + 40, 24, serif, 0xECD2C4);
+        text(c, texts.author, 74, y + 40, 24, serif, 0xFFECD2C4);
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
         TextPaint quote = quotePaint(INK, 46);
@@ -269,7 +269,7 @@ public class ShareQuoteCard {
         c.drawColor(PAPER);
         int m = 56;
         rectStroke(c, m, m, W - m, H - m, CINNABAR, 3);
-        rectStroke(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xE2D1C2, 1);
+        rectStroke(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xFFE2D1C2, 1);
         text(c, texts.dateLine, m + 40, m + 66, 21, serif, MUTED);
         seal(c, W - m - 40 - 70, m + 36, 70, "書");
 
@@ -293,7 +293,7 @@ public class ShareQuoteCard {
 
     private void gallery(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
-        text(c, "“", 104, 520, 330, serif, 0x3B2C27);
+        text(c, "“", 104, 520, 330, serif, 0xFF3B2C27);
         TextPaint quote = quotePaint(NIGHT_TEXT, 54);
         String[] lines = wrap(quote, texts.quote, 800);
         float y = 330;
@@ -411,7 +411,7 @@ public class ShareQuoteCard {
 
     private void gradientPlate(Canvas c, int l, int t, int r, int bt) {
         Paint p = new Paint();
-        int[] colors = new int[]{0x7E261E, 0x9E3A2B, 0xC0503A};
+        int[] colors = new int[]{0xFF7E261E, 0xFF9E3A2B, 0xFFC0503A};
         p.setShader(new LinearGradient(l, t, r, bt, colors, new float[]{0f, 0.6f, 1f}, Shader.TileMode.CLAMP));
         c.drawRect(l, t, r, bt, p);
     }
@@ -441,7 +441,7 @@ public class ShareQuoteCard {
         TextPaint t = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         t.setTypeface(serif);
         t.setTextSize(size * 0.56f);
-        t.setColor(0xFBF8F2);
+        t.setColor(0xFFFBF8F2);
         float w = t.measureText(glyph);
         c.drawText(glyph, x + (size - w) / 2f, y + size * 0.72f, t);
     }
