@@ -2513,25 +2513,32 @@ public class DragingDialogs {
         });
     }
 
-    /** Paints every tagged link row, and its icon, in the app's colour. */
+    /**
+     * Paints every action row in the app's colour.
+     *
+     * <p>A row is recognised by its shape - a horizontal container holding an icon and its
+     * label - because neither the style tag nor the text colour survives: the platform link
+     * colour (#008577 on this device) is applied at draw time and beat every resource
+     * override. Setting the colour on the views themselves is the only place that wins.
+     */
     private static void applyBrandColourToRows(View root, int color) {
-        if (root == null) {
-            return;
-        }
-        if (root instanceof android.widget.TextView && "textLink".equals(root.getTag())) {
-            ((android.widget.TextView) root).setTextColor(color);
-            if (root.getParent() instanceof android.view.ViewGroup) {
-                android.view.ViewGroup row = (android.view.ViewGroup) root.getParent();
-                for (int i = 0; i < row.getChildCount(); i++) {
-                    View child = row.getChildAt(i);
-                    if (child instanceof android.widget.ImageView) {
-                        ((android.widget.ImageView) child).setColorFilter(color);
-                    }
-                }
-            }
-        }
         if (root instanceof android.view.ViewGroup) {
             android.view.ViewGroup group = (android.view.ViewGroup) root;
+            android.widget.ImageView icon = null;
+            android.widget.TextView label = null;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                View child = group.getChildAt(i);
+                if (child instanceof android.widget.ImageView && icon == null) {
+                    icon = (android.widget.ImageView) child;
+                } else if (child instanceof android.widget.TextView && label == null
+                        && !(child instanceof android.widget.Button)) {
+                    label = (android.widget.TextView) child;
+                }
+            }
+            if (icon != null && label != null && group.getChildCount() <= 3) {
+                label.setTextColor(color);
+                icon.setColorFilter(color);
+            }
             for (int i = 0; i < group.getChildCount(); i++) {
                 applyBrandColourToRows(group.getChildAt(i), color);
             }
