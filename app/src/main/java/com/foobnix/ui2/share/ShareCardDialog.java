@@ -116,6 +116,7 @@ public class ShareCardDialog {
 
     private static void loadCover(Activity activity, String bookPath, IMG.ResourceReady ready) {
         try {
+            // The call returns a request, it does not start one: without submit() nothing loads.
             IMG.getCoverPageWithEffect(activity, bookPath, bitmap -> {
                 LOG.d("ShareCard cover for", bookPath, bitmap == null ? "none" : bitmap.getWidth() + "x" + bitmap.getHeight());
                 if (bitmap == null) {
@@ -125,7 +126,7 @@ public class ShareCardDialog {
                     return;
                 }
                 activity.runOnUiThread(() -> ready.onResourceReady(bitmap));
-            });
+            }).submit();
         } catch (Throwable e) {
             LOG.e(e);
         }
