@@ -128,7 +128,7 @@ public class ShareQuoteCard {
         text(c, weekday(), 86, 446, 26, serif, MUTED);
         line(c, 86, 512, W - 86, 512, HAIR_LIGHT, 1);
 
-        TextPaint quote = quotePaint(48);
+        TextPaint quote = quotePaint(48, INK);
         String[] lines = wrap(quote, texts.quote, 800);
         float quoteH = lines.length * 80f;
         float blockH = quoteH + 118;
@@ -161,7 +161,7 @@ public class ShareQuoteCard {
         text(c, texts.title, left + 24, top + 56, 28, serif, 0xFFF6E2D8);
         text(c, texts.dateLine, M, 742, 22, serif, NIGHT_MUTED);
 
-        TextPaint quote = quotePaint(46);
+        TextPaint quote = quotePaint(46, NIGHT_TEXT);
         String[] lines = wrap(quote, texts.quote, W - 2 * M);
         float blockH = lines.length * 78f + 60;
         float t0 = 800, b0 = H - 380;
@@ -204,7 +204,7 @@ public class ShareQuoteCard {
         line(c, rx - 40, 120, rx - 40, 700, HAIR_DARK, 1);
 
         int textX = spineW + 70;
-        TextPaint quote = quotePaint(44);
+        TextPaint quote = quotePaint(44, NIGHT_TEXT);
         String[] lines = wrap(quote, texts.quote, (rx - 60) - textX);
         float quoteH = lines.length * 78f;
         float blockH = quoteH + 150;
@@ -246,7 +246,7 @@ public class ShareQuoteCard {
         text(c, texts.author, 74, vy + 40, 24, serif, 0xFFECD2C4);
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
-        TextPaint quote = quotePaint(46);
+        TextPaint quote = quotePaint(46, INK);
         String[] lines = wrap(quote, texts.quote, W - 2 * M);
         float blockH = lines.length * 80f + 70;
         float t0 = bandH + 90, b0 = H - 360;
@@ -271,7 +271,7 @@ public class ShareQuoteCard {
         text(c, texts.dateLine, m + 40, m + 66, 21, serif, MUTED);
         seal(c, W - m - 40 - 70, m + 36, 70, "書");
 
-        TextPaint quote = quotePaint(52);
+        TextPaint quote = quotePaint(52, INK);
         String[] lines = wrap(quote, texts.quote, W - 2 * m - 120);
         float y = (H - lines.length * 88f) / 2f - 40;
         for (String l : lines) {
@@ -293,7 +293,7 @@ public class ShareQuoteCard {
     private void gallery(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
         text(c, "“", 58, 360, 320, serif, 0xFF42312B);
-        TextPaint quote = quotePaint(54);
+        TextPaint quote = quotePaint(54, NIGHT_TEXT);
         String[] lines = wrap(quote, texts.quote, 800);
         float blockH = lines.length * 92f + 230;
         float t0 = 200, b0 = H - 320;
@@ -463,11 +463,11 @@ public class ShareQuoteCard {
         return p.measureText(s == null ? "" : s);
     }
 
-    private TextPaint quotePaint(float size) {
+    private TextPaint quotePaint(float size, int color) {
         TextPaint p = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         p.setTypeface(serif);
         p.setTextSize(size);
-        p.setColor(INK);
+        p.setColor(color);
         return p;
     }
 

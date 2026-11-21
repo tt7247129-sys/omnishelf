@@ -2536,6 +2536,14 @@ public class DragingDialogs {
                 }
             }
             if (icon != null && label != null && group.getChildCount() <= 3) {
+                // A span outranks the platform link colour; setTextColor alone did not.
+                CharSequence text = label.getText();
+                if (text != null) {
+                    android.text.SpannableString spanned = new android.text.SpannableString(text);
+                    spanned.setSpan(new android.text.style.ForegroundColorSpan(color), 0,
+                            spanned.length(), android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    label.setText(spanned);
+                }
                 label.setTextColor(color);
                 icon.setColorFilter(color);
             }
