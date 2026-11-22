@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+
+const title = 'Copyright and takedown requests';
+const description =
+  'OmniShelf hosts only public-domain and original books, and links to licensed stores for everything else. Here is how to ask us to remove something.';
+---
+
+<Base title={title} description={description}>
+  <div class="shell">
+    <section class="page-head">
+      <p class="meta">Copyright</p>
+      <h1>Copyright and takedown requests</h1>
+      <p class="page-head__lead">
+        OmniShelf is a reading app and, from this site, a place to get books that are free to
+        share. This page says what may appear here and how to have something removed.
+      </p>
+    </section>
+
+    <section class="prose">
+      <h2>What this site hosts</h2>
+      <p>
+        Only works that are in the public domain in the relevant jurisdiction, works we wrote and
+        own, or works whose rights holders gave permission. The source and the copyright status
+        are printed on every book page.
+      </p>
+      <p>
+        For books still in copyright we do not host a file. A book page may link to a licensed
+        store where the book can be bought; the file never passes through this site.
+      </p>
+
+      <h2>What we will not do</h2>
+      <p>
+        No pirated files, no mirrored libraries, no downloads that bypass a store's licensing.
+        Requests to host such material are refused, whatever the traffic would be.
+      </p>
+
+      <h2>Asking for a takedown</h2>
+      <p>
+        Write to <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with the subject
+        <em>Takedown</em>, and include:
+      </p>
+      <ul>
+        <li>the exact URL of the page or file;</li>
+        <li>the work, and who owns the rights;</li>
+        <li>a statement that you are the rights holder or are acting for them;</li>
+        <li>how to reach you.</li>
+      </ul>
+      <p>
+        We remove or correct anything that turns out to be in copyright, normally within one
+        working day of seeing a clear request, and reply either way.
+      </p>
+
+      <h2>If something is mislabelled</h2>
+      <p>
+        Public-domain status differs by country, and a note about a jurisdiction we got wrong is
+        also welcome — we would rather fix a page than defend it.
+      </p>
+    </section>
+  </div>
+</Base>

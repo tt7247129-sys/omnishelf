@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import DownloadCta from '../components/DownloadCta.astro';
+import { SITE } from '../site';
+
+const title = 'OmniShelf closed test — how to join';
+const description =
+  'OmniShelf is in closed testing. Join with a Google account in two steps, install the Android build, and tell us what broke.';
+
+---
+
+<Base title={title} description={description}>
+  <div class="shell">
+    <section class="page-head">
+      <p class="meta">Closed testing</p>
+      <h1>How the closed test works</h1>
+      <p class="page-head__lead">
+        Google Play has not published OmniShelf publicly yet: the app is in closed testing while
+        the last details are checked. That means there is no store listing to browse — there is a
+        test link, and a list of accounts allowed to use it.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Two steps</h2>
+      <ol class="steps">
+        <li>
+          <strong>Ask to be added.</strong> Write to
+          <a href={`mailto:${SITE.email}?subject=OmniShelf%20closed%20test`}>{SITE.email}</a> from the
+          Google account on your phone. Any message will do; the address is the important part.
+        </li>
+        <li>
+          <strong>Open the test link.</strong> Once the account is on the list, press the button
+          below on that phone, choose <em>Become a tester</em>, then install from Play.
+        </li>
+      </ol>
+      <DownloadCta src="beta-primary" />
+      <p class="meta">
+        Already a tester? <a href={SITE.play.testingUrl} rel="nofollow">Open the test page directly →</a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">What to try</h2>
+      <ul class="check-list">
+        <li>Open one EPUB and one PDF from your own folder.</li>
+        <li>Long-press a paragraph, highlight it, and share a quote card.</li>
+        <li>Press the audio button and listen with the screen off for a minute.</li>
+        <li>Rotate the phone mid-page, then change the font size.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">What helps most</h2>
+      <p>
+        A sentence about what you expected and what happened — plus the phone model and Android
+        version — is worth more than a polished report. Crashes are best sent with the Play
+        Console feedback form, or by mail.
+      </p>
+      <p>
+        When testing ends the listing goes public and this page becomes a redirect. Nothing you
+        installed is lost.
+      </p>
+    </section>
+
+    <p class="meta">
+      Not a tester and only want to read? <a href="/reading-craft/">The reading notes are open to
+      everyone</a>; <a href="/download/">the download page</a> explains what the app does.
+    </p>
+  </div>
+</Base>

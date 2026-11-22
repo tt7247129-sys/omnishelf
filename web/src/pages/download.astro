@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import DownloadCta from '../components/DownloadCta.astro';
+import QrCode from '../components/QrCode.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import StickyDownload from '../components/StickyDownload.astro';
+import { SITE } from '../site';
+
+const title = 'Download OmniShelf for Android';
+const description = `Install OmniShelf on Android ${SITE.app.minAndroid} or newer. ${SITE.app.formats} formats, offline text-to-speech, no ads, no account, no tracking.`;
+
+const faqs = [
+  {
+    q: 'Is OmniShelf really free?',
+    a: 'Yes. There is no price, no subscription, no in-app purchase, and no advertising. The app is open source under the AGPLv3.',
+  },
+  {
+    q: 'Why is there no public Play Store page yet?',
+    a: 'The app is in closed testing. Google Play only publishes a listing once testing is complete, so the button joins the closed test instead. Once the listing is public this page switches to the store link automatically.',
+  },
+  {
+    q: 'How big is the app, and what does it need?',
+    a: `About 50 MB for the 64-bit build, Android ${SITE.app.minAndroid} or newer. It reads files from local storage, SD cards and cloud folders you have already synced; it does not need a network connection.`,
+  },
+  {
+    q: 'Which formats does it open?',
+    a: 'PDF, EPUB, MOBI, AZW3, AZW, FB2, DJVU, CBZ, CBR, TXT, RTF, DOCX, ODT, HTML, XPS and more — 34 in total, including a 3.5 MB bundled serif for Chinese, Japanese and Korean text.',
+  },
+  {
+    q: 'Does it collect anything?',
+    a: 'No. There is no analytics SDK, no advertising ID, no account and no telemetry. The only network use is the OPDS catalogue you choose to open, and cloud folders you configure yourself.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Base title={title} description={description} jsonLd={faqJsonLd}>
+  <div class="shell">
+    <section class="page-head">
+      <p class="meta">Download</p>
+      <h1>Download OmniShelf</h1>
+      <p class="page-head__lead">
+        One install, {SITE.app.formats} formats, {SITE.app.languages} languages, no account. The
+        reader is free and open source; this page is the only place that asks you to do anything.
+      </p>
+    </section>
+
+    <section class="download">
+      <div class="download__action">
+        <DownloadCta src="download-primary" />
+        <p class="download__status">
+          {
+            SITE.play.published
+              ? 'Available on Google Play.'
+              : 'In closed testing. Joining takes a Google account; the next screen explains the steps.'
+          }
+        </p>
+        <p class="meta">
+          Android {SITE.app.minAndroid}+ · arm64 · ~50 MB · version {SITE.app.version}
+        </p>
+        <p class="meta">
+          <a href="/beta/">How the closed test works →</a>
+        </p>
+      </div>
+      <QrCode caption="Scan to open this page on your phone" />
+    </section>
+
+    <section>
+      <h2 class="section-title">Three steps, then reading</h2>
+      <ol class="steps">
+        <li>
+          <strong>Install.</strong> Tap the button, let Play install the app, open it once.
+        </li>
+        <li>
+          <strong>Point it at a folder.</strong> OmniShelf scans the folder you choose — Download,
+          an SD card, a cloud folder already synced to the phone. Nothing is uploaded.
+        </li>
+        <li>
+          <strong>Read.</strong> Tap a book. Long-press text for highlights, notes and quote cards;
+          press the audio button to listen offline with the device voice.
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2 class="section-title">What it does</h2>
+      <ul class="check-list">
+        <li>Opens {SITE.app.formats} formats, including PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ and CBR.</li>
+        <li>Reads offline, including text-to-speech with the device voice.</li>
+        <li>Highlights, notes, bookmarks, and a share card for quotes.</li>
+        <li>OPDS catalogues, so a self-hosted library works without a desktop.</li>
+        <li>Interface in {SITE.app.languages} languages, with a bundled serif for CJK text.</li>
+        <li>Open source (AGPLv3) — the code can be read, built and audited.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">What it does not do</h2>
+      <ul class="cross-list">
+        <li>No advertising, no in-app purchases, no subscription.</li>
+        <li>No account: nothing to sign in to, nothing to lose.</li>
+        <li>No analytics SDK, no advertising ID, no telemetry.</li>
+        <li>No remote reading of your library: files stay where you put them.</li>
+      </ul>
+    </section>
+
+    <TrustStrip />
+
+    <section>
+      <h2 class="section-title">Questions</h2>
+      <dl class="faq">
+        {
+          faqs.map((item) => (
+            <>
+              <dt>{item.q}</dt>
+              <dd>{item.a}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <p class="meta">
+      Stuck? Write to <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. The
+      <a href="/beta/">closed-test page</a> has the exact steps for joining the test.
+    </p>
+
+    <StickyDownload src="download-sticky" />
+  </div>
+</Base>

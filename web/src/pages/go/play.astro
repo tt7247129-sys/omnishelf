@@ -1,0 +1,51 @@
+---
+/**
+ * The one redirect every download button goes through. It exists so that clicks can be
+ * counted and attributed: the Play link it builds carries the page the reader clicked on as
+ * utm_content, which Play Install Referrer hands back to the app on first launch.
+ */
+import Base from '../../layouts/Base.astro';
+import { SITE, playUrlWithReferrer } from '../../site';
+
+const params = Astro.url.searchParams;
+const src = (params.get('src') ?? 'unknown').slice(0, 64);
+const campaign = (params.get('utm_campaign') ?? 'site').slice(0, 64);
+
+const target = SITE.play.published
+  ? playUrlWithReferrer(src, campaign)
+  : SITE.play.testingUrl;
+---
+
+<Base title="Opening Google Play — OmniShelf" description="One moment.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <meta slot="head" http-equiv="refresh" content={`1;url=${target}`} />
+  <div class="shell">
+    <section class="page-head">
+      <p class="meta">One moment</p>
+      <h1>Opening Google Play…</h1>
+      <p class="page-head__lead">
+        {
+          SITE.play.published
+            ? 'The Play Store opens in a moment. If it does not, tap the link below.'
+            : 'OmniShelf is in closed testing, so this opens the closed-test page. If it does not open, tap the link below.'
+        }
+      </p>
+      <p>
+        <a class="cta" href={target} rel="nofollow">Continue to Google Play →</a>
+      </p>
+      <p class="meta">
+        <a href={SITE.play.published ? '/download/' : '/beta/'}>How the install works</a>
+      </p>
+    </section>
+  </div>
+  <script is:inline define:vars={{ target }}>
+    // Count the click before leaving; a failure to load analytics must never block the
+    // redirect, so the navigation is scheduled regardless.
+    try {
+      if (window.umami && typeof window.umami.track === 'function') {
+        window.umami.track('download_click', { src: 'go-play' });
+      }
+    } catch (error) {}
+    window.location.replace(target);
+  </script>
+</Base>

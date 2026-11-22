@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import DownloadCta from '../components/DownloadCta.astro';
+---
+
+<Base title="Page not found — OmniShelf" description="That page does not exist. Try the download page or the reading notes.">
+  <div class="shell">
+    <section class="page-head">
+      <p class="meta">404</p>
+      <h1>That page is not here</h1>
+      <p class="page-head__lead">
+        The link may be old, or the page may have been renamed. The two places worth going next
+        are the download page and the reading notes.
+      </p>
+      <p><DownloadCta src="404" /></p>
+      <p class="meta">
+        <a href="/">Home</a> · <a href="/download/">Download</a> ·
+        <a href="/reading-craft/">Reading Craft</a> · <a href="/where-to-read/">Where to Read</a>
+      </p>
+    </section>
+  </div>
+</Base>

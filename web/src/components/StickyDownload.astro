@@ -1,0 +1,27 @@
+---
+import DownloadCta from './DownloadCta.astro';
+
+interface Props {
+  src: string;
+  campaign?: string;
+}
+
+const { src, campaign = 'sticky' } = Astro.props;
+---
+
+<div class="sticky-cta" data-sticky-cta>
+  <span class="sticky-cta__text">Free, no ads, no account</span>
+  <DownloadCta src={src} variant="sticky" campaign={campaign} />
+</div>
+
+<script>
+  // The bar appears once the hero is out of view, so it never covers the first impression.
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  if (bar) {
+    const onScroll = () => {
+      bar.classList.toggle('is-visible', window.scrollY > 480);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>

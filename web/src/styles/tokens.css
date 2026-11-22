@@ -18,8 +18,8 @@
   --rule-soft: #e6e2da;
 
   /* one accent, and only one */
-  --accent: #4a5d4e;
-  --accent-ink: #3c4c40;
+  --accent: #8e2b21;
+  --accent-ink: #6e1f17;
 
   /* type families */
   --font-serif: "Literata", "Source Serif 4", "Iowan Old Style", Georgia,
@@ -59,7 +59,7 @@
     --ink-muted: #9a958c;
     --rule: #3a3a36;
     --rule-soft: #2b2b28;
-    --accent: #8aa68f;
-    --accent-ink: #a8c0ac;
+    --accent: #d2503c;
+    --accent-ink: #e0715e;
   }
 }

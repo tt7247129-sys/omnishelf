@@ -1,0 +1,24 @@
+---
+import { PLAY_LABEL, playLink } from '../site';
+
+interface Props {
+  /** Where on the page this button sits, e.g. "hero", "download-page", "book-1984". */
+  src: string;
+  label?: string;
+  variant?: 'primary' | 'secondary' | 'sticky';
+  campaign?: string;
+}
+
+const { src, label = PLAY_LABEL, variant = 'primary', campaign = 'site' } = Astro.props;
+---
+
+<a
+  class:list={['cta', `cta--${variant}`]}
+  href={playLink(src, campaign)}
+  data-track="download_click"
+  data-src={src}
+  rel="nofollow"
+>
+  {label}
+  {variant !== 'secondary' && <span class="cta__arrow" aria-hidden="true">→</span>}
+</a>

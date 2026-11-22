@@ -1,16 +1,21 @@
 ---
-import { getEntry } from 'astro:content';
-import Page from '../layouts/Page.astro';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import { getCollection, getEntry } from 'astro:content';
+import DownloadCta from '../components/DownloadCta.astro';
+import QrCode from '../components/QrCode.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import StickyDownload from '../components/StickyDownload.astro';
+import { SITE } from '../site';
 
-const entry = await getEntry('pages', 'index');
 const columns = [
   { collection: 'readingCraft' as const, path: '/reading-craft/' },
   { collection: 'whereToRead' as const, path: '/where-to-read/' },
   { collection: 'readingLife' as const, path: '/reading-life/' },
 ];
 
+// Three recent pieces from the editorial columns: proof the site is alive, not a
+// marketing shell.
 const cards = [];
 for (const column of columns) {
   for (const item of await getCollection(column.collection)) {
@@ -23,59 +28,115 @@ for (const column of columns) {
     });
   }
 }
-for (const note of await getCollection('articles')) {
-  cards.push({
-    href: `/notes/${note.id}/`,
-    title: note.data.title,
-    summary: note.data.summary,
-    date: note.data.date,
-    readingMinutes: note.data.readingMinutes,
-  });
-}
 cards.sort((a, b) => (a.date < b.date ? 1 : -1));
+const recent = cards.slice(0, 3);
+
+const title = 'OmniShelf — an Android ebook reader with no ads and no account';
+const description =
+  'OmniShelf reads 34 ebook and document formats on Android: PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ and more. No advertising, no in-app purchases, no tracking. Free, open source, offline.';
 ---
 
-<Page entry={entry} jsonLd={{
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'OmniShelf',
-  applicationCategory: 'BookApplication',
-  operatingSystem: 'Android 7.0+',
-  url: 'https://omnishelf.cc',
-  downloadUrl: 'https://play.google.com/store/apps/details?id=cc.omnishelf.reader',
-  installUrl: 'https://github.com/tt7247129-sys/omnishelf/releases',
-  softwareVersion: '1.1.0',
-  license: 'https://www.gnu.org/licenses/agpl-3.0.html',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  featureList: [
-    '34 ebook and document formats including PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ and CBR',
-    'Offline text-to-speech with the device voice',
-    'Highlights, notes and bookmarks',
-    'OPDS catalogues',
-    '54 interface languages',
-    'No advertising, analytics or tracking code',
-  ],
-}}>
-  <hr />
+<Base
+  title={title}
+  description={description}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'OmniShelf',
+    applicationCategory: 'BookApplication',
+    operatingSystem: `Android ${SITE.app.minAndroid}+`,
+    url: SITE.origin,
+    downloadUrl: SITE.play.storeUrl,
+    softwareVersion: SITE.app.version,
+    license: 'https://www.gnu.org/licenses/agpl-3.0.html',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    featureList: [
+      `${SITE.app.formats} ebook and document formats including PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ and CBR`,
+      `Offline text-to-speech in ${SITE.app.languages} languages`,
+      'Highlights, notes, bookmarks and quote cards',
+      'OPDS catalogues',
+      'No advertising, analytics or tracking code',
+    ],
+  }}
+>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero__text">
+        <p class="meta">OmniShelf for Android · free · open source</p>
+        <h1 class="hero__title">A reader with no ads.</h1>
+        <p class="hero__lead">
+          OmniShelf opens {SITE.app.formats} formats — PDF, EPUB, MOBI, AZW3, FB2, DJVU, CBZ — and
+          reads them offline, with text-to-speech, highlights and quote cards. No account, no
+          advertising, no tracking. The whole reader fits on a phone that can afford it.
+        </p>
+        <div class="hero__actions">
+          <DownloadCta src="home-hero" />
+          <a class="cta cta--secondary" href="/download/">What you get</a>
+        </div>
+        <p class="hero__note">
+          In closed testing, so there is no public store page yet — the button explains how to join.
+        </p>
+      </div>
+      <aside class="hero__aside">
+        <QrCode caption="Scan to open the download page" />
+      </aside>
+    </section>
 
-  <section class="prose">
+    <TrustStrip />
+
+    <section class="row">
+      <h2 class="row__title">Get it</h2>
+      <div class="row__body">
+        <p>
+          One page explains the install, the three steps after it, and what OmniShelf does
+          <em>not</em> do with your books.
+        </p>
+        <p><a href="/download/">Download OmniShelf →</a></p>
+      </div>
+    </section>
+
+    <section class="row">
+      <h2 class="row__title">Books to put in it</h2>
+      <div class="row__body">
+        <p>
+          A library of public-domain books in EPUB — free to download, nothing pirated, nothing
+          behind an account — is the next thing being built. Until then, the
+          <a href="/where-to-read/">Where to Read</a> column keeps the shortlist of places that
+          are legal to get books from.
+        </p>
+      </div>
+    </section>
+
+    <section class="row">
+      <h2 class="row__title">How to read better</h2>
+      <div class="row__body">
+        <p>
+          <a href="/reading-craft/">Reading Craft</a> is about the act itself: inspection reading,
+          marginalia, where to stop — written by the people who built the reader, from the problems
+          the reader ran into.
+        </p>
+      </div>
+    </section>
+
+    <h2 class="section-title">Latest</h2>
+    <ul class="note-list">
+      {
+        recent.map((card) => (
+          <ArticleCard
+            href={card.href}
+            title={card.title}
+            summary={card.summary}
+            date={card.date}
+            readingMinutes={card.readingMinutes}
+          />
+        ))
+      }
+    </ul>
     <p class="meta">
-      Newest first · <a href="/reading-craft/">Reading Craft</a> ·
-      <a href="/where-to-read/">Where to Read</a> ·
-      <a href="/reading-life/">Reading Life</a> ·
-      <a href="/notes/">Engineering notes</a>
+      <a href="/reading-craft/">Reading Craft</a> · <a href="/where-to-read/">Where to Read</a> ·
+      <a href="/reading-life/">Reading Life</a> · <a href="/notes/">Engineering notes</a>
     </p>
-  </section>
 
-  <ul class="note-list">
-    {cards.map((card) => (
-      <ArticleCard
-        href={card.href}
-        title={card.title}
-        summary={card.summary}
-        date={card.date}
-        readingMinutes={card.readingMinutes}
-      />
-    ))}
-  </ul>
-</Page>
+    <StickyDownload src="home-sticky" />
+  </div>
+</Base>

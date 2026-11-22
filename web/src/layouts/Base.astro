@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { SITE } from '../site';
 import '@fontsource/literata/400.css';
 import '@fontsource/literata/600.css';
 import '@fontsource/literata/400-italic.css';
@@ -43,6 +44,14 @@ const url = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
     {jsonLd && (
       <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
+    {SITE.analytics.umamiSrc && SITE.analytics.umamiWebsiteId && (
+      <script
+        defer
+        src={SITE.analytics.umamiSrc}
+        data-website-id={SITE.analytics.umamiWebsiteId}
+      />
+    )}
+    <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to the text</a>
@@ -51,5 +60,18 @@ const url = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
       <slot />
     </main>
     <Footer />
+    <script is:inline>
+      // Count calls to action without any third party: one listener, no cookies.
+      document.addEventListener('click', function (event) {
+        var el = event.target;
+        while (el && el !== document.body && !(el.dataset && el.dataset.track)) el = el.parentElement;
+        if (!el || !el.dataset || !el.dataset.track) return;
+        try {
+          if (window.umami && typeof window.umami.track === 'function') {
+            window.umami.track(el.dataset.track, { src: el.dataset.src || 'unknown' });
+          }
+        } catch (error) {}
+      });
+    </script>
   </body>
 </html>

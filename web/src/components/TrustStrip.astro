@@ -1,0 +1,22 @@
+---
+import { SITE } from '../site';
+
+const facts = [
+  { value: `${SITE.app.formats}`, label: 'formats' },
+  { value: `${SITE.app.languages}`, label: 'languages' },
+  { value: '0', label: 'ads' },
+  { value: '0', label: 'accounts' },
+  { value: '0', label: 'trackers' },
+];
+---
+
+<ul class="trust" aria-label="What OmniShelf is">
+  {
+    facts.map((fact) => (
+      <li>
+        <strong>{fact.value}</strong>
+        <span>{fact.label}</span>
+      </li>
+    ))
+  }
+</ul>
