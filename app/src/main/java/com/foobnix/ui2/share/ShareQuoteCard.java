@@ -354,7 +354,9 @@ public class ShareQuoteCard {
             claim = claim.substring(0, cut).trim() + (claim.indexOf('，') >= 0 ? "。" : ".");
         }
 
-        TextPaint claimPaint = paint(serif, 23, strong);
+        // The sample sets the claim heavier than the specs, so the middle line is bold and
+        // the specs line is not; both keep the sizes and colours of the approved art.
+        TextPaint claimPaint = paint(Typeface.create(serif, Typeface.BOLD), 23, strong);
         TextPaint specPaint = paint(sans, 14, fg);
         String[] claimLines = wrap(claimPaint, claim, maxw);
         String[] specLines = specs.length() == 0 ? new String[0] : wrap(specPaint, specs, maxw);
@@ -369,7 +371,8 @@ public class ShareQuoteCard {
         drawTrackedLeft(c, brand, left, y, 19, accent, 0.14f, serif);
         y += brandH;
         for (int i = 0; i < claimLines.length; i++) {
-            textTop(c, claimLines[i], left, y + i * 34, 23, serif, strong);
+            textTop(c, claimLines[i], left, y + i * 34, 23,
+                    Typeface.create(serif, Typeface.BOLD), strong);
         }
         y += claimH;
         if (specs.length() > 0) {
