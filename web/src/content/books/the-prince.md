@@ -17,8 +17,6 @@ summary: "The short, cold manual on how power is actually kept, in Marriott's st
 order: 25
 ---
 
-The short, cold manual on how power is actually kept, in Marriott's standard translation.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/niccolo-machiavelli/the-prince), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

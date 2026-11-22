@@ -16,8 +16,6 @@ summary: "More invents an island with no money and a five-hour working day, then
 order: 26
 ---
 
-More invents an island with no money and a five-hour working day, then hesitates to recommend it.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/thomas-more/utopia), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

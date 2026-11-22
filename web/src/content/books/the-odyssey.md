@@ -17,8 +17,6 @@ summary: "Ten years of trying to get home, told in Bryant's blank-verse translat
 order: 20
 ---
 
-Ten years of trying to get home, told in Bryant's blank-verse translation.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/homer/the-odyssey), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

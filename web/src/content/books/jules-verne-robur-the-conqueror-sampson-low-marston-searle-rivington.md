@@ -15,8 +15,6 @@ summary: "A public-domain science fiction title from Standard Ebooks, free to do
 order: 161
 ---
 
-A public-domain science fiction title from Standard Ebooks, free to download as EPUB and read in any reader. By Jules Verne.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/jules-verne/robur-the-conqueror/sampson-low-marston-searle-rivington), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

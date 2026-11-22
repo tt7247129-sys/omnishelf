@@ -17,8 +17,6 @@ summary: "A quarrel over a captive woman, and the wrath that follows it to the w
 order: 21
 ---
 
-A quarrel over a captive woman, and the wrath that follows it to the walls of Troy.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/homer/the-iliad), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

@@ -16,8 +16,6 @@ summary: "London and Paris on the eve of the Revolution, and the best closing sa
 order: 7
 ---
 
-London and Paris on the eve of the Revolution, and the best closing sacrifice in Victorian fiction.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/charles-dickens/a-tale-of-two-cities), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

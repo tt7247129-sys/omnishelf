@@ -15,8 +15,6 @@ summary: "A map, a one-legged sailor, and the invention of the modern adventure 
 order: 14
 ---
 
-A map, a one-legged sailor, and the invention of the modern adventure story.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/robert-louis-stevenson/treasure-island), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

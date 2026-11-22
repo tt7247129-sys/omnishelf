@@ -16,8 +16,6 @@ summary: "Holmes and Watson on the moor, with a family curse and a very large do
 order: 12
 ---
 
-Holmes and Watson on the moor, with a family curse and a very large dog.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/arthur-conan-doyle/the-hound-of-the-baskervilles), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

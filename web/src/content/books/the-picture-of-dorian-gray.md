@@ -16,8 +16,6 @@ summary: "A portrait ages so its subject need not; Wilde's sharpest and most dan
 order: 13
 ---
 
-A portrait ages so its subject need not; Wilde's sharpest and most dangerous book.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/oscar-wilde/the-picture-of-dorian-gray), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

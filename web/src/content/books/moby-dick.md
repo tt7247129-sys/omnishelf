@@ -16,8 +16,6 @@ summary: "Call me Ishmael: a whale, an obsessive captain, and the most digressiv
 order: 9
 ---
 
-Call me Ishmael: a whale, an obsessive captain, and the most digressive great novel in English.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/herman-melville/moby-dick), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

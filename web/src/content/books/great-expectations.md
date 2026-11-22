@@ -15,8 +15,6 @@ summary: "Pip inherits money and loses his bearings; Dickens at his tightest and
 order: 6
 ---
 
-Pip inherits money and loses his bearings; Dickens at his tightest and darkest.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/charles-dickens/great-expectations), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

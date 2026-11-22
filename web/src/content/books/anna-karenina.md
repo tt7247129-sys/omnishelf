@@ -17,8 +17,6 @@ summary: "Two marriages, one affair, and the most famous opening sentence in Rus
 order: 19
 ---
 
-Two marriages, one affair, and the most famous opening sentence in Russian fiction.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/leo-tolstoy/anna-karenina), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

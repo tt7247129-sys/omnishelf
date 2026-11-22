@@ -15,8 +15,6 @@ summary: "A public-domain classics title from Standard Ebooks, free to download 
 order: 153
 ---
 
-A public-domain classics title from Standard Ebooks, free to download as EPUB and read in any reader. By J. Storer Clouston.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/j-storer-clouston/the-man-from-the-clouds), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

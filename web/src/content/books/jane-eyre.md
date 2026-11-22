@@ -16,8 +16,6 @@ summary: "An orphan, a governess, a locked attic: the novel that made the Gothic
 order: 4
 ---
 
-An orphan, a governess, a locked attic: the novel that made the Gothic interior.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/charlotte-bronte/jane-eyre), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

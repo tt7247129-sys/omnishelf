@@ -22,6 +22,8 @@ const related = all
   .slice(0, 3);
 
 const isPaid = data.status === 'paid-affiliate';
+// A download URL that starts with "/" is a file this site hosts itself.
+const isHosted = data.download.url.startsWith('/');
 const title = `${data.title} by ${data.author} — free EPUB`;
 const description = data.summary;
 
@@ -101,7 +103,11 @@ const jsonLd = {
             data-track="book_download"
             data-src={book.id}
           >
-            {isPaid ? 'Search a licensed store →' : `Get the EPUB at ${data.source.name} →`}
+            {isPaid
+              ? 'Search a licensed store →'
+              : isHosted
+                ? 'Download the EPUB →'
+                : `Get the EPUB at ${data.source.name} →`}
           </a>
           <a class="cta cta--secondary" href="/download/">Read it in OmniShelf</a>
         </p>
@@ -109,7 +115,9 @@ const jsonLd = {
         <p class="meta">
           {isPaid
             ? 'No file is hosted here: the store sells the book and keeps its own copy.'
-            : `The file is produced and hosted by ${data.source.name}, so it is the edition's own download, not a copy of a copy.`}
+            : isHosted
+              ? 'This EPUB is published by OmniShelf for this site. The text is public domain; the source of the transcription is credited in the book.'
+              : `The file is produced and hosted by ${data.source.name}, so it is the edition's own download, not a copy of a copy.`}
         </p>
 
         <div class="prose book-page__prose">

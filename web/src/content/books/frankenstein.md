@@ -16,8 +16,6 @@ summary: "A student assembles a living being, then abandons it; the creature tel
 order: 10
 ---
 
-A student assembles a living being, then abandons it; the creature tells the rest.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/mary-shelley/frankenstein), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

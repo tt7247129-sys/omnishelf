@@ -15,8 +15,6 @@ summary: "A public-domain classics title from Standard Ebooks, free to download 
 order: 111
 ---
 
-A public-domain classics title from Standard Ebooks, free to download as EPUB and read in any reader. By C. H. Spurgeon.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/c-h-spurgeon/the-art-of-illustration), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).

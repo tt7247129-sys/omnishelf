@@ -15,8 +15,6 @@ summary: "A public-domain science fiction title from Standard Ebooks, free to do
 order: 124
 ---
 
-A public-domain science fiction title from Standard Ebooks, free to download as EPUB and read in any reader. By Edgar Rice Burroughs.
-
 The text is in the public domain. This EPUB is produced and hosted by [Standard Ebooks](https://standardebooks.org/ebooks/edgar-rice-burroughs/a-fighting-man-of-mars), so the download is the edition's own file.
 
 > Read it in OmniShelf: the reader opens EPUB files offline, with no account and no ads. [Get the app](/download/).
