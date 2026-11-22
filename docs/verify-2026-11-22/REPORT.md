@@ -91,3 +91,45 @@ template=4 textBlocks=4 decorations=2
   由适配逻辑保证,不在矩形自检范围内(压力测试已用肉眼与日志双重确认)。
 - 极端输入(例如整本书一次全选,上万字)会把字号压到最小可读尺寸;此时仍不截断,
   但排版已接近「密排」,建议在分享前把选择范围控制在自然段落。
+
+---
+
+# 追加:保存分享卡到本地相册(1.3.3)
+
+日期:2026-11-22 · 版本:1.3.3(versionCode 7)
+
+## 实现
+
+- 分享对话框由 2 个按钮变为 3 个:**SAVE / SHARE / CANCEL**;
+- 点 SAVE 时按当前模板与当前封面重新渲染一次**全尺寸 1080×1440** 卡片并写入系统相册:
+  - Android 10+:`MediaStore` + `RELATIVE_PATH=Pictures/OmniShelf`,**不申请任何权限**;
+  - Android 7–9:写入公共 `Pictures/OmniShelf` 后交给媒体扫描器索引
+    (该版本所需的 `WRITE_EXTERNAL_STORAGE` 已声明);
+- 保存成功 Toast「Success」,对话框保持打开,可继续分享或切换模板;
+- 按钮文案复用仓库中**已有的 55 语言翻译**(`save`/`share`/`cancel`/`success`),
+  **没有新增需要翻译的字符串**,不触碰翻译守则。
+
+## 设备验证(emulator-5554,Android 16 / 1080×1920)
+
+1. 选中文本 →「分享书摘卡」→ 对话框出现三个按钮,顺序 SAVE / SHARE / CANCEL;
+2. 点 SAVE:
+   - Toast 显示 **Success**(截图 `save-toast.png`);
+   - 文件落盘:`/sdcard/Pictures/OmniShelf/omnishelf-quote-1795352312631.png`(356,798 B);
+   - MediaStore 记录:`_display_name=omnishelf-quote-…png, relative_path=Pictures/OmniShelf/, mime_type=image/png`
+     —— 相册/图库可直接看到;
+   - 拉回的文件为 **1080×1440** PNG(见 `saved-from-gallery.png`);
+3. 保存后对话框仍在;再点 SHARE 仍能正常打开系统分享面板(标题「Sharing image」);
+4. 连续保存两张:目录中出现 2 个文件,互不覆盖。
+
+## 证据
+
+| 文件 | 内容 |
+|---|---|
+| `dialog-save-option.png` | 三按钮对话框(SAVE / SHARE / CANCEL) |
+| `save-toast.png` | 点 SAVE 后的 Success Toast + 对话框 |
+| `saved-from-gallery.png` | 从相册目录取回的文件(1080×1440) |
+
+## 版本与签名
+
+- 1.3.3(versionCode 7);`delivery/OmniShelf-1.3.3.aab`、`delivery/OmniShelf-1.3.3-arm64-signed.apk`
+- 证书 SHA-1 `5B:64:C1:A4:30:C2:B2:57:16:8F:98:30:C3:C9:FB:67:96:BE:BA:6C`
