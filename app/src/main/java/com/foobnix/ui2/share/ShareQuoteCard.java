@@ -170,21 +170,41 @@ public class ShareQuoteCard {
         spine.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9E3025, Shader.TileMode.CLAMP));
         c.drawRect(0, 0, spineW, H, spine);
 
-        // The title column runs down the spine and stops well above the author column.
+        // A title set down the spine only works while the characters stay readable. Past
+        // that it is set across the top of the dark column instead - smaller, never clipped.
         float titleTop = 150, titleBottom = H - 380;
-        float titleStep = stepFor(texts.title, titleTop, titleBottom);
-        float titleSize = Math.min(74, Math.max(24, titleStep * 0.84f));
-        float ty = titleTop;
-        for (char ch : texts.title.toCharArray()) {
-            textTop(c, String.valueOf(ch), 54, ty, titleSize, Typeface.create(serif, Typeface.BOLD), 0xFFF7E3D9);
-            ty += titleStep;
-        }
-        float authorStep = stepFor(texts.author, 120, 380);
-        float authorSize = Math.min(22, Math.max(13, authorStep * 0.7f));
-        float ay = H - 360;
-        for (char ch : texts.author.toCharArray()) {
-            textTop(c, String.valueOf(ch), 54, ay, authorSize, serif, 0xFFE4C2B4);
-            ay += authorStep;
+        float contentTop = 220;
+        int titleChars = texts.title.trim().length();
+        float titleStep = (titleBottom - titleTop) / Math.max(1, titleChars);
+        boolean spineVertical = titleStep >= 34;
+        if (spineVertical) {
+            float titleSize = Math.min(74, titleStep * 0.84f);
+            float ty = titleTop;
+            for (char ch : texts.title.toCharArray()) {
+                textTop(c, String.valueOf(ch), 54, ty, titleSize, Typeface.create(serif, Typeface.BOLD), 0xFFF7E3D9);
+                ty += titleStep;
+            }
+            int authorChars = Math.max(1, texts.author.trim().length());
+            float authorStep = 380f / authorChars;
+            if (authorStep >= 16) {
+                float authorSize = Math.min(22, authorStep * 0.7f);
+                float ay = H - 360;
+                for (char ch : texts.author.toCharArray()) {
+                    textTop(c, String.valueOf(ch), 54, ay, authorSize, serif, 0xFFE4C2B4);
+                    ay += authorStep;
+                }
+            } else {
+                drawBlock(c, fit(texts.author, spineW - 90, 3, 18, 12, 1.3f, serif),
+                        54, H - 220, serif, 0xFFE4C2B4);
+            }
+        } else {
+            float top = 200, maxW = spineW + 470;
+            Block title = fit(texts.title, maxW, 3, 46, 22, 1.18f, Typeface.create(serif, Typeface.BOLD));
+            drawBlock(c, title, spineW + 70, top, Typeface.create(serif, Typeface.BOLD), 0xFFF7E3D9);
+            Block author = fit(texts.author, maxW, 3, 20, 13, 1.3f, serif);
+            drawBlock(c, author, spineW + 70, top + title.height() + 18, serif, 0xFFE4C2B4);
+            // the quote starts under the title that fell back to horizontal
+            contentTop = Math.max(contentTop, top + title.height() + 18 + author.height() + 40);
         }
         int rx = W - 120;
         float dy = 120;
@@ -196,7 +216,7 @@ public class ShareQuoteCard {
 
         int textX = spineW + 70;
         float maxW = (rx - 60) - textX;
-        float top = 220, bottom = H - 320;
+        float top = contentTop, bottom = H - 320;
         Block meta = fit(pathLine(texts.chapter), maxW, 2, 24, 14, 1.35f, serif);
         float reserved = 26 + meta.height() + 20 + 74 + 20;
         Block quote = fit(texts.quote, maxW, bottom - top - reserved, 44, 18, 78f / 44f, serif);
@@ -324,7 +344,7 @@ public class ShareQuoteCard {
         y += 3;
         drawBlock(c, title, 150, y + 12, serif, NIGHT_TEXT);
         drawBlock(c, meta, 150, y + 12 + title.height() + 16, serif, NIGHT_MUTED);
-        seal(c, W - 82 - 78, quoteTop + 20, 78, "讀");
+        seal(c, W - 82 - 78, y + 20, 78, "讀");
         stub(c, b, true, M, "night", "night", 104);
         vignette(b, 0.60f);
         grain(b, 0.05f);
@@ -678,6 +698,9 @@ public class ShareQuoteCard {
 
     private String[] wrapLine(TextPaint p, String body, float maxWidth) {
         if (body == null || body.length() == 0) return new String[0];
+        if (body.indexOf(' ') >= 0 && !hasCjk(body)) {
+            return wrapWords(p, body, maxWidth);
+        }
         String noStart = "，。、；：！？）》」』】…·,.;:!?)]}";
         List<String> lines = new ArrayList<>();
         StringBuilder cur = new StringBuilder();
@@ -707,6 +730,34 @@ public class ShareQuoteCard {
             }
         }
         return lines.toArray(new String[0]);
+    }
+
+    /** Latin text breaks between words, because a word split in half is not a word. */
+    private String[] wrapWords(TextPaint p, String body, float maxWidth) {
+        String[] words = body.split("\\s+");
+        List<String> lines = new ArrayList<>();
+        StringBuilder cur = new StringBuilder();
+        for (String word : words) {
+            String candidate = cur.length() == 0 ? word : cur + " " + word;
+            if (p.measureText(candidate) > maxWidth && cur.length() > 0) {
+                lines.add(cur.toString());
+                cur.setLength(0);
+                cur.append(word);
+            } else {
+                cur.setLength(0);
+                cur.append(candidate);
+            }
+        }
+        if (cur.length() > 0) lines.add(cur.toString());
+        return lines.toArray(new String[0]);
+    }
+
+    private boolean hasCjk(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch >= 0x2E80 && ch <= 0x9FFF) return true;
+        }
+        return false;
     }
 
     private String join(String a, String sep, String b) {
