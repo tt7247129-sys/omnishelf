@@ -2120,10 +2120,6 @@ public class DragingDialogs {
                 if (quickShareCard != null) {
                     quickShareCard.setOnClickListener(openQuoteCard);
                 }
-                View onShareQuoteCard = view.findViewById(R.id.onShareQuoteCard);
-                if (onShareQuoteCard != null) {
-                    onShareQuoteCard.setOnClickListener(openQuoteCard);
-                }
 
                 View onBookSearch = view.findViewById(R.id.onBookSearch);
                 // onBookSearch.setText(controller.getString(R.string.search_in_the_book)
