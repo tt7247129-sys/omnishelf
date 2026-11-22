@@ -95,6 +95,10 @@ public class ShareQuoteCard {
     private Bitmap qr;
     private boolean qrDark;
 
+    /** Rects recorded while drawing, used by the self-check at the end of render(). */
+    private final List<RectF> textRects = new java.util.ArrayList<>();
+    private final List<RectF> decorationRects = new java.util.ArrayList<>();
+
     private ShareQuoteCard(Context context, Texts texts, int template, Bitmap cover) {
         this.context = context;
         this.texts = texts;
@@ -124,6 +128,7 @@ public class ShareQuoteCard {
         } catch (Throwable e) {
             android.util.Log.e("ShareQuoteCard", "render failed for template " + template, e);
         }
+        audit();
         return bitmap;
     }
 
@@ -376,7 +381,10 @@ public class ShareQuoteCard {
         }
         drawTrackedCentered(c, texts.scan, qrCx, qrY - 18 - label, label, muted, 0.10f, sans);
         Bitmap code = qr(qrSize, dark);
-        if (code != null) c.drawBitmap(code, qrX, qrY, null);
+        if (code != null) {
+            c.drawBitmap(code, qrX, qrY, null);
+            decorationRects.add(new RectF(qrX, qrY, qrX + qrSize, qrY + qrSize));
+        }
         drawTrackedCentered(c, texts.urlLabel, qrCx, qrY + qrSize + 10, label, muted, 0.06f, sans);
 
         colophon(c, dark, left, qrY - 34, qrY + qrSize, qrX - left - 46);
@@ -435,6 +443,29 @@ public class ShareQuoteCard {
         }
     }
 
+    /**
+     * Reports any text that left the card or landed on a seal or a QR code. It writes a
+     * warning rather than changing the picture: the picture is already the fix, this is the
+     * evidence that the fix holds for whatever text was passed in.
+     */
+    private void audit() {
+        String tag = "ShareQuoteCardAudit";
+        for (RectF text : textRects) {
+            if (text.left < 40 || text.right > W - 40 || text.top < 40 || text.bottom > H - 40) {
+                android.util.Log.w(tag, "OUTSIDE template=" + template + " rect=" + text);
+            }
+            for (RectF deco : decorationRects) {
+                if (RectF.intersects(text, deco)) {
+                    android.util.Log.w(tag, "OVERLAP template=" + template
+                            + " text=" + text.left + "," + text.top + "," + text.right + "," + text.bottom
+                            + " with=" + deco.left + "," + deco.top + "," + deco.right + "," + deco.bottom);
+                }
+            }
+        }
+        android.util.Log.d(tag, "template=" + template + " textBlocks=" + textRects.size()
+                + " decorations=" + decorationRects.size());
+    }
+
     // ---------------------------------------------------------------- fitting
 
     /** Fits text into a width and height: the largest size whose wrapped lines fit both. */
@@ -491,15 +522,26 @@ public class ShareQuoteCard {
     // ---------------------------------------------------------------- 绘制工具
 
     private void drawBlock(Canvas c, Block block, float x, float topY, Typeface face, int color) {
+        float right = x;
         for (int i = 0; i < block.lines.length; i++) {
-            textTop(c, block.lines[i], x, topY + i * block.leading, block.size, face, color);
+            String line = block.lines[i];
+            right = Math.max(right, x + measure(line, face, block.size));
+            textTop(c, line, x, topY + i * block.leading, block.size, face, color);
+        }
+        if (block.lines.length > 0) {
+            textRects.add(new RectF(x, topY, right, topY + block.height()));
         }
     }
 
     private void drawBlockCentered(Canvas c, Block block, float topY, Typeface face, int color) {
+        float widest = 0;
         for (int i = 0; i < block.lines.length; i++) {
             float w = measure(block.lines[i], face, block.size);
+            widest = Math.max(widest, w);
             textTop(c, block.lines[i], (W - w) / 2f, topY + i * block.leading, block.size, face, color);
+        }
+        if (block.lines.length > 0) {
+            textRects.add(new RectF((W - widest) / 2f, topY, (W + widest) / 2f, topY + block.height()));
         }
     }
 
@@ -603,6 +645,7 @@ public class ShareQuoteCard {
     }
 
     private void seal(Canvas c, float x, float y, int size, String glyph) {
+        decorationRects.add(new RectF(x, y, x + size, y + size));
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(CINNABAR);
         c.drawRoundRect(new RectF(x, y, x + size, y + size), 8, 8, p);
