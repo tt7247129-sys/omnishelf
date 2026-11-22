@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import DownloadCta from '../components/DownloadCta.astro';
 import { SITE } from '../site';
 
 const title = 'OmniShelf closed test — how to join';
@@ -34,7 +33,11 @@ const description =
           below on that phone, choose <em>Become a tester</em>, then install from Play.
         </li>
       </ol>
-      <DownloadCta src="beta-primary" />
+      <p>
+        <a class="cta cta--primary" href={SITE.play.testingUrl} rel="nofollow" data-track="download_click" data-src="beta-primary">
+          Open the Play test page →
+        </a>
+      </p>
       <p class="meta">
         Already a tester? <a href={SITE.play.testingUrl} rel="nofollow">Open the test page directly →</a>
       </p>

@@ -13,7 +13,7 @@ const campaign = (params.get('utm_campaign') ?? 'site').slice(0, 64);
 
 const target = SITE.play.published
   ? playUrlWithReferrer(src, campaign)
-  : SITE.play.testingUrl;
+  : '/beta/';
 ---
 
 <Base title="Opening Google Play — OmniShelf" description="One moment.">
@@ -27,11 +27,11 @@ const target = SITE.play.published
         {
           SITE.play.published
             ? 'The Play Store opens in a moment. If it does not, tap the link below.'
-            : 'OmniShelf is in closed testing, so this opens the closed-test page. If it does not open, tap the link below.'
+            : 'OmniShelf is in closed testing, so this takes you to the page that explains how to join. If nothing happens, tap the link below.'
         }
       </p>
       <p>
-        <a class="cta" href={target} rel="nofollow">Continue to Google Play →</a>
+        <a class="cta" href={target} rel="nofollow">Continue →</a>
       </p>
       <p class="meta">
         <a href={SITE.play.published ? '/download/' : '/beta/'}>How the install works</a>
