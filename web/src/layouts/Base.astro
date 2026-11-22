@@ -51,6 +51,12 @@ const url = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
         data-website-id={SITE.analytics.umamiWebsiteId}
       />
     )}
+    {SITE.verification.google && (
+      <meta name="google-site-verification" content={SITE.verification.google} />
+    )}
+    {SITE.verification.bing && (
+      <meta name="msvalidate.01" content={SITE.verification.bing} />
+    )}
     <slot name="head" />
   </head>
   <body>

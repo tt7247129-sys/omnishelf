@@ -25,6 +25,8 @@ const related = (entry.data.related ?? [])
 const url = new URL(categoryPath, Astro.site).href;
 const jsonLd = {
   '@context': 'https://schema.org',
+  '@graph': [
+    {
   '@type': 'Article',
   headline: entry.data.title,
   description: entry.data.description,
@@ -34,6 +36,26 @@ const jsonLd = {
   author: { '@type': 'Organization', name: 'OmniShelf' },
   publisher: { '@type': 'Organization', name: 'OmniShelf' },
   articleSection: entry.data.category,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://omnishelf.cc/' },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: entry.data.category,
+          item: `https://omnishelf.cc${categoryPath}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: entry.data.title,
+          item: `https://omnishelf.cc${categoryPath}${entry.id}/`,
+        },
+      ],
+    },
+  ],
 };
 ---
 

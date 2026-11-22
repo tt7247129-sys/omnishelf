@@ -25,6 +25,11 @@ export const SITE = {
     languages: 55,
     minAndroid: '7.0',
   },
+  /** Search-engine ownership checks; both empty until the owner adds the property. */
+  verification: {
+    google: import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
+    bing: import.meta.env.PUBLIC_BING_SITE_VERIFICATION ?? '',
+  },
   analytics: {
     /**
      * Optional. Set PUBLIC_UMAMI_SRC and PUBLIC_UMAMI_WEBSITE_ID in the build environment

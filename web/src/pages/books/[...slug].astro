@@ -5,6 +5,8 @@ import BookCover from '../../components/BookCover.astro';
 import BookCard from '../../components/BookCard.astro';
 import DownloadCta from '../../components/DownloadCta.astro';
 
+const SITE_ORIGIN = 'https://omnishelf.cc';
+
 export async function getStaticPaths() {
   const books = await getCollection('books');
   return books.map((book) => ({ params: { slug: book.id }, props: { book } }));
@@ -23,8 +25,7 @@ const isPaid = data.status === 'paid-affiliate';
 const title = `${data.title} by ${data.author} — free EPUB`;
 const description = data.summary;
 
-const jsonLd: Record<string, unknown> = {
-  '@context': 'https://schema.org',
+const bookJsonLd: Record<string, unknown> = {
   '@type': 'Book',
   name: data.title,
   author: { '@type': 'Person', name: data.author },
@@ -44,6 +45,27 @@ const jsonLd: Record<string, unknown> = {
           url: data.source.url,
         },
       }),
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    bookJsonLd,
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_ORIGIN}/` },
+        { '@type': 'ListItem', position: 2, name: 'Books', item: `${SITE_ORIGIN}/books/` },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Free library',
+          item: `${SITE_ORIGIN}/books/free/`,
+        },
+        { '@type': 'ListItem', position: 4, name: data.title, item: `${SITE_ORIGIN}/books/${book.id}/` },
+      ],
+    },
+  ],
 };
 ---
 

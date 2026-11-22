@@ -44,6 +44,11 @@ jobs:
 
       - name: Build
         run: pnpm build
+        env:
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ secrets.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_BING_SITE_VERIFICATION: ${{ secrets.PUBLIC_BING_SITE_VERIFICATION }}
+          PUBLIC_UMAMI_SRC: ${{ secrets.PUBLIC_UMAMI_SRC }}
+          PUBLIC_UMAMI_WEBSITE_ID: ${{ secrets.PUBLIC_UMAMI_WEBSITE_ID }}
 
       - name: Check the build is complete
         run: |
