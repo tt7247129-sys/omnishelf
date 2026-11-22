@@ -111,6 +111,15 @@ entries.sort((a, b) => a.title.localeCompare(b.title));
     });
   };
 
-  render(entries);
-  input.addEventListener('input', () => render(search(input.value)));
+  const initial = new URLSearchParams(window.location.search).get('q') ?? '';
+  if (initial) input.value = initial;
+  render(search(initial));
+  input.addEventListener('input', () => {
+    render(search(input.value));
+    // A link with ?q= is shareable; keep the address bar in step with the box.
+    const url = new URL(window.location.href);
+    if (input.value) url.searchParams.set('q', input.value);
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  });
 </script>
