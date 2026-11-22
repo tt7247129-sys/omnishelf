@@ -1,0 +1,67 @@
+---
+interface Props {
+  title: string;
+  author: string;
+  /** Small label at the foot of the cover, e.g. "OmniShelf Library". */
+  label?: string;
+}
+
+const { title, author, label = 'OmniShelf Library' } = Astro.props;
+
+// A typographic cover, generated from the metadata: no third-party artwork, no broken
+// hotlinks, and every book in the library looks like it belongs to this one.
+const wrapper = title.split(/\s+/).reduce<string[]>((lines, word) => {
+  const last = lines[lines.length - 1];
+  if (last && (last + ' ' + word).length <= 13) {
+    lines[lines.length - 1] = last + ' ' + word;
+  } else {
+    lines.push(word);
+  }
+  return lines;
+}, []);
+
+// Keep the cover readable: long titles get fewer, larger lines.
+const lines = wrapper.length > 6 ? wrapper.slice(0, 6) : wrapper;
+const fontSize = lines.length > 4 ? 58 : 68;
+const lineHeight = Math.round(fontSize * 1.18);
+const firstLineY = 300 - ((lines.length - 1) * lineHeight) / 2;
+const titleId = `t-${title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+---
+
+<svg
+  class="book-cover"
+  viewBox="0 0 600 900"
+  role="img"
+  aria-label={`Cover of ${title} by ${author}`}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect width="600" height="900" fill="#fbf8f2" />
+  <rect x="0" y="0" width="600" height="14" fill="#8e2b21" />
+  <rect x="54" y="86" width="46" height="4" fill="#8e2b21" />
+  <text x="54" y="74" font-family="'Literata', Georgia, serif" font-size="18" fill="#7c6b63" letter-spacing="3">
+    {label.toUpperCase()}
+  </text>
+  <g aria-hidden="true">
+    {
+      lines.map((line, index) => (
+        <text
+          x="54"
+          y={firstLineY + index * lineHeight}
+          font-family="'Literata', Georgia, serif"
+          font-size={fontSize}
+          font-weight="600"
+          fill="#241815"
+        >
+          {line}
+        </text>
+      ))
+    }
+  </g>
+  <text x="54" y="812" font-family="'Literata', Georgia, serif" font-size="26" fill="#4a4740" font-style="italic">
+    {author.length > 32 ? author.slice(0, 31) + '…' : author}
+  </text>
+  <rect x="54" y="840" width="492" height="1" fill="#d8d4cc" />
+  <text id={titleId} x="54" y="866" font-family="'IBM Plex Sans', sans-serif" font-size="15" fill="#6b6660" letter-spacing="2">
+    PUBLIC DOMAIN · EPUB
+  </text>
+</svg>

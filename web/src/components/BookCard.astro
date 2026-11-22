@@ -1,0 +1,37 @@
+---
+import BookCover from './BookCover.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  author: string;
+  translator?: string;
+  summary: string;
+  status: string;
+  format: string;
+}
+
+const { slug, title, author, translator, summary, status, format } = Astro.props;
+const badge =
+  status === 'paid-affiliate'
+    ? 'Licensed store'
+    : status === 'free-original'
+      ? 'Free · original'
+      : 'Free · public domain';
+---
+
+<article class="book-card">
+  <a class="book-card__link" href={`/books/${slug}/`}>
+    <BookCover title={title} author={author} />
+    <h3 class="book-card__title">{title}</h3>
+    <p class="book-card__author">
+      {author}
+      {translator && <span> · tr. {translator}</span>}
+    </p>
+    <p class="book-card__summary">{summary}</p>
+    <p class="book-card__meta">
+      <span class:list={['badge', status === 'paid-affiliate' && 'badge--paid']}>{badge}</span>
+      <span>{format}</span>
+    </p>
+  </a>
+</article>

@@ -54,10 +54,32 @@ const pages = defineCollection({
   }),
 });
 
+
+/**
+ * Books: the free library. Only public-domain or original works, plus links to licensed
+ * stores for anything still in copyright, so there is never a pirated file on the site.
+ */
+const books = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
+  schema: z.object({
+    title: z.string(),
+    author: z.string(),
+    translator: z.string().optional(),
+    genres: z.array(z.string()).default([]),
+    language: z.string().default('en'),
+    status: z.enum(['free-public-domain', 'free-original', 'paid-affiliate']),
+    source: z.object({ name: z.string(), url: z.string() }),
+    download: z.object({ format: z.string(), url: z.string() }),
+    summary: z.string(),
+    order: z.number().default(100),
+  }),
+});
+
 export const collections = {
   articles,
   pages,
   readingCraft,
   whereToRead,
   readingLife,
+  books,
 };

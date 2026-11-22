@@ -1,0 +1,127 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookCover from '../../components/BookCover.astro';
+import BookCard from '../../components/BookCard.astro';
+import DownloadCta from '../../components/DownloadCta.astro';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  return books.map((book) => ({ params: { slug: book.id }, props: { book } }));
+}
+
+const { book } = Astro.props;
+const { Content } = await render(book);
+const data = book.data;
+
+const all = await getCollection('books');
+const related = all
+  .filter((other) => other.id !== book.id && other.data.genres.some((g) => data.genres.includes(g)))
+  .slice(0, 3);
+
+const isPaid = data.status === 'paid-affiliate';
+const title = `${data.title} by ${data.author} — free EPUB`;
+const description = data.summary;
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: data.title,
+  author: { '@type': 'Person', name: data.author },
+  inLanguage: data.language,
+  genre: data.genres,
+  description: data.summary,
+  ...(data.translator ? { translator: { '@type': 'Person', name: data.translator } } : {}),
+  ...(isPaid
+    ? {}
+    : {
+        isAccessibleForFree: true,
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+          url: data.source.url,
+        },
+      }),
+};
+---
+
+<Base title={`${title} — OmniShelf`} description={description} jsonLd={jsonLd} ogType="article">
+  <div class="shell shell--wide">
+    <p class="meta">
+      <a href="/books/">Books</a> / <a href="/books/free/">Free library</a> / {data.genres[0]}
+    </p>
+
+    <article class="book-page">
+      <div class="book-page__cover">
+        <BookCover title={data.title} author={data.author} />
+      </div>
+      <div class="book-page__body">
+        <h1 class="book-page__title">{data.title}</h1>
+        <p class="book-page__author">
+          {data.author}
+          {data.translator && <span> · translated by {data.translator}</span>}
+        </p>
+        <p class="book-page__summary">{data.summary}</p>
+
+        <p class="book-page__meta">
+          <span class="badge">{isPaid ? 'Licensed store' : 'Free · public domain'}</span>
+          <span class="badge">{data.download.format}</span>
+          {data.genres.map((genre) => <span class="badge">{genre}</span>)}
+        </p>
+
+        <p class="book-page__actions">
+          <a
+            class="cta cta--primary"
+            href={data.download.url}
+            rel="nofollow noopener"
+            data-track="book_download"
+            data-src={book.id}
+          >
+            {isPaid ? 'Search a licensed store →' : `Get the EPUB at ${data.source.name} →`}
+          </a>
+          <a class="cta cta--secondary" href="/download/">Read it in OmniShelf</a>
+        </p>
+
+        <p class="meta">
+          {isPaid
+            ? 'No file is hosted here: the store sells the book and keeps its own copy.'
+            : `The file is produced and hosted by ${data.source.name}, so it is the edition's own download, not a copy of a copy.`}
+        </p>
+
+        <div class="prose book-page__prose">
+          <Content />
+        </div>
+      </div>
+    </article>
+
+    {related.length > 0 && (
+      <section>
+        <h2 class="section-title">If you liked this</h2>
+        <div class="book-grid">
+          {related.map((other) => (
+            <BookCard
+              slug={other.id}
+              title={other.data.title}
+              author={other.data.author}
+              translator={other.data.translator}
+              summary={other.data.summary}
+              status={other.data.status}
+              format={other.data.download.format}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="book-cta">
+      <h2 class="section-title">More than a download link</h2>
+      <p>
+        OmniShelf reads the file offline, keeps your highlights and notes, and can read it aloud
+        with the device voice. Free, no account, no advertising.
+      </p>
+      <DownloadCta src={`book-${book.id}`} />
+    </section>
+  </div>
+</Base>

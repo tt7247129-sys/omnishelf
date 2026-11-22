@@ -15,6 +15,9 @@ const staticPaths = [
   '/privacy/',
   '/terms/',
   '/download/',
+  '/books/',
+  '/books/free/',
+  '/books/paid/',
   '/beta/',
   '/dmca/',
 ];
@@ -38,6 +41,11 @@ export const GET: APIRoute = async ({ site }) => {
         lastmod: entry.data.updatedDate ?? entry.data.pubDate,
       });
     }
+  }
+
+  const books = await getCollection('books');
+  for (const book of books) {
+    urls.push({ loc: `${base}/books/${book.id}/`, lastmod: '2026-11-22' });
   }
 
   const notes = await getCollection('articles');

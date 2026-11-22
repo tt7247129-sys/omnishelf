@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import DownloadCta from '../../components/DownloadCta.astro';
+import { SITE } from '../../site';
+
+const title = 'Books still in copyright — where to buy them';
+const description =
+  'OmniShelf does not host books that are still in copyright. This page points at licensed stores, and explains why the free shelf stops where it does.';
+
+const examples = [
+  { title: 'Project Hail Mary', author: 'Andy Weir', genre: 'Science fiction' },
+  { title: 'The Overstory', author: 'Richard Powers', genre: 'Fiction' },
+  { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', genre: 'Non-fiction' },
+];
+
+const search = (store: string, q: string) =>
+  `https://www.google.com/search?q=${encodeURIComponent(`buy ${q} epub ${store}`)}`;
+---
+
+<Base title={`${title} — OmniShelf`} description={description}>
+  <div class="shell shell--wide">
+    <section class="page-head">
+      <p class="meta">Books · licensed</p>
+      <h1>For books still in copyright</h1>
+      <p class="page-head__lead">
+        This shelf has no files. A book that is still in copyright cannot be given away here, so
+        the page sends you to a store that sells it and keeps the file out of our hands. It is a
+        shorter shelf and a legal one.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Where to buy</h2>
+      <ul class="check-list">
+        <li>Google Play Books, Amazon Kindle, Kobo and Apple Books all sell EPUB or their own DRM format.</li>
+        <li>Buy the EPUB where the store offers one; the DRM-free stores are best for OmniShelf.</li>
+        <li>Public libraries with Libby or OverDrive lend EPUBs for free — no purchase, still legal.</li>
+        <li>DRM-protected files need the store's own app. OmniShelf reads files you own, not rented locks.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-title">Examples</h2>
+      <div class="book-grid">
+        {
+          examples.map((book) => (
+            <article class="book-card book-card--plain">
+              <h3 class="book-card__title">{book.title}</h3>
+              <p class="book-card__author">{book.author}</p>
+              <p class="book-card__summary">{book.genre}</p>
+              <p class="book-card__meta">
+                <a class="badge badge--paid" href={search('google play books', book.title)} rel="nofollow noopener">
+                  Search a store →
+                </a>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+      <p class="meta">
+        These are examples of the shelf, not recommendations or sponsored placements. This site
+        has no affiliate agreement at the moment; if one is added, it will be labelled here.
+      </p>
+    </section>
+
+    <section class="book-cta">
+      <h2 class="section-title">Read what you already own</h2>
+      <p>
+        OmniShelf opens the EPUB and PDF files you own, offline, without an account — including
+        files from stores that sell DRM-free EPUBs.
+      </p>
+      <DownloadCta src="books-paid" />
+      <p class="meta">
+        Copyright questions: <a href="/dmca/">the copyright page</a>.
+      </p>
+    </section>
+  </div>
+</Base>

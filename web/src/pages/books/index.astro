@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookCard from '../../components/BookCard.astro';
+import DownloadCta from '../../components/DownloadCta.astro';
+import { SITE } from '../../site';
+
+const free = (await getCollection('books'))
+  .filter((book) => book.data.status !== 'paid-affiliate')
+  .sort((a, b) => a.data.order - b.data.order);
+const featured = free.slice(0, 8);
+
+const title = 'Books — free public-domain library';
+const description =
+  'A free library of public-domain EPUBs to read in OmniShelf: classics in English and links to licensed stores for everything still in copyright.';
+---
+
+<Base title={`${title} — OmniShelf`} description={description}>
+  <div class="shell shell--wide">
+    <section class="page-head">
+      <p class="meta">Books</p>
+      <h1>The library</h1>
+      <p class="page-head__lead">
+        Two shelves. One is free and public domain — download the EPUB and keep it. The other is
+        for books still in copyright: we point at licensed stores and host no files.
+      </p>
+      <p class="hero__actions">
+        <a class="cta cta--primary" href="/books/free/">Free library →</a>
+        <a class="cta cta--secondary" href="/books/paid/">Licensed stores</a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Start here</h2>
+      <div class="book-grid">
+        {
+          featured.map((book) => (
+            <BookCard
+              slug={book.id}
+              title={book.data.title}
+              author={book.data.author}
+              translator={book.data.translator}
+              summary={book.data.summary}
+              status={book.data.status}
+              format={book.data.download.format}
+            />
+          ))
+        }
+      </div>
+      <p class="meta"><a href="/books/free/">All {free.length} free books →</a></p>
+    </section>
+
+    <section>
+      <h2 class="section-title">Why this shelf is different</h2>
+      <ul class="check-list">
+        <li>Public domain only: the text is free to copy, keep and share, everywhere.</li>
+        <li>No account, no "download limit", no email wall.</li>
+        <li>EPUB, not a scan — reflowable text that works at any font size.</li>
+        <li>Every file is produced by the publisher named on the book page.</li>
+      </ul>
+    </section>
+
+    <section class="book-cta">
+      <h2 class="section-title">Read them in OmniShelf</h2>
+      <p>
+        The reader opens EPUB, PDF, MOBI, AZW3, FB2, DJVU, CBZ — {SITE.app.formats} formats — offline, with
+        highlights, notes and text-to-speech. No account, no ads, no tracking.
+      </p>
+      <DownloadCta src="books-index" />
+    </section>
+  </div>
+</Base>

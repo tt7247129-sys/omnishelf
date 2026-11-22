@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookCard from '../../components/BookCard.astro';
+import DownloadCta from '../../components/DownloadCta.astro';
+import { SITE } from '../../site';
+
+const books = (await getCollection('books'))
+  .filter((book) => book.data.status !== 'paid-affiliate')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const genres = [...new Set(books.map((book) => book.data.genres[0]))].sort();
+
+const title = 'Free public-domain books in EPUB';
+const description =
+  'A curated library of free public-domain books in EPUB: Austen, Dickens, Melville, Tolstoy, Homer, Sun Tzu and more. No account, no paywall, nothing pirated.';
+---
+
+<Base title={`${title} — OmniShelf`} description={description}>
+  <div class="shell shell--wide">
+    <section class="page-head">
+      <p class="meta">Books</p>
+      <h1>Free books, no account</h1>
+      <p class="page-head__lead">
+        Every book here is in the public domain: free to download, free to keep, free to read
+        with or without OmniShelf. {books.length} titles to start, grouped by what they are.
+      </p>
+      <p class="meta">
+        <a href="/books/paid/">Looking for a book still in copyright?</a> — we link to licensed
+        stores and host nothing.
+      </p>
+    </section>
+
+    <nav class="genre-nav" aria-label="Genres">
+      {genres.map((genre) => (
+        <a href={`#${genre.toLowerCase().replace(/[^a-z]+/g, '-')}`}>{genre}</a>
+      ))}
+    </nav>
+
+    {
+      genres.map((genre) => (
+        <section class="book-section" id={genre.toLowerCase().replace(/[^a-z]+/g, '-')}>
+          <h2 class="section-title">{genre}</h2>
+          <div class="book-grid">
+            {books
+              // one section per book: grouped by its first genre, so nothing repeats
+              .filter((book) => book.data.genres[0] === genre)
+              .map((book) => (
+                <BookCard
+                  slug={book.id}
+                  title={book.data.title}
+                  author={book.data.author}
+                  translator={book.data.translator}
+                  summary={book.data.summary}
+                  status={book.data.status}
+                  format={book.data.download.format}
+                />
+              ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="book-cta">
+      <h2 class="section-title">Keep them somewhere quiet</h2>
+      <p>
+        OmniShelf opens EPUB and PDF files offline, keeps highlights and notes, and reads aloud
+        with the device voice. It is free, has no account and no advertising.
+      </p>
+      <DownloadCta src="books-free" />
+      <p class="meta">
+        How the download works: <a href="/download/">download page</a> · Every file here comes
+        from <a href="https://standardebooks.org/" rel="noopener">Standard Ebooks</a>, which
+        produces and hosts these editions.
+      </p>
+    </section>
+  </div>
+</Base>
