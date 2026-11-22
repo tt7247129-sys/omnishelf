@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const title = 'Search';
+const description = 'Search the books, the reading notes and the engineering articles on OmniShelf.';
+
+type Entry = { title: string; description: string; url: string; kind: string };
+
+const entries: Entry[] = [];
+
+for (const book of await getCollection('books')) {
+  entries.push({
+    title: `${book.data.title} — ${book.data.author}`,
+    description: book.data.summary,
+    url: `/books/${book.id}/`,
+    kind: 'Book',
+  });
+}
+
+for (const [collection, path, kind] of [
+  ['readingCraft', '/reading-craft/', 'Reading Craft'],
+  ['whereToRead', '/where-to-read/', 'Where to Read'],
+  ['readingLife', '/reading-life/', 'Reading Life'],
+] as const) {
+  for (const item of await getCollection(collection)) {
+    entries.push({
+      title: item.data.title,
+      description: item.data.description,
+      url: `${path}${item.id}/`,
+      kind,
+    });
+  }
+}
+
+for (const note of await getCollection('articles')) {
+  entries.push({
+    title: note.data.title,
+    description: note.data.summary,
+    url: `/notes/${note.id}/`,
+    kind: 'Engineering note',
+  });
+}
+
+entries.sort((a, b) => a.title.localeCompare(b.title));
+---
+
+<Base title={`${title} — OmniShelf`} description={description}>
+  <div class="shell shell--wide">
+    <section class="page-head">
+      <p class="meta">Search</p>
+      <h1>Search the site</h1>
+      <p class="page-head__lead">
+        Books, reading notes and engineering articles — {entries.length} entries, filtered on this
+        device. Nothing you type is sent anywhere.
+      </p>
+    </section>
+
+    <label class="search">
+      <span class="search__label">Find a book, an author or a topic</span>
+      <input
+        class="search__input"
+        id="q"
+        type="search"
+        autocomplete="off"
+        placeholder="e.g. Melville, poetry, highlights"
+        autofocus
+      />
+    </label>
+
+    <p class="meta" id="count">{entries.length} entries</p>
+    <ul class="search-results" id="results"></ul>
+
+    <p class="meta">
+      Nothing found? Try the <a href="/books/free/">free library</a> or the
+      <a href="/reading-craft/">reading notes</a>.
+    </p>
+  </div>
+</Base>
+
+<script define:vars={{ entries }}>
+  const input = document.getElementById('q');
+  const list = document.getElementById('results');
+  const count = document.getElementById('count');
+
+  const render = (items) => {
+    list.innerHTML = '';
+    for (const item of items.slice(0, 40)) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = item.url;
+      a.textContent = item.title;
+      const p = document.createElement('p');
+      p.textContent = item.description;
+      const meta = document.createElement('p');
+      meta.className = 'meta';
+      meta.textContent = item.kind;
+      li.append(a, meta, p);
+      list.append(li);
+    }
+    count.textContent = items.length + (items.length === 1 ? ' entry' : ' entries');
+  };
+
+  const search = (query) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return entries;
+    const words = q.split(/\s+/);
+    return entries.filter((entry) => {
+      const haystack = (entry.title + ' ' + entry.description + ' ' + entry.kind).toLowerCase();
+      return words.every((word) => haystack.includes(word));
+    });
+  };
+
+  render(entries);
+  input.addEventListener('input', () => render(search(input.value)));
+</script>

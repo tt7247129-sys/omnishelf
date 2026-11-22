@@ -374,6 +374,8 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // QR codes for share cards; the target URL is a string resource
     implementation 'com.google.zxing:core:3.5.3'
+    // Where an install came from: Play Install Referrer, read once, stored on device
+    implementation 'com.android.installreferrer:installreferrer:2.2'
     proImplementation project(':libPro')
     fdroidImplementation project(':libPro')
     proJSImplementation project(':libPro')

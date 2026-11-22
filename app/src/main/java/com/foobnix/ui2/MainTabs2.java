@@ -720,6 +720,8 @@ public class MainTabs2 extends AdsFragmentActivity {
         // A new start of the app rather than the screen turning: the notice comes back.
         if (savedInstanceState == null) {
             LibreraX.migrateNoticeClosed = false;
+            // One read per install; a sideload simply has no referrer to read.
+            com.foobnix.model.InstallAttribution.captureOnce(this);
         }
 
         if (!isTaskRoot() && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(getIntent().getAction())) {

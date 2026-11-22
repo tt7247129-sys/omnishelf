@@ -113,3 +113,6 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# Play Install Referrer is a thin AIDL client; keep its surface intact.
+-keep class com.android.installreferrer.** { *; }

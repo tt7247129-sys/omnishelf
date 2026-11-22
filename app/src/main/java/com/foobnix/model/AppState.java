@@ -476,6 +476,10 @@ public class AppState {
     public String contactSource = "";
     /** Which quote-card layout the reader last shared; 0..5, see ShareQuoteCard. */
     public int shareCardTemplate = 1;
+    /** The utm string Play Install Referrer returned on first launch; empty when unknown. */
+    public String installReferrer = "";
+    /** One attempt per install: the referrer does not change afterwards. */
+    public boolean installReferrerChecked = false;
     public boolean isAskedContactSource = false;
     @IgnoreHashCode public boolean isRewindEnable = true;
     // The reader's own clock and battery are already up there; a second pair along the foot of

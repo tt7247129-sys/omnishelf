@@ -20,6 +20,7 @@ const staticPaths = [
   '/books/paid/',
   '/beta/',
   '/dmca/',
+  '/search/',
 ];
 
 export const GET: APIRoute = async ({ site }) => {
