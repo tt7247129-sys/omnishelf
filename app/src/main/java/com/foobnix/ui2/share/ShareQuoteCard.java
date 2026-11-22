@@ -376,7 +376,8 @@ public class ShareQuoteCard {
         }
         y += claimH;
         if (specs.length() > 0) {
-            y += 8;
+            // the sample's third line sits six pixels under the claim, not eight
+            y += 6;
             for (int i = 0; i < specLines.length; i++) {
                 drawTrackedLeft(c, specLines[i], left, y + i * 22, 14, fg, 0.05f, sans);
             }
