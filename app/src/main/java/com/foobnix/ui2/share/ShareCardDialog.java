@@ -2,16 +2,23 @@ package com.foobnix.ui2.share;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
@@ -24,6 +31,7 @@ import com.foobnix.pdf.info.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -72,6 +80,7 @@ public class ShareCardDialog {
             final ImageView preview = dialog.findViewById(R.id.cardPreview);
             final TextView label = dialog.findViewById(R.id.cardTemplate);
             final Button share = dialog.findViewById(R.id.cardShare);
+            final Button saveToGallery = dialog.findViewById(R.id.cardSave);
             final Button cancel = dialog.findViewById(R.id.cardCancel);
 
             int start = AppState.get().shareCardTemplate;
@@ -94,6 +103,15 @@ public class ShareCardDialog {
                 rememberTemplate(current[0]);
                 shareBitmap(activity, texts, current[0], cover[0]);
                 dismiss();
+            });
+            saveToGallery.setOnClickListener(v -> {
+                rememberTemplate(current[0]);
+                Bitmap card = ShareQuoteCard.create(activity, texts, current[0], cover[0]).render();
+                if (saveToAlbum(activity, card)) {
+                    Toast.makeText(activity, R.string.success, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(activity, R.string.fail, Toast.LENGTH_SHORT).show();
+                }
             });
             cancel.setOnClickListener(v -> dismiss());
             dialog.show();
@@ -235,6 +253,67 @@ public class ShareCardDialog {
             }
         } catch (Throwable e) {
             LOG.e(e);
+        }
+    }
+
+    /**
+     * Writes the card into the phone's gallery.
+     *
+     * <p>On Android 10 and later this uses MediaStore with a relative path, which needs no
+     * permission at all and puts the file in Pictures/OmniShelf. Older releases insert through
+     * MediaStore's data column and then ask the media scanner to index the file; the write
+     * permission is already declared for those versions.
+     */
+    private static boolean saveToAlbum(Activity activity, Bitmap card) {
+        String name = "omnishelf-quote-" + System.currentTimeMillis() + ".png";
+        ContentResolver resolver = activity.getContentResolver();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+            values.put(MediaStore.Images.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES + "/OmniShelf");
+            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+            Uri uri = null;
+            try {
+                uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                if (uri == null) return false;
+                try (OutputStream out = resolver.openOutputStream(uri)) {
+                    if (out == null || !card.compress(Bitmap.CompressFormat.PNG, 100, out)) {
+                        return false;
+                    }
+                }
+                ContentValues done = new ContentValues();
+                done.put(MediaStore.Images.Media.IS_PENDING, 0);
+                resolver.update(uri, done, null, null);
+                return true;
+            } catch (Throwable e) {
+                LOG.e(e);
+                if (uri != null) {
+                    try {
+                        resolver.delete(uri, null, null);
+                    } catch (Throwable ignored) {
+                    }
+                }
+                return false;
+            }
+        }
+        // Android 7-9: write into the public Pictures folder, then have it indexed.
+        try {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "OmniShelf");
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+            File file = new File(dir, name);
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                if (!card.compress(Bitmap.CompressFormat.PNG, 100, out)) return false;
+            }
+            MediaScannerConnection.scanFile(activity, new String[]{file.getAbsolutePath()},
+                    new String[]{"image/png"}, null);
+            return true;
+        } catch (Throwable e) {
+            LOG.e(e);
+            return false;
         }
     }
 

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:minWidth="64dp"
             android:gravity="center"
-            android:text="1 / 6"
+            android:text="1 / 5"
             android:textColor="@color/omni_primary"
             android:textSize="14sp" />
 
@@ -58,13 +58,24 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/cardSave"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/save"
+            android:textColor="@color/omni_primary"
+            android:textSize="14sp" />
+
+        <Button
             android:id="@+id/cardShare"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/share"
-            android:textColor="@color/omni_primary" />
+            android:textColor="@color/omni_primary"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/cardCancel"
@@ -73,6 +84,7 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:text="@string/cancel"
-            android:textColor="@color/omni_primary" />
+            android:textColor="@color/omni_primary"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>
