@@ -2094,30 +2094,35 @@ public class DragingDialogs {
                     }
                 });
 
-                // A quote card: the selection rendered as one of six layouts, previewed and
-                // shared from a dialog. The row keeps the panel compact; the work lives in
-                // ShareCardDialog.
+                // A quote card: the selection rendered as one of five layouts, previewed and
+                // shared from a dialog. The entry sits in the top row, directly after "+", so
+                // it is one tap from the selection instead of two.
+                final OnClickListener openQuoteCard = new OnClickListener() {
+                    @Override public void onClick(View v) {
+                        try {
+                            String quote = editText.getText().toString().trim();
+                            if (quote.length() == 0) {
+                                quote = AppState.get().selectedText;
+                            }
+                            FileMeta cardMeta = controller.getBookFileMeta();
+                            String cardTitle = cardMeta != null ? cardMeta.getTitle() : "";
+                            String cardAuthor = cardMeta != null ? cardMeta.getAuthor() : "";
+                            ShareCardDialog.show(controller.getActivity(), quote, cardTitle, cardAuthor,
+                                    cardMeta != null ? cardMeta.getPath() : "");
+                            closeDialog();
+                        } catch (Throwable e) {
+                            LOG.e(e);
+                            Toast.makeText(v.getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+                View quickShareCard = view.findViewById(R.id.onShareCardQuick);
+                if (quickShareCard != null) {
+                    quickShareCard.setOnClickListener(openQuoteCard);
+                }
                 View onShareQuoteCard = view.findViewById(R.id.onShareQuoteCard);
                 if (onShareQuoteCard != null) {
-                    onShareQuoteCard.setOnClickListener(new OnClickListener() {
-                        @Override public void onClick(View v) {
-                            try {
-                                String quote = editText.getText().toString().trim();
-                                if (quote.length() == 0) {
-                                    quote = AppState.get().selectedText;
-                                }
-                                FileMeta cardMeta = controller.getBookFileMeta();
-                                String cardTitle = cardMeta != null ? cardMeta.getTitle() : "";
-                                String cardAuthor = cardMeta != null ? cardMeta.getAuthor() : "";
-                                ShareCardDialog.show(controller.getActivity(), quote, cardTitle, cardAuthor,
-                                        cardMeta != null ? cardMeta.getPath() : "");
-                                closeDialog();
-                            } catch (Throwable e) {
-                                LOG.e(e);
-                                Toast.makeText(v.getContext(), R.string.fail, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    onShareQuoteCard.setOnClickListener(openQuoteCard);
                 }
 
                 View onBookSearch = view.findViewById(R.id.onBookSearch);
@@ -2472,7 +2477,6 @@ public class DragingDialogs {
                         ((View) ((View) view.findViewById(R.id.readTTS)).getParent()),
                         view.findViewById(R.id.onAddToBookmark),
                         view.findViewById(R.id.onShare),
-                        view.findViewById(R.id.onShareQuoteCard),
                         view.findViewById(R.id.onGoogle),
                         view.findViewById(R.id.onTranslate),
                         ((View) ((View) view.findViewById(R.id.dictionaryLine)).getParent()),

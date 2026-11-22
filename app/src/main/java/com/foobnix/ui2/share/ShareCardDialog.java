@@ -50,7 +50,8 @@ public class ShareCardDialog {
         }
         try {
             final ShareQuoteCard.Texts texts = new ShareQuoteCard.Texts();
-            texts.quote = text.length() > 220 ? text.substring(0, 219) + "…" : text;
+            // No cut-off: the renderer fits the whole selection, however long it is.
+            texts.quote = text;
             texts.title = title == null ? "" : title;
             texts.author = author == null ? "" : author;
             texts.chapter = "";

@@ -26,18 +26,15 @@ import java.util.Random;
 /**
  * Renders a quote card. Five layouts, all drawn from the app's palette.
  *
- * <p>This is a line-by-line port of docs/share-card/v3/render-cards.py: the same coordinates,
- * the same sizes, the same tracking and the same top-anchored text, so a card rendered on a
- * phone is the card that was approved. Only the typefaces differ in file, not in role: the
- * approved art used Songti and Helvetica, the phone has the bundled Noto Serif SC and the
- * system sans, which take their places.
+ * <p>The geometry follows the approved art, but every block of text is fitted to its own
+ * safe area before it is drawn: a long title shrinks, a long quote shrinks, and the
+ * decorations (seal, code, frame) reserve their space first. Nothing is ever clipped or
+ * covered - the card is allowed to look quieter, never to lose a word.
  *
- * <p>Every date comes from {@link Date} and the reader's locale, so the card is always the
- * card of today.
+ * <p>Dates come from the device clock and locale, so the card is always the card of today.
  */
 public class ShareQuoteCard {
 
-    // The five approved layouts. The cover-ticket card was cut by request.
     public static final int T_DATE_PAPER = 0;
     public static final int T_VERTICAL_SPINE_NIGHT = 1;
     public static final int T_COVER_FULL_PAPER = 2;
@@ -61,20 +58,30 @@ public class ShareQuoteCard {
         public String scan = "";
         public String url = "https://omnishelf.cc";
         public String urlLabel = "omnishelf.cc";
-        /** The day as "21", from the device clock. */
         public String day = "";
-        /** Month label for the date card: NOVEMBER, or 十一月 in Chinese. */
         public String monthLabel = "";
-        /** The year as "2026". */
         public String year = "";
-        /** Weekday in the reader's language. */
         public String weekday = "";
-        /** Full date, e.g. 2026 年 11 月 21 日 or Nov 21, 2026. */
         public String dateLine = "";
-        /** Month and year, e.g. 二〇二六年十一月 or November 2026. */
         public String monthYearLine = "";
-        /** A column of date characters for the spine layout. */
         public String verticalDate = "";
+    }
+
+    /** A block of text that has been fitted: its lines, size and line step. */
+    private static final class Block {
+        final String[] lines;
+        final float size;
+        final float leading;
+
+        Block(String[] lines, float size, float leading) {
+            this.lines = lines;
+            this.size = size;
+            this.leading = leading;
+        }
+
+        float height() {
+            return lines.length * leading;
+        }
     }
 
     private final Context context;
@@ -126,7 +133,6 @@ public class ShareQuoteCard {
         c.drawColor(PAPER);
         rect(c, 84, 92, 84 + 46, 96, CINNABAR);
         textTop(c, texts.monthLabel, 84, 116, 22, sans, MUTED);
-        // the day is drawn as a block, optically aligned to the margin
         TextPaint big = paint(Typeface.create(sans, Typeface.BOLD), 200, INK);
         Rect bounds = new Rect();
         big.getTextBounds(texts.day, 0, texts.day.length(), bounds);
@@ -135,19 +141,22 @@ public class ShareQuoteCard {
         textTop(c, texts.weekday, 86, 446, 26, serif, MUTED);
         line(c, 86, 512, W - 86, 512, HAIR_LIGHT, 1);
 
-        TextPaint quote = paint(serif, 48, INK);
-        String[] lines = wrap(quote, texts.quote, 800);
-        float quoteH = lines.length * 80f;
-        float blockH = quoteH + 118;
-        float top = 540, bottom = H - 330;
-        float y = top + Math.max(24, (bottom - top - blockH) / 2f);
-        for (int i = 0; i < lines.length; i++) {
-            textTop(c, lines[i], 86, y + i * 80, 48, serif, INK);
-        }
-        y += quoteH;
-        textTop(c, "《" + texts.title + "》", 86, y + 34, 30, Typeface.create(serif, Typeface.BOLD), INK);
-        textTop(c, join(texts.author, " · ", texts.chapter), 86, y + 82, 22, serif, MUTED);
-        seal(c, W - 86 - 84, y + 20, 84, "書");
+        final float left = 86, maxW = 800;          // the seal starts at x=910
+        final float quoteTop = 540, quoteBottom = H - 330;
+
+        Block title = fit("《" + texts.title + "》", maxW, 2, 30, 18, 1.15f, serif);
+        Block meta = fit(join(texts.author, " · ", texts.chapter), maxW, 2, 22, 14, 1.3f, serif);
+        float reserved = 34 + title.height() + 16 + meta.height() + 26;
+        Block quote = fit(texts.quote, maxW, quoteBottom - quoteTop - reserved, 48, 20, 80f / 48f, serif);
+
+        float y = quoteTop + Math.max(0, (quoteBottom - quoteTop - reserved - quote.height()) / 2f);
+        drawBlock(c, quote, left, y, serif, INK);
+        y += quote.height() + 34;
+        drawBlock(c, title, left, y, serif, INK);
+        y += title.height() + 16;
+        drawBlock(c, meta, left, y, serif, MUTED);
+
+        seal(c, W - 86 - 84, quoteTop + Math.max(0, (quoteBottom - quoteTop - 104) / 2f), 84, "書");
         stub(c, b, false, M, "paper", "paper", 112);
         grain(b, 0.05f);
     }
@@ -161,16 +170,21 @@ public class ShareQuoteCard {
         spine.setShader(new LinearGradient(0, 0, spineW, 0, 0xFF7A241B, 0xFF9E3025, Shader.TileMode.CLAMP));
         c.drawRect(0, 0, spineW, H, spine);
 
-        float y = 150;
-        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
+        // The title column runs down the spine and stops well above the author column.
+        float titleTop = 150, titleBottom = H - 380;
+        float titleStep = stepFor(texts.title, titleTop, titleBottom);
+        float titleSize = Math.min(74, Math.max(24, titleStep * 0.84f));
+        float ty = titleTop;
         for (char ch : texts.title.toCharArray()) {
-            textTop(c, String.valueOf(ch), 54, y, 74, titleFace, 0xFFF7E3D9);
-            y += 88;
+            textTop(c, String.valueOf(ch), 54, ty, titleSize, Typeface.create(serif, Typeface.BOLD), 0xFFF7E3D9);
+            ty += titleStep;
         }
+        float authorStep = stepFor(texts.author, 120, 380);
+        float authorSize = Math.min(22, Math.max(13, authorStep * 0.7f));
         float ay = H - 360;
         for (char ch : texts.author.toCharArray()) {
-            textTop(c, String.valueOf(ch), 54, ay, 22, serif, 0xFFE4C2B4);
-            ay += 32;
+            textTop(c, String.valueOf(ch), 54, ay, authorSize, serif, 0xFFE4C2B4);
+            ay += authorStep;
         }
         int rx = W - 120;
         float dy = 120;
@@ -181,20 +195,18 @@ public class ShareQuoteCard {
         line(c, rx - 40, 120, rx - 40, 700, HAIR_DARK, 1);
 
         int textX = spineW + 70;
-        TextPaint quote = paint(serif, 44, NIGHT_TEXT);
-        String[] lines = wrap(quote, texts.quote, (rx - 60) - textX);
-        float quoteH = lines.length * 78f;
-        float blockH = quoteH + 150;
+        float maxW = (rx - 60) - textX;
         float top = 220, bottom = H - 320;
-        float qy = top + Math.max(20, (bottom - top - blockH) / 2f);
-        for (int i = 0; i < lines.length; i++) {
-            textTop(c, lines[i], textX, qy + i * 78, 44, serif, NIGHT_TEXT);
-        }
-        qy += quoteH;
-        if (texts.chapter != null && texts.chapter.trim().length() > 0) {
-            textTop(c, "/ " + texts.chapter, textX, qy + 26, 24, serif, NIGHT_MUTED);
-        }
-        seal(c, textX, qy + 70, 74, "書");
+        Block meta = fit(pathLine(texts.chapter), maxW, 2, 24, 14, 1.35f, serif);
+        float reserved = 26 + meta.height() + 20 + 74 + 20;
+        Block quote = fit(texts.quote, maxW, bottom - top - reserved, 44, 18, 78f / 44f, serif);
+
+        float qy = top + Math.max(0, (bottom - top - reserved - quote.height()) / 2f);
+        drawBlock(c, quote, textX, qy, serif, NIGHT_TEXT);
+        qy += quote.height() + 26;
+        drawBlock(c, meta, textX, qy, serif, NIGHT_MUTED);
+        qy += meta.height() + 20;
+        seal(c, textX, qy, 74, "書");
         stub(c, b, true, spineW + 40, "spine", "night", 108);
         vignette(b, 0.45f);
         grain(b, 0.05f);
@@ -217,30 +229,45 @@ public class ShareQuoteCard {
                     new int[]{0xFF86281F, 0xFF9E3A2B, 0xFFC0503A}, new float[]{0f, 0.55f, 1f},
                     Shader.TileMode.CLAMP));
             c.drawRect(0, 0, W, bandH, plate);
-            // the warm lamp of the reference art
             Paint lamp = new Paint();
             lamp.setShader(new RadialGradient(W / 2f, bandH * 0.42f, W * 0.62f,
                     new int[]{0x33FFD9B0, 0x00000000}, new float[]{0f, 1f}, Shader.TileMode.CLAMP));
             c.drawRect(0, 0, W, bandH, lamp);
         }
-        float vy = 96;
-        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
-        for (char ch : texts.title.toCharArray()) {
-            textTop(c, String.valueOf(ch), 74, vy, 64, titleFace, 0xFFFBF3EC);
-            vy += 76;
+
+        // The title is set down the band. If it cannot fit vertically at a readable size it
+        // is set across the top instead - the one layout exception, and it never truncates.
+        float titleTop = 96, titleBottom = bandH - 180;
+        float step = stepFor(texts.title, titleTop, titleBottom);
+        Block author = fit(texts.author, 768, 2, 24, 16, 1.3f, serif);
+        if (step >= 30) {
+            float size = Math.min(64, Math.max(26, step * 0.84f));
+            float y = titleTop;
+            for (char ch : texts.title.toCharArray()) {
+                textTop(c, String.valueOf(ch), 74, y, size, Typeface.create(serif, Typeface.BOLD), 0xFFFBF3EC);
+                y += step;
+            }
+            drawBlock(c, author, 74, y + 12, serif, 0xFFECD2C4);
+        } else {
+            Block title = fit(texts.title, 768, 3, 54, 24, 1.2f, Typeface.create(serif, Typeface.BOLD));
+            drawBlock(c, title, 74, titleTop, Typeface.create(serif, Typeface.BOLD), 0xFFFBF3EC);
+            drawBlock(c, author, 74, titleTop + title.height() + 16, serif, 0xFFECD2C4);
         }
-        textTop(c, texts.author, 74, vy + 15, 24, serif, 0xFFECD2C4);
         seal(c, W - 74 - 74, bandH - 74 - 74, 74, "讀");
 
-        TextPaint quote = paint(serif, 46, INK);
-        String[] lines = wrap(quote, texts.quote, W - 164);
-        float qy = bandH + 76;
-        for (int i = 0; i < lines.length; i++) {
-            textTop(c, lines[i], 82, qy + i * 80, 46, serif, INK);
-        }
-        qy += lines.length * 80f;
-        textTop(c, texts.chapter, 82, qy + 22, 24, serif, MUTED);
-        textTop(c, join(texts.author, " · ", texts.dateLine), 82, qy + 62, 20, serif, MUTED);
+        float quoteTop = bandH + 76, quoteBottom = (H - 296) - 24;
+        float maxW = W - 164;
+        Block chapter = fit(texts.chapter, maxW, 2, 24, 14, 1.35f, serif);
+        Block meta = fit(join(texts.author, " · ", texts.dateLine), maxW, 2, 20, 13, 1.35f, serif);
+        float reserved = 22 + chapter.height() + 14 + meta.height();
+        Block quote = fit(texts.quote, maxW, quoteBottom - quoteTop - reserved, 46, 18, 80f / 46f, serif);
+
+        float qy = quoteTop;
+        drawBlock(c, quote, 82, qy, serif, INK);
+        qy += quote.height() + 22;
+        drawBlock(c, chapter, 82, qy, serif, MUTED);
+        qy += chapter.height() + 14;
+        drawBlock(c, meta, 82, qy, serif, MUTED);
         stub(c, b, false, M, "paper", "paper", 108);
         grain(b, 0.08f);
     }
@@ -252,25 +279,27 @@ public class ShareQuoteCard {
         int m = 56;
         frame(c, m, m, W - m, H - m, CINNABAR, 3);
         frame(c, m + 10, m + 10, W - m - 10, H - m - 10, 0xFFE2D1C2, 1);
-        textTop(c, cjk() ? "摘录 · " + texts.monthYearLine : texts.monthYearLine, m + 40, m + 44,
-                21, serif, MUTED);
-        seal(c, W - m - 40 - 70, m + 36, 70, "書");
 
-        TextPaint quote = paint(serif, 52, INK);
-        String[] lines = wrap(quote, texts.quote, W - 2 * m - 120);
-        float y = (H - lines.length * 88f) / 2f - 40;
-        for (int i = 0; i < lines.length; i++) {
-            float w = quote.measureText(lines[i]);
-            textTop(c, lines[i], (W - w) / 2f, y + i * 88, 52, serif, INK);
-        }
-        y += lines.length * 88f;
-        line(c, W / 2f - 40, y + 40, W / 2f + 40, y + 40, CINNABAR, 2);
-        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
-        String t = "《" + texts.title + "》";
-        float tw = measure(t, titleFace, 32);
-        textTop(c, t, (W - tw) / 2f, y + 66, 32, titleFace, INK);
-        float aw = measure(texts.author, serif, 24);
-        textTop(c, texts.author, (W - aw) / 2f, y + 116, 24, serif, MUTED);
+        // the date sits left of the seal and must never run under it
+        float sealX = W - m - 40 - 70;
+        Block dateLine = fit(cjkLine(texts), sealX - (m + 40) - 16, 2, 21, 14, 1.3f, serif);
+        drawBlock(c, dateLine, m + 40, m + 44, serif, MUTED);
+        seal(c, sealX, m + 36, 70, "書");
+
+        float innerW = W - 2 * m - 120;
+        float top = m + 120;
+        Block title = fit("《" + texts.title + "》", W - 2 * m - 40, 2, 32, 20, 1.25f, serif);
+        Block author = fit(texts.author, W - 2 * m - 40, 2, 24, 16, 1.3f, serif);
+        float reserved = 10 + 2 + title.height() + 16 + author.height();
+        Block quote = fit(texts.quote, innerW, (H - m - 60) - top - reserved, 52, 20, 88f / 52f, serif);
+
+        float y = top + Math.max(0, ((H - m - 60) - top - reserved - quote.height()) / 2f);
+        float quoteH = quote.height();
+        drawBlockCentered(c, quote, y, serif, INK);
+        y += quoteH + 16;
+        line(c, W / 2f - 40, y, W / 2f + 40, y, CINNABAR, 2);
+        drawBlockCentered(c, title, y + 14, serif, INK);
+        drawBlockCentered(c, author, y + 14 + title.height() + 12, serif, MUTED);
         stub(c, b, false, M, "paper", "paper", 100);
         grain(b, 0.09f);
     }
@@ -279,22 +308,23 @@ public class ShareQuoteCard {
 
     private void gallery(Canvas c, Bitmap b) {
         c.drawColor(NIGHT);
+        // The oversized opening quote mark owns the top-left corner; text starts below it.
         textTop(c, "“", 104, 210, 330, Typeface.create(serif, Typeface.BOLD), 0xFF3B2C27);
-        TextPaint quote = paint(serif, 54, NIGHT_TEXT);
-        String[] lines = wrap(quote, texts.quote, 800);
-        float quoteH = lines.length * 92f;
-        float blockH = quoteH + 230;
-        float top = 200, bottom = H - 320;
-        float y = top + Math.max(20, (bottom - top - blockH) / 2f);
-        for (int i = 0; i < lines.length; i++) {
-            textTop(c, lines[i], 150, y + i * 92, 54, serif, NIGHT_TEXT);
-        }
-        y += quoteH;
-        line(c, 150, y + 34, 150 + 64, y + 34, ACCENT, 3);
-        Typeface titleFace = Typeface.create(serif, Typeface.BOLD);
-        textTop(c, "《" + texts.title + "》", 150, y + 64, 30, titleFace, NIGHT_TEXT);
-        textTop(c, join(texts.author, " · ", texts.chapter), 150, y + 112, 22, serif, NIGHT_MUTED);
-        seal(c, W - 82 - 78, y + 40, 78, "讀");
+        float quoteTop = 540, quoteBottom = H - 320;
+        float maxW = 800;
+        Block title = fit("《" + texts.title + "》", 754, 2, 30, 18, 1.2f, serif);
+        Block meta = fit(join(texts.author, " · ", texts.chapter), 754, 2, 22, 14, 1.3f, serif);
+        float reserved = 34 + 3 + title.height() + 16 + meta.height();
+        Block quote = fit(texts.quote, maxW, quoteBottom - quoteTop - reserved, 54, 20, 92f / 54f, serif);
+
+        float y = quoteTop + Math.max(0, (quoteBottom - quoteTop - reserved - quote.height()) / 2f);
+        drawBlock(c, quote, 150, y, serif, NIGHT_TEXT);
+        y += quote.height() + 34;
+        line(c, 150, y, 150 + 64, y, ACCENT, 3);
+        y += 3;
+        drawBlock(c, title, 150, y + 12, serif, NIGHT_TEXT);
+        drawBlock(c, meta, 150, y + 12 + title.height() + 16, serif, NIGHT_MUTED);
+        seal(c, W - 82 - 78, quoteTop + 20, 78, "讀");
         stub(c, b, true, M, "night", "night", 104);
         vignette(b, 0.60f);
         grain(b, 0.05f);
@@ -310,7 +340,6 @@ public class ShareQuoteCard {
         int hair = dark ? HAIR_DARK : HAIR_LIGHT;
         int muted = dark ? NIGHT_MUTED : MUTED;
 
-        // the perforation is drawn as segments, exactly as the approved art drew it
         for (int x = left; x < W - 84; x += 18) {
             line(c, x, perfY, Math.min(x + 9, W - 84), perfY, hair, 2);
         }
@@ -320,7 +349,6 @@ public class ShareQuoteCard {
         notch.setColor(notchColor(rightNotch));
         c.drawCircle(W, perfY, 13, notch);
 
-        // one group: the scan line, the code, the domain - same size, same tracking, same axis
         float qrCx = qrX + qrSize / 2f;
         float label = 16f;
         while (label > 11f && trackedWidth(texts.scan, label, 0.10f, sans) > qrSize + 26) {
@@ -334,7 +362,13 @@ public class ShareQuoteCard {
         colophon(c, dark, left, qrY - 34, qrY + qrSize, qrX - left - 46);
     }
 
-    /** Three tiers: kicker, tracked name, claim, specs. Port of intro_block(). */
+    private int notchColor(String side) {
+        if ("spine".equals(side)) return CINNABAR;
+        if ("night".equals(side)) return NIGHT;
+        return PAPER;
+    }
+
+    /** Three tiers, fitted so they can never grow down into the code. */
     private void colophon(Canvas c, boolean dark, int left, float topY, float bottomY, int maxw) {
         int fg = dark ? NIGHT_MUTED : MUTED;
         int strong = dark ? NIGHT_TEXT : INK;
@@ -354,45 +388,101 @@ public class ShareQuoteCard {
             claim = claim.substring(0, cut).trim() + (claim.indexOf('，') >= 0 ? "。" : ".");
         }
 
-        // The sample sets the claim heavier than the specs, so the middle line is bold and
-        // the specs line is not; both keep the sizes and colours of the approved art.
-        TextPaint claimPaint = paint(Typeface.create(serif, Typeface.BOLD), 22, strong);
-        TextPaint specPaint = paint(sans, 14, fg);
-        String[] claimLines = wrap(claimPaint, claim, maxw);
-        String[] specLines = specs.length() == 0 ? new String[0] : wrap(specPaint, specs, maxw);
+        Block specBlock = specs.length() == 0
+                ? new Block(new String[0], 14, 22)
+                : fit(specs, maxw, 3, 14, 10, 22f / 14f, sans);
+        float specArea = specBlock.lines.length == 0 ? 0 : 8 + specBlock.height();
+        // brand 26 + kicker 18 + the claim line step; shrink the claim until the column fits
+        float claimArea = (bottomY - topY) - 18 - 26 - specArea;
+        Block claimBlock = fit(claim, maxw, 99, 23, 15, 34f / 23f, serif);
+        if (claimBlock.height() > claimArea && claimArea > 0) {
+            claimBlock = fitToHeight(claim, maxw, claimArea, 23, 12, 34f / 23f, serif);
+        }
 
-        float brandH = 26, claimH = claimLines.length * 34f;
-        float specH = specLines.length * 22f;
-        float total = 6 + 12 + brandH + claimH + (specs.length() == 0 ? 0 : 8 + specH);
-        float y = total <= (bottomY - topY) + 18 ? topY : bottomY - total;
-
+        float y = topY;
         rect(c, left, y, left + 34, y + 4, accent);
         y += 18;
-        drawTrackedLeft(c, brand, left, y, 17, accent, 0.14f, serif);
-        y += brandH;
-        for (int i = 0; i < claimLines.length; i++) {
-            textTop(c, claimLines[i], left, y + i * 34, 22,
-                    Typeface.create(serif, Typeface.BOLD), strong);
-        }
-        y += claimH;
-        if (specs.length() > 0) {
-            // the sample's third line sits six pixels under the claim, not eight
-            y += 6;
-            for (int i = 0; i < specLines.length; i++) {
-                drawTrackedLeft(c, specLines[i], left, y + i * 22, 14, fg, 0.05f, sans);
+        drawTrackedLeft(c, brand, left, y, 19, accent, 0.14f, serif);
+        y += 26;
+        drawBlock(c, claimBlock, left, y, serif, strong);
+        y += claimBlock.height();
+        if (specBlock.lines.length > 0) {
+            y += 8;
+            for (int i = 0; i < specBlock.lines.length; i++) {
+                drawTrackedLeft(c, specBlock.lines[i], left, y + i * specBlock.leading,
+                        specBlock.size, fg, 0.05f, sans);
             }
         }
     }
 
-    private int notchColor(String side) {
-        if ("spine".equals(side)) return CINNABAR;
-        if ("night".equals(side)) return NIGHT;
-        return PAPER;
+    // ---------------------------------------------------------------- fitting
+
+    /** Fits text into a width and height: the largest size whose wrapped lines fit both. */
+    private Block fit(String text, float maxWidth, float maxHeight, float maxSize, float minSize,
+                      float leadingRatio, Typeface face) {
+        if (text == null || text.trim().length() == 0) return new Block(new String[0], maxSize, maxSize * leadingRatio);
+        for (float size = maxSize; size >= minSize; size -= 1f) {
+            Block block = wrapAt(text, size, leadingRatio, maxWidth, face);
+            if (block.height() <= maxHeight + 0.5f) return block;
+        }
+        // Still too long at the smallest size: keep going rather than clip a word.
+        for (float size = minSize - 1f; size >= 9f; size -= 1f) {
+            Block block = wrapAt(text, size, leadingRatio, maxWidth, face);
+            if (block.height() <= maxHeight + 0.5f) return block;
+        }
+        return wrapAt(text, 9f, leadingRatio, maxWidth, face);
+    }
+
+    /** Fits text into a width and a number of lines (titles and bylines). */
+    private Block fit(String text, float maxWidth, int maxLines, float maxSize, float minSize,
+                      float leadingRatio, Typeface face) {
+        if (text == null || text.trim().length() == 0) {
+            return new Block(new String[0], maxSize, maxSize * leadingRatio);
+        }
+        for (float size = maxSize; size >= minSize; size -= 1f) {
+            Block block = wrapAt(text, size, leadingRatio, maxWidth, face);
+            if (block.lines.length <= maxLines) return block;
+        }
+        // At the floor, allow the extra lines: a wrapped title is readable, a clipped one is not.
+        return wrapAt(text, minSize, leadingRatio, maxWidth, face);
+    }
+
+    /** Fits by height alone, used when the column has fixed room for the claim. */
+    private Block fitToHeight(String text, float maxWidth, float maxHeight, float maxSize,
+                              float minSize, float leadingRatio, Typeface face) {
+        for (float size = maxSize; size >= 9f; size -= 1f) {
+            Block block = wrapAt(text, size, leadingRatio, maxWidth, face);
+            if (block.height() <= maxHeight + 0.5f) return block;
+        }
+        return wrapAt(text, 9f, leadingRatio, maxWidth, face);
+    }
+
+    private Block wrapAt(String text, float size, float leadingRatio, float maxWidth, Typeface face) {
+        TextPaint p = paint(face, size, INK);
+        String[] lines = wrap(p, text, maxWidth);
+        return new Block(lines, size, size * leadingRatio);
+    }
+
+    private float stepFor(String text, float top, float bottom) {
+        int count = text == null ? 0 : Math.max(1, text.trim().length());
+        return Math.min(88f, Math.max(20f, (bottom - top) / count));
     }
 
     // ---------------------------------------------------------------- 绘制工具
 
-    /** Top-anchored text: the y the approved art used is the top of the ascender. */
+    private void drawBlock(Canvas c, Block block, float x, float topY, Typeface face, int color) {
+        for (int i = 0; i < block.lines.length; i++) {
+            textTop(c, block.lines[i], x, topY + i * block.leading, block.size, face, color);
+        }
+    }
+
+    private void drawBlockCentered(Canvas c, Block block, float topY, Typeface face, int color) {
+        for (int i = 0; i < block.lines.length; i++) {
+            float w = measure(block.lines[i], face, block.size);
+            textTop(c, block.lines[i], (W - w) / 2f, topY + i * block.leading, block.size, face, color);
+        }
+    }
+
     private void textTop(Canvas c, String s, float x, float topY, float size, Typeface face, int color) {
         if (s == null || s.length() == 0) return;
         TextPaint p = paint(face, size, color);
@@ -456,9 +546,6 @@ public class ShareQuoteCard {
         try {
             com.google.zxing.common.BitMatrix m = new QRCodeWriter()
                     .encode(texts.url, BarcodeFormat.QR_CODE, size, size);
-            // ZXing reserves a four-module quiet zone. The card itself is the quiet zone -
-            // its ground is uniform around the code - and the approved art has none, so the
-            // code is drawn to fill its box: find the module area, scale by whole modules.
             int minX = m.getWidth(), minY = m.getHeight(), maxX = -1, maxY = -1;
             for (int y = 0; y < m.getHeight(); y++) {
                 for (int x = 0; x < m.getWidth(); x++) {
@@ -470,9 +557,6 @@ public class ShareQuoteCard {
             }
             if (maxX < 0) return null;
             int modules = Math.max(maxX - minX + 1, maxY - minY + 1);
-            // Fill the box exactly, as the approved art does: every module gets an equal
-            // share of the 112px and the edges land on whole pixels, so the code is the
-            // same size as the one in the mockup and the labels keep their 18px / 10px gaps.
             float scale = size / (float) modules;
             qr = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(qr);
@@ -502,7 +586,6 @@ public class ShareQuoteCard {
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setColor(CINNABAR);
         c.drawRoundRect(new RectF(x, y, x + size, y + size), 8, 8, p);
-        // a few specks off the edge, as if the stamp pressed unevenly
         Random rnd = new Random(7);
         Paint speck = new Paint(Paint.ANTI_ALIAS_FLAG);
         speck.setColor(PAPER);
@@ -514,9 +597,8 @@ public class ShareQuoteCard {
         TextPaint t = paint(face, size * 0.56f, PAPER);
         Rect bounds = new Rect();
         t.getTextBounds(glyph, 0, glyph.length(), bounds);
-        float gx = x + (size - bounds.width()) / 2f - bounds.left;
-        float gy = y + (size - bounds.height()) / 2f - bounds.top;
-        c.drawText(glyph, gx, gy, t);
+        c.drawText(glyph, x + (size - bounds.width()) / 2f - bounds.left,
+                y + (size - bounds.height()) / 2f - bounds.top, t);
     }
 
     private TextPaint paint(Typeface face, float size, int color) {
@@ -635,15 +717,22 @@ public class ShareQuoteCard {
         return x + sep + y;
     }
 
+    private String pathLine(String chapter) {
+        String c = chapter == null ? "" : chapter.trim();
+        return c.length() == 0 ? "" : "/ " + c;
+    }
+
     private boolean cjk() {
         String lang = Locale.getDefault().getLanguage();
         return "zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang);
     }
 
-    /**
-     * Deletes cards older than a week. They live in filesDir/share, one PNG per share, and
-     * without this the directory only grows.
-     */
+    private String cjkLine(Texts t) {
+        return cjk() && t.monthYearLine != null && t.monthYearLine.length() > 0
+                ? "摘录 · " + t.monthYearLine
+                : (t.monthYearLine != null && t.monthYearLine.length() > 0 ? t.monthYearLine : t.dateLine);
+    }
+
     public static void pruneOldCards(java.io.File dir) {
         if (dir == null || !dir.isDirectory()) return;
         java.io.File[] files = dir.listFiles();
