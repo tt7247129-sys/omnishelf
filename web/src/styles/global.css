@@ -93,6 +93,8 @@ hr {
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-2) var(--space-3);
+  /* the header is site-wide furniture: it gets more width than the reading column */
+  max-width: 72rem;
 }
 
 .wordmark {
@@ -114,7 +116,9 @@ hr {
 
 .site-nav {
   display: flex;
-  gap: var(--space-3);
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  min-width: 0;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
 }
@@ -641,5 +645,27 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .sticky-cta {
     transition: none;
+  }
+}
+
+/* The reading column is deliberately narrow; landing pages are not reading. */
+.shell--wide {
+  max-width: min(72rem, 100%);
+}
+
+@media (max-width: 40rem) {
+  .hero__title {
+    font-size: 2rem;
+  }
+  .download {
+    gap: var(--space-3);
+  }
+  .cta {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero__actions,
+  .hero__actions .cta {
+    width: 100%;
   }
 }
