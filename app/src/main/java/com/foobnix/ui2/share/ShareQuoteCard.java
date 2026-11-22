@@ -144,7 +144,7 @@ public class ShareQuoteCard {
         final float left = 86, maxW = 800;          // the seal starts at x=910
         final float quoteTop = 540, quoteBottom = H - 330;
 
-        Block title = fit("《" + texts.title + "》", maxW, 2, 30, 18, 1.15f, serif);
+        Block title = fit(quotedTitle(texts.title), maxW, 2, 30, 18, 1.15f, serif);
         Block meta = fit(join(texts.author, " · ", texts.chapter), maxW, 2, 22, 14, 1.3f, serif);
         float reserved = 34 + title.height() + 16 + meta.height() + 26;
         Block quote = fit(texts.quote, maxW, quoteBottom - quoteTop - reserved, 48, 20, 80f / 48f, serif);
@@ -308,7 +308,7 @@ public class ShareQuoteCard {
 
         float innerW = W - 2 * m - 120;
         float top = m + 120;
-        Block title = fit("《" + texts.title + "》", W - 2 * m - 40, 2, 32, 20, 1.25f, serif);
+        Block title = fit(quotedTitle(texts.title), W - 2 * m - 40, 2, 32, 20, 1.25f, serif);
         Block author = fit(texts.author, W - 2 * m - 40, 2, 24, 16, 1.3f, serif);
         float reserved = 10 + 2 + title.height() + 16 + author.height();
         Block quote = fit(texts.quote, innerW, (H - m - 60) - top - reserved, 52, 20, 88f / 52f, serif);
@@ -332,7 +332,7 @@ public class ShareQuoteCard {
         textTop(c, "“", 104, 210, 330, Typeface.create(serif, Typeface.BOLD), 0xFF3B2C27);
         float quoteTop = 540, quoteBottom = H - 320;
         float maxW = 800;
-        Block title = fit("《" + texts.title + "》", 754, 2, 30, 18, 1.2f, serif);
+        Block title = fit(quotedTitle(texts.title), 754, 2, 30, 18, 1.2f, serif);
         Block meta = fit(join(texts.author, " · ", texts.chapter), 754, 2, 22, 14, 1.3f, serif);
         float reserved = 34 + 3 + title.height() + 16 + meta.height();
         Block quote = fit(texts.quote, maxW, quoteBottom - quoteTop - reserved, 54, 20, 92f / 54f, serif);
@@ -758,6 +758,11 @@ public class ShareQuoteCard {
             if (ch >= 0x2E80 && ch <= 0x9FFF) return true;
         }
         return false;
+    }
+
+    private String quotedTitle(String title) {
+        String t = title == null ? "" : title.trim();
+        return hasCjk(t) ? "《" + t + "》" : "\u201C" + t + "\u201D";
     }
 
     private String join(String a, String sep, String b) {
